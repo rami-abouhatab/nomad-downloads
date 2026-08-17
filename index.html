@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nomad — your desktop, on any machine</title>
+    <meta
+      name="description"
+      content="Nomad is a desktop environment that lives in your account. Sign in on any machine and your desk is already there."
+    />
+    <link rel="icon" href="./mark.png" />
+    <meta property="og:title" content="Nomad" />
+    <meta property="og:description" content="Your desktop, on any machine." />
+    <style>
+      /* Nomad's own tokens, trimmed to what one page needs. Noir shell, ivory
+         for objects, never pure white or pure black. */
+      :root {
+        --ink: #f2f0ec;
+        --ink-soft: rgba(242, 240, 236, 0.62);
+        --ink-faint: rgba(242, 240, 236, 0.38);
+        --field: #131416;
+        --card: rgba(255, 255, 255, 0.045);
+        --hair: rgba(255, 255, 255, 0.1);
+        --accent: #4c8dff;
+        --radius: 16px;
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(120% 90% at 18% 12%, #23262c 0%, transparent 60%),
+          radial-gradient(90% 80% at 82% 78%, #1b2430 0%, transparent 55%),
+          linear-gradient(160deg, #1f2022, #191a1c 45%, #131416);
+        background-attachment: fixed;
+        color: var(--ink);
+        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 24px 64px;
+      }
+
+      main {
+        width: 100%;
+        max-width: 620px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      /* The wordmark, built the way the shell builds it: letters as vector,
+         the O as its own bitmap at the size it actually occupies. Embedding
+         the emblem in the SVG would minify a 264px raster by four and give
+         sharp letters beside a fuzzy O. */
+      .wordmark {
+        position: relative;
+        width: min(340px, 74vw);
+        aspect-ratio: 1993 / 293;
+        margin: clamp(72px, 14vh, 132px) 0 0;
+      }
+      .wordmark img { position: absolute; }
+      .letters { inset: 0; width: 100%; height: 100%; }
+      .emblem {
+        left: 13.45%;
+        top: 7.51%;
+        width: 12.49%;
+        height: 84.98%;
+      }
+
+      h1 {
+        margin: 36px 0 0;
+        font-size: clamp(26px, 5vw, 34px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .lede {
+        margin: 14px 0 0;
+        max-width: 460px;
+        font-size: 15.5px;
+        line-height: 1.62;
+        color: var(--ink-soft);
+      }
+
+      .downloads {
+        margin-top: 40px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      /* One card per architecture. The one matching this machine is lit; the
+         other stays available rather than hidden, because detection is a
+         guess and a guess must never be the only way through. */
+      .dl {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--hair);
+        background: var(--card);
+        color: inherit;
+        text-decoration: none;
+        text-align: left;
+        transition:
+          border-color 160ms var(--ease),
+          background 160ms var(--ease),
+          transform 90ms var(--ease);
+      }
+      .dl:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.18); }
+      .dl:active { transform: scale(0.995); }
+
+      .dl.match {
+        border-color: rgba(76, 141, 255, 0.5);
+        background: rgba(76, 141, 255, 0.1);
+      }
+
+      .dl-glyph {
+        flex: 0 0 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .dl-glyph svg { width: 20px; height: 20px; }
+
+      .dl-body { flex: 1; min-width: 0; }
+      .dl-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+      .dl-meta { margin-top: 3px; font-size: 12.5px; color: var(--ink-faint); }
+
+      .dl-tag {
+        flex: 0 0 auto;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      /* Unreleased builds are shown, not hidden. A download page that lists
+         only what exists teaches nothing about what is coming; one that lets
+         you click a dead link teaches the wrong thing. */
+      .dl.pending {
+        pointer-events: none;
+        opacity: 0.44;
+      }
+      .dl.pending .dl-tag { color: var(--ink-faint); }
+
+      .note {
+        margin-top: 26px;
+        max-width: 470px;
+        font-size: 12.5px;
+        line-height: 1.6;
+        color: var(--ink-faint);
+      }
+
+      footer {
+        margin-top: 56px;
+        font-size: 12px;
+        color: var(--ink-faint);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="wordmark">
+        <img class="letters" src="./nomados-wordmark-letters.svg" alt="Nomad" />
+        <img class="emblem" src="./nomados-wordmark-o-emblem.png" alt="" />
+      </div>
+
+      <h1>Your desktop, on any machine.</h1>
+      <p class="lede">
+        Nomad is a desktop environment that lives in your account rather than on
+        a laptop. Sign in anywhere and your desk is already there — your dock,
+        your arrangement, your apps, exactly as you left them.
+      </p>
+
+      <div class="downloads" id="downloads">
+        <a class="dl" id="dl-arm64" href="#" data-arch="arm64">
+          <span class="dl-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12" /><path d="M7 11l5 5 5-5" /><path d="M4 20h16" />
+            </svg>
+          </span>
+          <span class="dl-body">
+            <span class="dl-name">Windows on ARM</span>
+            <span class="dl-meta" id="meta-arm64">Snapdragon and other ARM64 machines</span>
+          </span>
+          <span class="dl-tag" id="tag-arm64"></span>
+        </a>
+
+        <a class="dl" id="dl-x64" href="#" data-arch="x64">
+          <span class="dl-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12" /><path d="M7 11l5 5 5-5" /><path d="M4 20h16" />
+            </svg>
+          </span>
+          <span class="dl-body">
+            <span class="dl-name">Windows on Intel or AMD</span>
+            <span class="dl-meta" id="meta-x64">The usual 64-bit PC</span>
+          </span>
+          <span class="dl-tag" id="tag-x64"></span>
+        </a>
+      </div>
+
+      <p class="note" id="note">
+        Early build. Nomad installs per-user, so it needs no administrator, and
+        uninstalls from Windows' own app list. Windows will warn that the
+        publisher is unknown — the app is not code-signed yet.
+      </p>
+
+      <footer id="footer">Nomad 0.1.0</footer>
+    </main>
+
+    <script>
+      /**
+       * Release plumbing lives in one object so publishing a new version is a
+       * data edit rather than a page rewrite. `url: null` means the build is
+       * announced but not out yet, and its card is shown disabled rather than
+       * hidden — a link that 404s is worse than a card that says "soon".
+       */
+      var RELEASE = {
+        version: '0.1.0',
+        base: 'https://github.com/rami-abouhatab/nomad-downloads/releases/download/v0.1.0/',
+        builds: {
+          arm64: { file: null, size: null },
+          x64: { file: null, size: null },
+        },
+      };
+
+      /**
+       * Which build this machine wants.
+       *
+       * `navigator.userAgentData.platform` is the only honest source on
+       * Windows-on-ARM: the classic user-agent string reports an ARM64 machine
+       * as `Win64; x64` on purpose, so websites serve it something that runs
+       * under emulation. Reading that would recommend the wrong build to
+       * exactly the machines Nomad was developed on. When the modern API is
+       * unavailable we recommend nothing rather than guess wrong.
+       */
+      function detect() {
+        var d = navigator.userAgentData;
+        if (d && typeof d.getHighEntropyValues === 'function') {
+          return d
+            .getHighEntropyValues(['architecture'])
+            .then(function (v) {
+              if (v.architecture === 'arm') return 'arm64';
+              if (v.architecture === 'x86') return 'x64';
+              return null;
+            })
+            .catch(function () { return null; });
+        }
+        return Promise.resolve(null);
+      }
+
+      function human(bytes) {
+        if (!bytes) return '';
+        return (bytes / 1024 / 1024).toFixed(0) + ' MB';
+      }
+
+      function paint(match) {
+        ['arm64', 'x64'].forEach(function (arch) {
+          var build = RELEASE.builds[arch];
+          var card = document.getElementById('dl-' + arch);
+          var tag = document.getElementById('tag-' + arch);
+          var meta = document.getElementById('meta-' + arch);
+
+          if (build.file) {
+            card.href = RELEASE.base + encodeURIComponent(build.file);
+            card.setAttribute('download', '');
+            if (build.size) meta.textContent = meta.textContent + ' · ' + human(build.size);
+          } else {
+            card.classList.add('pending');
+            card.removeAttribute('href');
+            tag.textContent = 'Soon';
+          }
+
+          if (arch === match && build.file) {
+            card.classList.add('match');
+            tag.textContent = 'For this PC';
+          }
+        });
+
+        document.getElementById('footer').textContent = 'Nomad ' + RELEASE.version;
+      }
+
+      detect().then(paint);
+    </script>
+  </body>
+</html>
