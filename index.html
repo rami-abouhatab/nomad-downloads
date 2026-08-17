@@ -230,19 +230,27 @@
 
     <script>
       /**
-       * Release plumbing lives in one object so publishing a new version is a
-       * data edit rather than a page rewrite. `url: null` means the build is
-       * announced but not out yet, and its card is shown disabled rather than
-       * hidden — a link that 404s is worse than a card that says "soon".
+       * What exists is asked for, not baked in.
+       *
+       * `/dl/manifest` reports the current release and its assets, so
+       * publishing a version is uploading two installers and nothing else —
+       * no edit here, no commit, no chance of the page advertising a build
+       * that was never uploaded or a version that has been superseded.
+       *
+       * A build with no asset comes back null and its card is drawn disabled
+       * rather than hidden: a link that 404s is worse than one that says
+       * "soon", and a platform silently missing tells someone waiting for it
+       * nothing at all.
        */
-      var RELEASE = {
-        version: '0.1.0',
-        base: 'https://github.com/rami-abouhatab/nomad-downloads/releases/download/v0.1.0/',
-        builds: {
-          arm64: { file: null, size: null },
-          x64: { file: null, size: null },
-        },
-      };
+      var RELEASE = { version: null, builds: { arm64: null, x64: null } };
+
+      function loadManifest() {
+        return fetch('/dl/manifest', { headers: { Accept: 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (m) { if (m) RELEASE = m; })
+          .catch(function () { /* Offline, or the function is not up yet.
+              The cards stay in their "soon" state, which is honest. */ });
+      }
 
       /**
        * Which build this machine wants.
@@ -281,8 +289,8 @@
           var tag = document.getElementById('tag-' + arch);
           var meta = document.getElementById('meta-' + arch);
 
-          if (build.file) {
-            card.href = RELEASE.base + encodeURIComponent(build.file);
+          if (build && build.url) {
+            card.href = build.url;
             card.setAttribute('download', '');
             if (build.size) meta.textContent = meta.textContent + ' · ' + human(build.size);
           } else {
@@ -291,16 +299,20 @@
             tag.textContent = 'Soon';
           }
 
-          if (arch === match && build.file) {
+          if (arch === match && build && build.url) {
             card.classList.add('match');
             tag.textContent = 'For this PC';
           }
         });
 
-        document.getElementById('footer').textContent = 'Nomad ' + RELEASE.version;
+        document.getElementById('footer').textContent = RELEASE.version
+          ? 'Nomad ' + RELEASE.version
+          : 'Nomad — not yet released';
       }
 
-      detect().then(paint);
+      // The manifest and the architecture check are independent, so they run
+      // together rather than one after the other.
+      Promise.all([loadManifest(), detect()]).then(function (r) { paint(r[1]); });
     </script>
   </body>
 </html>
