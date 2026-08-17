@@ -1,0 +1,32 @@
+# The house pattern: build nothing, deploy the folder, on a Linux runner.
+#
+# Wrangler has no ARM64-Windows build, so deploys never happen from either
+# laptop — they happen here. Auth is the repo secret `CLOUDFLARE_API_TOKEN`,
+# which is write-only and set once per repository.
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The page is static and hand-written: no build step, nothing to
+      # install, nothing to go stale. `.` would also upload .git and the
+      # workflow itself, so the site is assembled explicitly.
+      - name: Assemble the site
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp *.svg *.png dist/ 2>/dev/null || true
+          ls -la dist
+
+      - name: Deploy
+        run: npx wrangler@3 pages deploy dist --project-name nomad-downloads --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
