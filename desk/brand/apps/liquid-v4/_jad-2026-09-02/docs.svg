@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Nomad Docs. Jad, 2026-09-02. One construction shared by docs/sheets/slides:
+       ivory->greige plate (the shell masks the superellipse at draw time, so the
+       file stays square), one solid liquid-ink object lit from the top-left,
+       features punched THROUGH the object to the plate, one soft flat shadow.
+       Silhouette: a portrait page. -->
+  <defs>
+    <linearGradient id="plate" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6F3EE"/>
+      <stop offset="1" stop-color="#E3DED6"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5FA0FF"/>
+      <stop offset="1" stop-color="#1E4FD6"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.16"/>
+      <stop offset="0.35" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.7" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.22"/>
+    </linearGradient>
+    <mask id="cut">
+      <rect x="138" y="100" width="236" height="312" rx="36" fill="#fff"/>
+      <rect x="182" y="172" width="148" height="30" rx="15" fill="#000"/>
+      <rect x="182" y="228" width="148" height="30" rx="15" fill="#000"/>
+      <rect x="182" y="284" width="96" height="30" rx="15" fill="#000"/>
+    </mask>
+  </defs>
+  <rect width="512" height="512" fill="url(#plate)"/>
+  <rect x="138" y="114" width="236" height="312" rx="36" fill="#1B2A4A" opacity="0.22" filter="url(#soft)"/>
+  <g mask="url(#cut)">
+    <rect x="138" y="100" width="236" height="312" rx="36" fill="url(#ink)"/>
+    <rect x="138" y="100" width="236" height="312" rx="36" fill="url(#body)"/>
+  </g>
+</svg>

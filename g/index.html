@@ -7,172 +7,20 @@
     <meta name="robots" content="noindex" />
     <link rel="icon" href="../mark.png" />
     <style>
-      /* Nomad's own tokens, trimmed to what one page needs — the download
-         page's palette, so a guest sees the same house. */
-      :root {
-        --ink: #f2f0ec;
-        --ink-soft: rgba(242, 240, 236, 0.62);
-        --ink-faint: rgba(242, 240, 236, 0.38);
-        --card: rgba(255, 255, 255, 0.045);
-        --card-hover: rgba(255, 255, 255, 0.08);
-        --hair: rgba(255, 255, 255, 0.1);
-        --accent: #4c8dff;
-        --radius: 14px;
-        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-      }
-      * { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; }
-      body {
-        min-height: 100vh;
-        background:
-          radial-gradient(120% 90% at 18% 12%, #23262c 0%, transparent 60%),
-          radial-gradient(90% 80% at 82% 78%, #1b2430 0%, transparent 55%),
-          linear-gradient(160deg, #1f2022, #191a1c 45%, #131416);
-        background-attachment: fixed;
-        color: var(--ink);
-        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 0 20px 64px;
-      }
-      main { width: 100%; max-width: 680px; }
-      .brand { display: flex; align-items: center; gap: 10px; margin: clamp(40px, 8vh, 72px) 0 28px; color: var(--ink-faint); font-size: 13px; }
-      .brand img { width: 22px; height: 22px; border-radius: 6px; }
-      h1 { margin: 0 0 6px; font-size: 26px; font-weight: 650; letter-spacing: -0.02em; }
-      .sub { margin: 0 0 26px; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
-      .card { background: var(--card); border: 1px solid var(--hair); border-radius: var(--radius); overflow: hidden; }
-      .crumbs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--hair); font-size: 13px; color: var(--ink-soft); }
-      .crumbs button { background: none; border: 0; color: var(--ink); font: inherit; cursor: pointer; padding: 2px 4px; border-radius: 6px; }
-      .crumbs button:hover { background: var(--card-hover); }
-      .crumbs .sep { color: var(--ink-faint); }
-      .row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 16px; border: 0; border-top: 1px solid var(--hair); background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
-      .row:first-child { border-top: 0; }
-      .row:hover { background: var(--card-hover); }
-      .row .ico { width: 26px; height: 26px; border-radius: 7px; flex: 0 0 auto; display: grid; place-items: center; background: rgba(255,255,255,0.06); color: var(--ink-soft); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; }
-      .row .ico.dir { background: rgba(76, 141, 255, 0.18); color: #9dbfff; }
-      .row .name { flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; }
-      .row .meta { flex: 0 0 auto; color: var(--ink-faint); font-size: 12px; }
-      .empty { padding: 28px 16px; text-align: center; color: var(--ink-faint); font-size: 13px; }
-      .foot { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 18px 4px 0; color: var(--ink-faint); font-size: 12px; }
-      .drop { margin-top: 18px; padding: 22px 16px; border: 1px dashed var(--hair); border-radius: var(--radius); text-align: center; color: var(--ink-soft); font-size: 13px; transition: background 160ms var(--ease), border-color 160ms var(--ease); }
-      .drop.over { background: rgba(76, 141, 255, 0.08); border-color: var(--accent); }
-      .drop label { color: var(--ink); text-decoration: underline; cursor: pointer; }
-      .drop input { display: none; }
-      .note { margin-top: 12px; color: var(--ink-soft); font-size: 13px; min-height: 1.4em; }
-      .refusal { padding: 40px 0; text-align: center; }
-      .refusal h1 { font-size: 22px; }
-      .refusal p { color: var(--ink-soft); }
-      .refusal a { color: var(--ink); }
-      [hidden] { display: none !important; }
+      html, body { margin: 0; min-height: 100vh; background: #131416; color: rgba(242, 240, 236, 0.62); font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; display: grid; place-items: center; }
+      p { font-size: 14px; }
+      a { color: #f2f0ec; }
     </style>
-  </head>
-  <body>
-    <main>
-      <div class="brand"><img src="../mark.png" alt="" /> Nomad</div>
-      <section id="view" hidden>
-        <h1 id="title"></h1>
-        <p class="sub" id="sub"></p>
-        <div class="card">
-          <div class="crumbs" id="crumbs"></div>
-          <div id="list"></div>
-        </div>
-        <div class="drop" id="drop" hidden>
-          Drop files here to add them to the space, or <label>choose files<input type="file" id="pick" multiple /></label>.
-          <div class="note" id="note"></div>
-        </div>
-        <div class="foot">
-          <span id="expiry"></span>
-          <span>Shared through <a href="https://nomad.devapps.cc" style="color: var(--ink-soft)">Nomad</a>.</span>
-        </div>
-      </section>
-      <section id="refusal" class="refusal" hidden>
-        <h1 id="why"></h1>
-        <p>Ask whoever sent it for a new one. <a href="https://nomad.devapps.cc">What is Nomad?</a></p>
-      </section>
-    </main>
     <script>
-      (() => {
-        const FN = 'https://hifnfnldkcfdczmzzdfl.supabase.co/functions/v1/guest';
-        const token = location.hash.replace(/^#/, '').trim();
-        const $ = (id) => document.getElementById(id);
-        const refuse = (why) => { $('refusal').hidden = false; $('view').hidden = true; $('why').textContent = why; };
-        const call = async (body) => {
-          const r = await fetch(FN, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token, ...body }) });
-          const j = await r.json().catch(() => ({ error: 'Nomad did not answer.' }));
-          if (!r.ok) throw new Error(j.error || 'Nomad did not answer.');
-          return j;
-        };
-        const size = (n) => n < 1000 ? `${n} B` : n < 1e6 ? `${(n / 1e3).toFixed(n < 1e4 ? 1 : 0)} KB` : n < 1e9 ? `${(n / 1e6).toFixed(n < 1e7 ? 1 : 0)} MB` : `${(n / 1e9).toFixed(1)} GB`;
-        const ext = (name) => { const i = name.lastIndexOf('.'); return i > 0 ? name.slice(i + 1).toUpperCase().slice(0, 4) : ''; };
-        if (!/^[0-9a-f]{64}$/.test(token)) { refuse('That link is not one of ours.'); return; }
-
-        let files = [];
-        let here = '';
-        const render = () => {
-          const crumbs = $('crumbs');
-          crumbs.innerHTML = '';
-          const parts = here ? here.split('/') : [];
-          const mk = (label, path) => { const b = document.createElement('button'); b.textContent = label; b.onclick = () => { here = path; render(); }; return b; };
-          crumbs.appendChild(mk('Files', ''));
-          parts.forEach((p, i) => { const s = document.createElement('span'); s.className = 'sep'; s.textContent = '›'; crumbs.appendChild(s); crumbs.appendChild(mk(p, parts.slice(0, i + 1).join('/'))); });
-          const list = $('list');
-          list.innerHTML = '';
-          const prefix = here ? here + '/' : '';
-          const rows = files.filter((f) => f.path.startsWith(prefix) && !f.path.slice(prefix.length).includes('/'))
-            .sort((a, b) => (a.isDirectory === b.isDirectory ? a.name.localeCompare(b.name) : a.isDirectory ? -1 : 1));
-          if (rows.length === 0) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = 'Nothing here yet.'; list.appendChild(e); return; }
-          for (const f of rows) {
-            const b = document.createElement('button');
-            b.className = 'row';
-            b.innerHTML = `<span class="ico ${f.isDirectory ? 'dir' : ''}">${f.isDirectory ? '▸' : ext(f.name)}</span><span class="name"></span><span class="meta"></span>`;
-            b.querySelector('.name').textContent = f.name;
-            b.querySelector('.meta').textContent = f.isDirectory ? '' : size(f.size);
-            b.onclick = async () => {
-              if (f.isDirectory) { here = f.path; render(); return; }
-              b.disabled = true;
-              try { const { url } = await call({ action: 'sign', path: f.path }); window.open(url, '_blank', 'noopener'); }
-              catch (e) { $('note').textContent = e.message; }
-              b.disabled = false;
-            };
-            list.appendChild(b);
-          }
-        };
-
-        const upload = async (list) => {
-          for (const file of list) {
-            $('note').textContent = `Adding ${file.name}…`;
-            try {
-              const { url, path } = await call({ action: 'upload', name: file.name, size: file.size });
-              const put = await fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/octet-stream', 'x-upsert': 'true' }, body: file });
-              if (!put.ok) throw new Error('The upload did not go through.');
-              await call({ action: 'confirm', name: file.name, size: file.size });
-              files = files.filter((f) => f.path !== path).concat([{ path, name: path.split('/').pop(), isDirectory: false, size: file.size }]);
-              if (!files.some((f) => f.path === 'Inbox' && f.isDirectory)) files.push({ path: 'Inbox', name: 'Inbox', isDirectory: true, size: 0 });
-              $('note').textContent = `${file.name} is in the space’s Inbox.`;
-            } catch (e) { $('note').textContent = e.message; }
-          }
-          render();
-        };
-
-        call({ action: 'open' }).then((r) => {
-          $('view').hidden = false;
-          $('title').textContent = r.space.name;
-          $('sub').textContent = `${r.owner} shared this space with you. ${r.mode === 'interact' ? 'Look through its files, download them, or add your own.' : 'Look through its files and download what you need.'}`;
-          $('expiry').textContent = `This link works until ${new Date(r.expiresAt).toLocaleString(undefined, { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.`;
-          files = r.files;
-          render();
-          if (r.mode === 'interact') {
-            const drop = $('drop');
-            drop.hidden = false;
-            drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
-            drop.addEventListener('dragleave', () => drop.classList.remove('over'));
-            drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); upload([...e.dataTransfer.files]); });
-            $('pick').addEventListener('change', (e) => upload([...e.target.files]));
-          }
-        }).catch((e) => refuse(e.message));
+      /* Links made before 2026-09-15 pointed here; the space itself now
+         opens at /desk/, the token still in the hash. */
+      (function () {
+        var token = location.hash.replace(/^#/, '').replace(/^g=/, '').trim();
+        if (/^[0-9a-f]{64}$/.test(token)) location.replace('../desk/#' + token);
       })();
     </script>
+  </head>
+  <body>
+    <p>Opening the space… If nothing happens, <a href="https://nomad.devapps.cc">go to Nomad</a>.</p>
   </body>
 </html>

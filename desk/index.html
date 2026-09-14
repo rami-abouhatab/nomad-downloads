@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      `blob:` is load-bearing, not decoration. Files in Nomad Drive reach the
+      viewers as bytes over IPC, wrapped in a blob URL — see state/driveUrl.ts.
+      Drop it and every image, video and custom wallpaper silently fails to
+      load: CSP refuses the load *before* any request, so there is no network
+      error, no handler invocation and nothing in any log. Two transports were
+      rewritten chasing that silence before the policy was the answer.
+    -->
+    <!--
+      The account's origin is named, not wildcarded. It is the one host this
+      shell talks to, and `connect-src` is exactly the wrong place to be
+      generous: the failure mode of getting it wrong is the same silence
+      described above — supabase-js reports "Failed to fetch" with no request
+      ever leaving, which reads as the project being down. `wss:` on the same
+      host is here for Realtime, which the restore loop will want the moment
+      two machines are signed in at once.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' blob: ws: https://hifnfnldkcfdczmzzdfl.supabase.co wss://hifnfnldkcfdczmzzdfl.supabase.co; frame-src https: http:"
+    />
+    <title>Nomad</title>
+    <script type="module" crossorigin src="./assets/index-D74oemx6.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-RBVPO8C1.css">
+  </head>
+  <body>
+    <div id="shell"></div>
+  </body>
+</html>

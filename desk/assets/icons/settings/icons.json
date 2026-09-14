@@ -1,0 +1,40 @@
+{
+  "family": "Nomad Settings",
+  "format": "PNG",
+  "colors": [
+    "black",
+    "white"
+  ],
+  "sizes": [
+    16,
+    20,
+    24,
+    32,
+    48,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "icons": [
+    "home",
+    "system",
+    "devices",
+    "network",
+    "bluetooth",
+    "personalization",
+    "nomad-edge",
+    "apps",
+    "accounts",
+    "time-language",
+    "accessibility",
+    "privacy-security",
+    "storage",
+    "keyboard",
+    "about"
+  ],
+  "background": "transparent",
+  "style": "filled",
+  "source": "approved-settings-filled-sheet.png"
+}

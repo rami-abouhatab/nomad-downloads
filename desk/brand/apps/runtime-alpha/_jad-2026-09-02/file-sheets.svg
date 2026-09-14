@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Nomad file-type mark for sheets. Jad, 2026-09-02. TRANSPARENT ground: the shell
+       draws this onto its own #FDFDFD plate (app.glyph branch). Same box as the
+       other runtime-alpha file marks (x 152-360, y 117-394); a plain portrait
+       page in the app's colour carrying the app's own cutout, no folded corner,
+       no letter badge. -->
+  <defs>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#52D993"/><stop offset="1" stop-color="#0F8A52"/></linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.16"/><stop offset="0.35" stop-color="#fff" stop-opacity="0"/><stop offset="0.7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.22"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="10"/></filter>
+    <mask id="cut"><rect x="152" y="117" width="208" height="277" rx="34" fill="#fff"/><rect x="182" y="180" width="66" height="44" rx="9" fill="#000"/><rect x="264" y="180" width="66" height="44" rx="9" fill="#000"/><rect x="182" y="240" width="66" height="44" rx="9" fill="#000"/><rect x="264" y="240" width="66" height="44" rx="9" fill="#000"/><rect x="182" y="300" width="66" height="44" rx="9" fill="#000"/><rect x="264" y="300" width="66" height="44" rx="9" fill="#000"/></mask>
+  </defs>
+  <rect x="152" y="129" width="208" height="277" rx="34" fill="#143D2A" opacity="0.20" filter="url(#soft)"/>
+  <g mask="url(#cut)">
+    <rect x="152" y="117" width="208" height="277" rx="34" fill="url(#ink)"/>
+    <rect x="152" y="117" width="208" height="277" rx="34" fill="url(#body)"/>
+  </g>
+</svg>

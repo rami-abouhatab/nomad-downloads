@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="88 88 1024 1024" width="1024" height="1024">
+  <!-- Nomad Apps icon - 3x3 dot grid, airy spacing, soft dark gradient per dot. -->
+  <defs>
+    <linearGradient id="tileGrad" x1="0.25" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#FDFDFD"/><stop offset="1" stop-color="#FDFDFD"/></linearGradient>
+    <linearGradient id="inkGrad" gradientUnits="userSpaceOnUse" x1="420" y1="320" x2="640" y2="880">
+      <stop offset="0" stop-color="#4E4639"/>
+      <stop offset="1" stop-color="#100E0A"/>
+    </linearGradient>
+    <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="30" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <path id="tilePath" d="M 416,88 L 784,88 C 981,88 1112,219 1112,416 L 1112,784 C 1112,981 981,1112 784,1112 L 416,1112 C 219,1112 88,981 88,784 L 88,416 C 88,219 219,88 416,88 Z"/>
+  </defs>
+  <use href="#tilePath" fill="url(#tileGrad)"/>
+  <use href="#tilePath" fill="none" stroke="rgba(26,23,18,0.07)" stroke-width="3"/>
+
+  <g fill="url(#inkGrad)">
+    <circle cx="600" cy="545" r="208" fill="none" stroke="url(#inkGrad)" stroke-width="124"/>
+    <rect x="382" y="822" width="436" height="104" rx="52" fill="url(#inkGrad)"/>
+  </g>
+</svg>
