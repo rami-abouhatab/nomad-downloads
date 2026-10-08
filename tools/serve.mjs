@@ -1,8 +1,9 @@
-// A local preview that behaves like Cloudflare Pages for this site:
-// pretty URLs (/ax serves ax.html), folder index pages, and the /dl
-// functions run in-process against the real GitHub releases.
+// A local preview of the BUILT site (dist/) that behaves like Cloudflare
+// Pages: pretty URLs (/ax serves ax.html), folder index pages, and the /dl
+// functions run in-process (from ./functions, as wrangler compiles them)
+// against the real GitHub releases.
 //
-//   node tools/serve.mjs [port]      (default 8790)
+//   npm run build && node tools/serve.mjs [port]      (default 8791)
 //
 // wrangler's own `pages dev` needs workerd, which has no ARM64 Windows
 // binary; this stands in for it. It is a preview, never a deploy target.
@@ -12,7 +13,8 @@ import { extname, join, normalize, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { ROOT } from './site-files.mjs';
 
-const port = Number(process.argv[2] || 8790);
+const port = Number(process.argv[2] || 8791);
+const DIST = join(ROOT, 'dist');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -26,6 +28,8 @@ const TYPES = {
   '.jpg': 'image/jpeg',
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.wasm': 'application/wasm',
   '.txt': 'text/plain; charset=utf-8',
 };
 
@@ -36,8 +40,8 @@ async function isFile(p) {
 /** Pages' lookup order for a path: exact file, then `.html`, then `/index.html`. */
 async function resolveStatic(pathname) {
   const rel = normalize(decodeURIComponent(pathname)).replace(/^[\\/]+/, '');
-  const base = join(ROOT, rel);
-  if (!base.startsWith(ROOT.replace(/[\\/]$/, '') + sep) && base !== ROOT.replace(/[\\/]$/, '')) return null;
+  const base = join(DIST, rel);
+  if (!base.startsWith(DIST + sep) && base !== DIST) return null;
   for (const candidate of [base, base + '.html', join(base, 'index.html')]) {
     if (await isFile(candidate)) return candidate;
   }
