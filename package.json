@@ -1,0 +1,11 @@
+{
+  "name": "nomad-site",
+  "private": true,
+  "type": "module",
+  "description": "nomad.ax: static pages and the /dl Pages Functions. No build step.",
+  "scripts": {
+    "test": "node --test tools/releases.test.mjs",
+    "check": "node tools/check-site.mjs",
+    "serve": "node tools/serve.mjs"
+  }
+}
