@@ -330,7 +330,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 700; }
   letter-spacing: -0.015em;
   text-decoration: none;
 }
-.menu-sheet .btn { margin-top: 18px; width: 100%; }
+.menu-sheet .btn { display: flex; margin-top: 18px; width: 100%; padding: 0 24px; font-size: 16px; }
 
 @keyframes sheet-in {
   from { opacity: 0; transform: translateY(-8px); }
@@ -1131,6 +1131,13 @@ html:not(.js) .scene .desk-frame { width: 100%; }
       animation: rise linear both;
       animation-timeline: view();
       animation-range: entry 0% cover 45%;
+    }
+    /* The AX scene's desk is sticky, and a sticky element's own view
+       progress stalls while it is pinned; it rises on its section's entry. */
+    .scene { view-timeline: --scene block; }
+    .scene .rise {
+      animation-timeline: --scene;
+      animation-range: entry 0% entry 55%;
     }
     .recede {
       animation: recede linear both;
