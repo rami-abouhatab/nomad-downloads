@@ -146,6 +146,11 @@ test('manifest?product=all lists every product; drafts and pre-releases never sh
   assert.equal(products.reach.builds.arm64.url, '/dl/reach/arm64');
 });
 
+test('the manifest is readable from the account portal (CORS, any origin)', async () => {
+  const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=all'), fakeFetch());
+  assert.equal(res.headers.get('Access-Control-Allow-Origin'), '*');
+});
+
 test('manifest?product=unknown is a 404 with the list of products', async () => {
   const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=word'), fakeFetch());
   assert.equal(res.status, 404);
