@@ -22,9 +22,21 @@
      light key stops a shade short of white on purpose (an app surface needs
      room above it); a public page is not an app surface. */
   --site-page: #ffffff;
-  /* Apple's #f5f5f7 band, in the house's own value. */
-  --site-band: var(--surface);
+  /* Rami, 2026-10-08: no grey bands. Every ground is white; a section is
+     marked by a hairline and a card by its edge, never by a fill. */
   --site-line: var(--border-soft);
+  --site-edge: inset 0 0 0 var(--hairline) var(--border-soft);
+
+  /* The footer card: black, inset from the window, its own greys. Contrast
+     on --site-foot (#08080a), and in brackets under the brightest point of
+     the glow: text 16.4:1 (11.9), muted 7.8:1 (5.6), faint 6.5:1 (4.75).
+     Every 12px line clears AA (4.5:1) wherever it sits. */
+  --site-foot: #08080a;
+  --site-foot-text: #e8e8ed;
+  --site-foot-muted: #a1a1a6;
+  --site-foot-faint: #939398;
+  --site-foot-line: rgba(255, 255, 255, 0.12);
+  --site-foot-inset: 12px;
 
   /* Marketing type. tokens.css stops at --t-page (17px) because an app never
      needs a 56px headline; a product page does. Inter, tracked tighter as it
@@ -52,6 +64,7 @@
   :root {
     --site-gutter: var(--space-xl);
     --site-section: calc(var(--space-xxl) * 3);
+    --site-foot-inset: 16px;
   }
 }
 
@@ -381,9 +394,9 @@ img.icon {
   text-decoration: none;
 }
 
-.brand img {
-  -webkit-mask: var(--squircle) center / 100% 100% no-repeat;
-  mask: var(--squircle) center / 100% 100% no-repeat;
+.brand .camel {
+  /* The camel's weight sits low; a hair up puts it on the word's x-height. */
+  transform: translateY(-1px);
 }
 
 .gnav-links ul {
@@ -708,8 +721,21 @@ img.icon {
   padding-block: calc(var(--site-section) / 2);
 }
 
+/* A band used to be a grey ground. Now it is white like the page, and a
+   hairline the width of the content marks where it starts. */
 .band {
-  background: var(--site-band);
+  position: relative;
+}
+
+.band::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(var(--site-max), 100% - 2 * var(--site-gutter));
+  height: var(--hairline);
+  background: var(--site-line);
+  transform: translateX(-50%);
 }
 
 .section-head {
@@ -756,6 +782,7 @@ img.icon {
   padding: var(--space-xxl) var(--space-xxl) var(--space-xxl) calc(var(--space-xxl) + var(--space-base));
   border-radius: var(--r-float);
   background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .ax-card-copy > * + * {
@@ -785,6 +812,7 @@ img.icon {
   padding: var(--space-xxl) var(--space-xl) var(--space-xl);
   border-radius: var(--r-float);
   background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .card > .plate,
@@ -897,6 +925,7 @@ img.icon {
   padding: var(--space-xxl);
   border-radius: var(--r-float);
   background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .step-n {
@@ -955,6 +984,7 @@ img.icon {
   padding: var(--space-xxl);
   border-radius: var(--r-float);
   background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .plan.lit {
@@ -1133,6 +1163,7 @@ a.nm-btn.plan-cta {
   padding: var(--space-xxl);
   border-radius: var(--r-float);
   background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .app-card-head {
@@ -1220,7 +1251,8 @@ a.nm-btn.plan-cta {
   align-items: center;
   padding: calc(var(--space-xxl) * 1.5);
   border-radius: var(--r-float);
-  background: var(--site-band);
+  background: var(--site-page);
+  box-shadow: var(--site-edge);
 }
 
 .in-ax-copy > * + * {
@@ -1313,7 +1345,8 @@ a.nm-btn.plan-cta {
   align-items: center;
   padding: var(--space-md) var(--space-base);
   border-radius: var(--r-card);
-  background: var(--site-band);
+  background: var(--site-page);
+  box-shadow: var(--site-edge);
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -1427,28 +1460,60 @@ a.nm-btn.plan-cta {
 
 /* ── Footer ───────────────────────────────────────────────────────────── */
 
+/* A black card set into the white page, a small even gap from the window's
+   sides and bottom (Rami, 2026-10-08). Everything inside is small and quiet,
+   apple.com's footer in size: 12px type, muted greys, tight columns. */
 .foot {
-  background: var(--site-band);
-  color: var(--text-secondary);
+  padding: 0 var(--site-foot-inset) var(--site-foot-inset);
+  background: var(--site-page);
+}
+
+.foot-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-sheet);
+  /* The light: a static radial gradient falling from the top edge onto the
+     columns, and a faint top rim. Painted once; nothing here moves. */
+  background:
+    radial-gradient(70% 85% at 50% 0%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.045) 42%, transparent 75%),
+    var(--site-foot);
+  box-shadow: inset 0 var(--hairline) 0 rgba(255, 255, 255, 0.1);
+  color: var(--site-foot-muted);
   font-size: var(--site-t-meta);
   line-height: 1.5;
 }
 
-.foot-note {
-  padding: var(--space-lg) 0;
-  border-bottom: var(--hairline) solid var(--border);
+.foot-inner {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(var(--space-xxl) + var(--space-base));
+}
+
+.foot-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--site-foot-text);
+  font-size: var(--site-t-small);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.foot-brand .camel {
+  transform: translateY(-1px);
 }
 
 .foot-cols {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: var(--space-xl);
-  padding: var(--space-xxl) 0;
+  padding: var(--space-xxl) 0 var(--space-xl);
 }
 
 .foot-col h2 {
   margin-bottom: var(--space-sm);
-  color: var(--text-primary);
+  color: var(--site-foot-text);
   font-size: var(--site-t-meta);
   font-weight: 600;
 }
@@ -1459,20 +1524,37 @@ a.nm-btn.plan-cta {
 }
 
 .foot-col li + li {
-  margin-top: var(--space-sm);
+  margin-top: var(--space-xs);
 }
 
 .foot a {
-  color: var(--text-secondary);
+  color: var(--site-foot-muted);
   text-decoration: none;
 }
 
+.foot .foot-brand {
+  color: var(--site-foot-text);
+}
+
 @media (hover: hover) {
-  .foot a:hover {
-    color: var(--text-primary);
+  .foot-col a:hover,
+  .foot-legal a:hover {
+    color: var(--site-foot-text);
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+}
+
+.foot a:focus-visible {
+  outline: 2px solid var(--site-foot-text);
+  outline-offset: 2px;
+  border-radius: var(--r-pip);
+}
+
+.foot-note {
+  padding: var(--space-base) 0;
+  border-top: var(--hairline) solid var(--site-foot-line);
+  color: var(--site-foot-faint);
 }
 
 .foot-base {
@@ -1480,9 +1562,10 @@ a.nm-btn.plan-cta {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-md) var(--space-xl);
+  gap: var(--space-sm) var(--space-xl);
   padding: var(--space-base) 0 var(--space-xxl);
-  border-top: var(--hairline) solid var(--border);
+  border-top: var(--hairline) solid var(--site-foot-line);
+  color: var(--site-foot-faint);
 }
 
 .foot-legal {
@@ -1493,14 +1576,29 @@ a.nm-btn.plan-cta {
 
 .foot-legal a + a {
   padding-left: var(--space-base);
-  border-left: var(--hairline) solid var(--border);
+  border-left: var(--hairline) solid var(--site-foot-line);
 }
 
 .foot-locale {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  color: var(--text-primary);
+  color: var(--site-foot-muted);
+}
+
+/* The faint wordmark low in the card: type, not an image, at a few percent.
+   It sits under the base line and is clipped by the card's own corners. */
+.foot-word {
+  margin: calc(var(--space-base) * -1) 0 -0.16em;
+  color: rgba(255, 255, 255, 0.045);
+  font-size: clamp(72px, 15vw, 210px);
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 0.74;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ── Motion: scroll-driven, compositor-only, absent under reduced motion ── */
@@ -1586,6 +1684,7 @@ a.nm-btn.plan-cta {
 
   .foot-cols {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: var(--space-xl);
   }
 
   .places {
@@ -1664,6 +1763,10 @@ a.nm-btn.plan-cta {
   .foot-base {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .foot-card {
+    border-radius: var(--r-float);
   }
 
   .foot-legal span {

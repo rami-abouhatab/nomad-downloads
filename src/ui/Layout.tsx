@@ -11,7 +11,7 @@
  */
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Button } from '@nd/controls/Button';
-import { LinkButton, Sym } from './kit';
+import { CamelMark, LinkButton, Sym } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
 import { PeriodProvider } from './period';
 import type { PageId } from '../pages';
@@ -31,7 +31,7 @@ const MORE: { id: PageId; label: string; href: string }[] = [
 function Brand() {
   return (
     <a className="brand" href="/" aria-label="Nomad home">
-      <img src="/assets/mark-180.png" alt="" width={26} height={26} />
+      <CamelMark height={17} />
       <span>Nomad</span>
     </a>
   );
@@ -150,8 +150,18 @@ function LocalNav({ name, links, cta }: LocalNavProps) {
 
 type Col = { title: string; links: { label: string; href: string }[] };
 
+/* Five short columns, apple.com's footer in size and voice: small type, muted,
+   nothing a person has to read twice. Pricing and Download sit with the
+   products they buy and install. */
 const FOOT: Col[] = [
-  { title: 'Products', links: PRODUCTS.map(({ label, href }) => ({ label, href })) },
+  {
+    title: 'Products',
+    links: [
+      ...PRODUCTS.map(({ label, href }) => ({ label, href })),
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Download', href: '/download' },
+    ],
+  },
   {
     title: 'Account',
     links: [
@@ -161,18 +171,10 @@ const FOOT: Col[] = [
     ],
   },
   {
-    title: 'Buy and download',
-    links: [
-      { label: 'Pricing', href: '/pricing' },
-      { label: 'Compare AX plans', href: '/pricing#compare' },
-      { label: 'Apps on their own', href: '/pricing#apps' },
-      { label: 'Download', href: '/download' },
-    ],
-  },
-  {
     title: 'Support',
     links: [
       { label: 'Questions about AX', href: '/ax#questions' },
+      { label: 'Compare AX plans', href: '/pricing#compare' },
       { label: 'Which download is mine?', href: '/download#which' },
       { label: 'Your data', href: '/privacy#what-you-can-do' },
     ],
@@ -193,42 +195,56 @@ const FOOT: Col[] = [
   },
 ];
 
+/* Rami, 2026-10-08: the footer is a black card inset from the window by a
+   small gap, the page around it pure white. The light inside it is a static
+   radial gradient falling from the card's top edge, and the faint "Nomad" low
+   in the card is type at a few percent: nothing animates and nothing filters,
+   so scrolling past it costs the compositor nothing (the first law). */
 function Footer() {
   return (
     <footer className="foot">
-      <div className="wrap">
-        <p className="foot-note">
-          Prices in US dollars. AX, Reach, Drift and Nomad Office need a Nomad account; Polaris Browser works without one. AX Starter's
-          14-day trial is for new accounts.
+      <div className="foot-card">
+        <div className="wrap foot-inner">
+          <a className="foot-brand" href="/" aria-label="Nomad home">
+            <CamelMark height={14} />
+            <span>Nomad</span>
+          </a>
+          <div className="foot-cols">
+            {FOOT.map((c) => (
+              <section key={c.title} className="foot-col" aria-label={c.title}>
+                <h2>{c.title}</h2>
+                <ul>
+                  {c.links.map((l) => (
+                    <li key={l.label}>
+                      <a href={l.href}>{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+          <p className="foot-note">
+            Prices in US dollars. AX, Reach, Drift and Nomad Office need a Nomad account; Polaris Browser works without one. AX
+            Starter's 14-day trial is for new accounts.
+          </p>
+          <div className="foot-base">
+            <p className="foot-legal">
+              <span>Copyright © 2026 Nomad. All rights reserved.</span>
+              <a href="/privacy">Privacy</a>
+              <a href="/terms">Terms</a>
+            </p>
+            {/* The country/language slot. One locale today, so it is a statement,
+                not a control: a picker with one row is a menu row that does
+                nothing (hig.md tripwire 10). */}
+            <p className="foot-locale">
+              <Sym name="globe" size={14} />
+              <span>English (United States)</span>
+            </p>
+          </div>
+        </div>
+        <p className="foot-word" aria-hidden="true">
+          Nomad
         </p>
-        <div className="foot-cols">
-          {FOOT.map((c) => (
-            <section key={c.title} className="foot-col" aria-label={c.title}>
-              <h2>{c.title}</h2>
-              <ul>
-                {c.links.map((l) => (
-                  <li key={l.label}>
-                    <a href={l.href}>{l.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
-        </div>
-        <div className="foot-base">
-          <p className="foot-legal">
-            <span>Copyright © 2026 Nomad. All rights reserved.</span>
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-          </p>
-          {/* The country/language slot. One locale today, so it is a statement,
-              not a control: a picker with one row is a menu row that does
-              nothing (hig.md tripwire 10). */}
-          <p className="foot-locale">
-            <Sym name="globe" size={16} />
-            <span>English (United States)</span>
-          </p>
-        </div>
       </div>
     </footer>
   );

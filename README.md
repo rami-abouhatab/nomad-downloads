@@ -31,6 +31,15 @@ one file, `src/data.ts`. `tools/check-site.mjs` fails the build output if any
 page prints a price THE LAW does not name. Buy buttons go to
 `https://account.nomad.ax/checkout?product=<id>&period=yearly|monthly`.
 
+**The mark is the camel** (Rami, 2026-10-08): Nomad's one mark, everywhere.
+The bar and the footer draw it inline (`CamelMark` in `src/ui/kit.tsx`, the path
+from `design-assets/camel-mark-2026-09-30/nomad-camel.svg`). The favicons
+(`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192/512.png`)
+are the charcoal camel on white, and `/brand/camel-mark.png` is the hosted
+mark the emails point at. No other Nomad mark ships. Every ground is white:
+sections are marked by a hairline, cards by their edge; the one dark surface
+is the footer card.
+
 **AX has no logo yet.** Until it does, AX is drawn typographically on a
 squircle (`ProductMark` in `src/ui/kit.tsx`). Drift's plate is a placeholder
 glyph too; every other icon is the family-v1 artwork from nomad-shell
