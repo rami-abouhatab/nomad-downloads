@@ -1,34 +1,23 @@
-import { assetFor, latestRelease } from './[arch].js';
-
 /**
- * What is downloadable right now, as JSON.
+ * /dl/manifest — what is downloadable right now, as JSON.
  *
- * The page asks this instead of carrying hardcoded filenames, which is what
- * makes publishing a release a *zero-commit* operation: upload two installers
- * and the buttons light up on their own, with the right version and the right
- * sizes. The previous shape — a `RELEASE` object edited by a script — meant
- * every publish touched the page, and a publish that forgot to would leave
- * live buttons pointing at a version that no longer existed.
+ *   /dl/manifest                 AX, in the original shape (urls /dl/<arch>)
+ *   /dl/manifest?product=reach   one product
+ *   /dl/manifest?product=all     every product, under `products`
+ *
+ * The pages ask this instead of carrying filenames, which is what makes
+ * publishing a release a zero-commit operation: upload the installers and the
+ * buttons light up on their own, with the right version and sizes.
  *
  * A build with no asset is reported as `null` rather than omitted, so the page
- * can draw a disabled card that says "soon" instead of silently dropping a
- * platform someone is waiting for.
+ * can draw a disabled "Soon" button instead of silently dropping a platform
+ * someone is waiting for.
  */
-export async function onRequestGet() {
-  const release = await latestRelease();
+import { PRODUCTS, describeProduct, listReleases, productSlug, productUrl } from '../_lib/releases.js';
 
-  const describe = (arch) => {
-    const asset = assetFor(release, arch);
-    return asset ? { file: asset.name, size: asset.size, url: `/dl/${arch}` } : null;
-  };
-
-  const body = {
-    version: release?.tag_name?.replace(/^v/, '') ?? null,
-    published: release?.published_at ?? null,
-    builds: { arm64: describe('arm64'), x64: describe('x64') },
-  };
-
-  return new Response(JSON.stringify(body), {
+const json = (body, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       // Short enough that a fresh release shows up while you are still
@@ -36,4 +25,30 @@ export async function onRequestGet() {
       'Cache-Control': 'public, max-age=120',
     },
   });
+
+export async function handleManifest(url, fetchImpl = fetch) {
+  const asked = url.searchParams.get('product');
+
+  if (asked && asked.toLowerCase() === 'all') {
+    const releases = await listReleases(fetchImpl);
+    const products = {};
+    for (const slug of Object.keys(PRODUCTS)) products[slug] = describeProduct(releases, slug, productUrl);
+    return json({ products });
+  }
+
+  if (asked) {
+    const slug = productSlug(asked);
+    if (!slug) return json({ error: `Unknown product "${asked}".`, products: Object.keys(PRODUCTS) }, 404);
+    const releases = await listReleases(fetchImpl);
+    return json(describeProduct(releases, slug, productUrl));
+  }
+
+  // No product: the original response, for the original page and anything
+  // that copied it. AX, with the short /dl/<arch> urls.
+  const releases = await listReleases(fetchImpl);
+  return json(describeProduct(releases, 'ax', (_slug, arch) => `/dl/${arch}`));
+}
+
+export function onRequestGet({ request }) {
+  return handleManifest(new URL(request.url));
 }
