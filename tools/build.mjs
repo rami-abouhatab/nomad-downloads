@@ -71,8 +71,10 @@ function page(meta, body, a) {
     <meta property="og:description" content="${esc(meta.description)}" />
     <meta property="og:url" content="${url}" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" href="/assets/mark-180.png" />
-    <link rel="apple-touch-icon" href="/assets/mark-180.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 ${font ? `    <link rel="preload" href="/_s/${font}" as="font" type="font/woff2" crossorigin />\n` : ''}${a.css
     .map((f) => `    <link rel="stylesheet" href="/${f}" />\n`)
     .join('')}${a.preload.map((f) => `    <link rel="modulepreload" href="/${f}" />\n`).join('')}    <script type="module" src="/${a.entry}"></script>

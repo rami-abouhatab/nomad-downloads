@@ -13,3 +13,9 @@
 # changed icon reaches everyone by tomorrow at the latest.
 /assets/*
   Cache-Control: public, max-age=86400
+
+# The camel, for emails and anyone who links to the mark. Not content-hashed:
+# a day, like /assets.
+/brand/*
+  Cache-Control: public, max-age=86400
+  Access-Control-Allow-Origin: *
