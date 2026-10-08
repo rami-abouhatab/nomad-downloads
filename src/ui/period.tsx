@@ -55,7 +55,7 @@ export function PriceBlock({ product }: { product: ProductId }) {
   return (
     <div className="price">
       <p className="price-big">
-        {period === 'yearly' ? p.yearly : p.monthly}
+        {period === 'yearly' ? p.yearly : p.monthly}{' '}
         <small>{period === 'yearly' ? 'a year' : 'a month'}</small>
       </p>
       <p className="price-sub">

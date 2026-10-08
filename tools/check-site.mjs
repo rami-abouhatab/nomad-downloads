@@ -1,6 +1,7 @@
-// Validates the site before a deploy. No dependencies: `node tools/check-site.mjs`.
+// Validates the BUILT site (dist/) before a deploy. Run `npm run build` first,
+// then `node tools/check-site.mjs`. No dependencies.
 //
-// For every page (desk/, the shell's build output, is not ours to check):
+// For every page in dist/ (desk/, the shell's build output, is not ours to check):
 //   - the document basics: doctype, <html lang>, charset, viewport, a title,
 //     one <h1> on every page that has a <main>
 //   - well-formed markup: every non-void element closed, in order
@@ -9,12 +10,16 @@
 //     serve it (pretty URLs, folder index pages, the /dl functions), and every
 //     #fragment exists on the page it points to
 //   - every external link goes to a host we expect
-//   - url(...) references in the stylesheets resolve
-//   - the shared partials (nav, footer, plans…) are in sync on every page
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
+//   - url(...) references in the built stylesheets resolve
+//   - the page was prerendered (a filled #root, never a blank client-only
+//     page) and loads exactly one module entry to hydrate it
+//   - every buy link goes to account.nomad.ax/checkout with a product the
+//     billing contract sells (C3) and a period of yearly or monthly, and no
+//     page still sends a buyer to the old billing.nomad.ax/?product= form
+//   - every page's prices are prices THE LAW names (docs/pricing.md)
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT, pages, routeOf } from './site-files.mjs';
+import { DIST as ROOT, pages, routeOf } from './site-files.mjs';
 import { ARCHES, productSlug } from '../functions/_lib/releases.js';
 
 const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
@@ -24,6 +29,19 @@ const EXTERNAL_OK = [
   /^(account|billing|drift|desk|cms)\.nomad\.ax$/,
   /^developers\.google\.com$/,
 ];
+
+/** Platform contract C3: what billing sells. */
+const PRODUCTS = new Set(['ax:starter', 'ax:pro', 'ax:ultra', 'office', 'reach:premium', 'drift:premium']);
+/** THE LAW's prices (monthly, yearly, the yearly-per-month line), plus the extra mailbox. */
+const LAW_PRICES = new Set([
+  '$9.99', '$99', '$8.25', '$16.99', '$169', '$14.08', '$29.99', '$299', '$24.92',
+  '$4.99', '$49', '$4.08', '$2.99', '$29', '$2.42', '$5.99', '$59', '$4.92', '$1.99',
+]);
+
+if (!existsSync(join(ROOT, 'index.html'))) {
+  console.log('dist/ has no index.html: run `npm run build` first.');
+  process.exit(1);
+}
 
 const errors = [];
 const warn = (file, msg) => errors.push(`${file}: ${msg}`);
@@ -96,6 +114,14 @@ function checkRef(file, html, t, value, kind) {
   const line = lineOf(html, t.index);
   if (/^[a-z]+:\/\//i.test(value)) {
     const url = new URL(value);
+    if (url.hostname === 'billing.nomad.ax' && url.searchParams.has('product'))
+      warn(file, `line ${line}: buy link still goes to billing.nomad.ax (${value}); use account.nomad.ax/checkout`);
+    if (url.hostname === 'account.nomad.ax' && url.pathname === '/checkout') {
+      const product = url.searchParams.get('product');
+      const period = url.searchParams.get('period');
+      if (!PRODUCTS.has(product)) warn(file, `line ${line}: checkout for unknown product "${product}"`);
+      if (period !== 'yearly' && period !== 'monthly') warn(file, `line ${line}: checkout with period "${period}"`);
+    }
     if (url.protocol !== 'https:') warn(file, `line ${line}: insecure link ${value}`);
     if (!EXTERNAL_OK.some((re) => re.test(url.hostname))) warn(file, `line ${line}: unexpected external host ${url.hostname}`);
     externals.set(value, (externals.get(value) || 0) + 1);
@@ -136,6 +162,17 @@ function checkPage(file) {
     const h1 = open('h1').length;
     if (h1 !== 1) warn(file, `has ${h1} <h1> elements (want 1)`);
     if (!open('main').some((t) => t.attrs.id === 'main')) warn(file, '<main> should carry id="main" for the skip link');
+  }
+
+  // Prerendered, and hydrated by one module entry.
+  if (file !== 'g/index.html') {
+    const root = /<div id="root">([\s\S]*?)<\/div>\s*<\/body>/.exec(html);
+    if (!root || root[1].trim().length < 200) warn(file, '#root is empty: the page was not prerendered');
+    const modules = all.filter((t) => !t.close && t.name === 'script' && t.attrs.type === 'module');
+    if (modules.length !== 1) warn(file, `has ${modules.length} module scripts (want 1 entry)`);
+    for (const m of html.matchAll(/\$\d+(?:\.\d+)?/g)) {
+      if (!LAW_PRICES.has(m[0])) warn(file, `line ${lineOf(html, m.index)}: price ${m[0]} is not in THE LAW`);
+    }
   }
 
   // Well-formed: a stack of open elements.
@@ -187,10 +224,7 @@ function checkCss(file) {
 
 const files = pages();
 for (const f of files) checkPage(f);
-for (const f of ['site.css', '_legal.css']) checkCss(f);
-
-const sync = spawnSync(process.execPath, [join(ROOT, 'tools', 'sync-partials.mjs'), '--check'], { encoding: 'utf8' });
-if (sync.status !== 0) warn('partials', sync.stdout.trim() || sync.stderr.trim());
+for (const f of readdirSync(join(ROOT, '_s')).filter((n) => n.endsWith('.css'))) checkCss(`_s/${f}`);
 
 console.log(`Checked ${files.length} pages: ${files.join(', ')}`);
 console.log(`External links (${externals.size}):`);

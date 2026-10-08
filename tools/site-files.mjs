@@ -1,22 +1,24 @@
-// Which files make up the site, shared by the tools.
+// Which files make up the BUILT site (dist/), shared by the tools.
 import { readdirSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = fileURLToPath(new URL('..', import.meta.url));
+/** What `npm run build` writes and what is deployed. */
+export const DIST = join(ROOT, 'dist');
 
-/** Folders that are not pages: build output, tooling, templates. */
-const SKIP = new Set(['.git', '.wrangler', 'node_modules', 'desk', 'tools', 'partials', 'functions', 'assets']);
+/** Folders in dist/ that are not ours to check as pages: the shell's build, hashed output, images. */
+const SKIP = new Set(['desk', '_s', 'assets']);
 
-/** Every .html page, as a forward-slash path relative to the root. */
-export function pages(dir = ROOT) {
+/** Every .html page in dist/, as a forward-slash path relative to dist/. */
+export function pages(dir = DIST) {
   const out = [];
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) {
       if (!SKIP.has(name)) out.push(...pages(full));
     } else if (name.endsWith('.html')) {
-      out.push(relative(ROOT, full).split(sep).join('/'));
+      out.push(relative(DIST, full).split(sep).join('/'));
     }
   }
   return out.sort();

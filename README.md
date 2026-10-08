@@ -6,43 +6,54 @@ Reach, Drift, Nomad Office), pricing, downloads, and the legal pages. Also the
 `/desk` — the shell's web build, which a guest link opens (nomad-shell
 `src/guest`).
 
-Plain HTML, one stylesheet (`site.css`) and one small script (`site.js`). No
-framework and no build step: every page reads and works with scripts off.
+**Built from nomad-design.** Every page is React on nomad-design's tokens and
+controls (the Button anatomy, Segment, ProBadge, `Sym`), imported the way
+nomad-cms and nomad-account import it (`file:` sibling, React deduped,
+`fs.allow` over `..`). Each page is **prerendered to static HTML at build
+time** and then hydrated by its own small entry, so it reads and works before
+any script runs, and a page never downloads another page's code.
 
-| Path | Page |
+| Path | Source |
 | --- | --- |
-| `/` | `index.html` — Nomad, "Wherever you are." |
-| `/ax` | `ax.html` — AX, the desktop, with its plans |
+| `/` | `src/pages/home.tsx` |
+| `/ax` | `src/pages/ax.tsx` — AX, with its plans and questions |
 | `/polaris` `/reach` `/drift` `/office` | one page per app |
-| `/pricing` | AX plans first, then "Apps on their own" |
+| `/pricing` | AX plans, the comparison table, then "Apps on their own" |
 | `/download` | every product, per Windows architecture |
 | `/privacy` `/terms` | legal (entity, contact and governing law still to fill) |
 
-Prices on these pages are THE LAW in `nomad-shell/docs/pricing.md`
-(2026-10-08). If a price changes there, change `partials/plans.html` and the
-app prices in `pricing.html`, `reach.html`, `drift.html` and `office.html`.
+`src/pages.ts` lists every page with its title and description;
+`src/ui/` holds the frame (global bar, product bar, footer) and the shared
+sections (hero, plan cards, comparison table, questions).
 
-**AX has no logo yet.** Until it does, AX is drawn typographically: the
-`.plate-ax` squircle and the `.ax-lockup` wordmark in `site.css`. Drift's plate
-is a placeholder glyph too; every other icon is the family-v1 artwork from
-nomad-shell, with the shell's squircle baked in (`assets/icons/`).
+Prices are THE LAW in `nomad-shell/docs/pricing.md` (2026-10-08) and live in
+one file, `src/data.ts`. `tools/check-site.mjs` fails the build output if any
+page prints a price THE LAW does not name. Buy buttons go to
+`https://account.nomad.ax/checkout?product=<id>&period=yearly|monthly`.
 
-## Shared markup
+**AX has no logo yet.** Until it does, AX is drawn typographically on a
+squircle (`ProductMark` in `src/ui/kit.tsx`). Drift's plate is a placeholder
+glyph too; every other icon is the family-v1 artwork from nomad-shell
+(`public/assets/icons/`). The product screenshots in `public/assets/shots/`
+are the real apps, captured headless from their own code on sample data.
 
-The nav, the footer, the yearly/monthly switch and the AX plan cards live once
-in `partials/` and are copied into each page between
-`<!-- partial:name -->` markers:
+**Icons.** nomad-design's `symbols.tsx` imports every icon family it can draw
+(~1.5 MB). `tools/nd-symbols.mjs` answers that import with a module generated
+from nomad-design's own maps holding only `SITE_MARKS`. A page that starts
+drawing a new mark adds its name there.
 
-    node tools/sync-partials.mjs          # after editing anything in partials/
+## Working on it
 
-## Checking it
-
-    node tools/check-site.mjs             # links, fragments, markup, ids, alt text, partials
+    npm install
+    npm run dev                 # http://127.0.0.1:5390, client-rendered, hot reload
+    npm run build               # typecheck, then tools/build.mjs → dist/
+    node tools/serve.mjs        # dist/ on http://127.0.0.1:8791, /dl included
+    node tools/check-site.mjs   # checks dist/: links, fragments, markup, prerender, buy links, prices
     node --test tools/releases.test.mjs   # the /dl functions
-    node tools/serve.mjs                  # preview on http://127.0.0.1:8790, /dl included
 
+`npm run build` prints every page's JS and CSS, raw and gzipped.
 `serve.mjs` stands in for `wrangler pages dev`, whose workerd has no ARM64
-Windows binary: pretty URLs, folder index pages, and the real functions
+Windows binary: pretty URLs (`ax.html` at `/ax`), and the real functions
 answering from the real GitHub releases (downloads are not streamed in the
 preview).
 
@@ -80,21 +91,18 @@ the older `bynomad.co` hosts) are attached to that project in Cloudflare.
 
        npx vite build --mode web --outDir ../nomad-site/desk
 
-2. Check, then stage only what is public into `dist/` (no tools, partials,
-   README or function sources):
+2. Build and check. The build stages `public/` (assets, `/g`, `_headers`) and
+   copies `desk/` into `dist/`:
 
+       npm run build
        node tools/check-site.mjs
        node --test tools/releases.test.mjs
-       node tools/stage.mjs
 
 3. Deploy from the repository root — wrangler compiles `./functions` from the
    folder it runs in, whatever folder it uploads — with `CLOUDFLARE_API_TOKEN`
    and `CLOUDFLARE_ACCOUNT_ID` in the environment:
 
        npx wrangler pages deploy dist --project-name nomad-downloads --branch main --commit-dirty=true
-
-   Deploying `.` instead of `dist` still works, as it always has; it just
-   publishes the tooling alongside the site.
 
 On the ARM64 laptop wrangler's `workerd` has no binary: install wrangler with
 `--ignore-scripts`, run `npm rebuild esbuild`, and stub

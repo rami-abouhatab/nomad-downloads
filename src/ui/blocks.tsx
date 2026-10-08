@@ -272,7 +272,7 @@ export function SinglePlan({
 }) {
   const period = usePeriod();
   return (
-    <section className="section band" id={id} aria-labelledby={`${id}-title`}>
+    <section className="section" id={id} aria-labelledby={`${id}-title`}>
       <div className="wrap split">
         <div className="split-copy reveal">
           <p className="eyebrow">{eyebrow}</p>
