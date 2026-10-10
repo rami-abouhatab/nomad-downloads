@@ -9,7 +9,7 @@
  * architecture wins:
  *
  *     <Product>-<version>-<arch>-setup.exe
- *     AX-1.0.0-arm64-setup.exe · Reach-0.4.2-x64-setup.exe · NomadOffice-…
+ *     MeridianOS-1.0.0-arm64-setup.exe · Reach-0.4.2-x64-setup.exe · NomadOffice-…
  *
  * Builds published before the products were named say `Nomad-…`; they are
  * AX's, so AX accepts both prefixes. That keeps `/dl/arm64` (the old link
@@ -31,10 +31,11 @@ export const ARCHES = ['arm64', 'x64'];
  * prefixes that belong to the product, the first being today's.
  */
 export const PRODUCTS = {
-  ax: { name: 'AX', prefixes: ['AX', 'Nomad'] },
+  ax: { name: 'MeridianOS', prefixes: ['MeridianOS', 'AX', 'Nomad'] },
   polaris: { name: 'Polaris Browser', prefixes: ['Polaris'] },
   reach: { name: 'Reach', prefixes: ['Reach'] },
   drift: { name: 'Drift', prefixes: ['Drift'] },
+  citadel: { name: 'Citadel', prefixes: ['Citadel'] },
   office: { name: 'Nomad Office', prefixes: ['NomadOffice'] },
 };
 
@@ -47,6 +48,7 @@ const ALIASES = {
   'polaris-browser': 'polaris',
   reach: 'reach',
   drift: 'drift',
+  citadel: 'citadel',
   office: 'office',
   nomadoffice: 'office',
   'nomad-office': 'office',

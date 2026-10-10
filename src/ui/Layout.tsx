@@ -14,13 +14,15 @@ import { Button } from '@nd/controls/Button';
 import { CamelMark, LinkButton, Sym } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
 import { PeriodProvider } from './period';
+import { footnotesFor } from '../footnotes';
 import type { PageId } from '../pages';
 
 const PRODUCTS: { id: PageId; label: string; href: string }[] = [
-  { id: 'ax', label: 'AX', href: '/ax' },
+  { id: 'ax', label: 'MeridianOS', href: '/ax' },
   { id: 'polaris', label: 'Polaris Browser', href: '/polaris' },
   { id: 'reach', label: 'Reach', href: '/reach' },
   { id: 'drift', label: 'Drift', href: '/drift' },
+  { id: 'citadel', label: 'Citadel', href: '/citadel' },
   { id: 'office', label: 'Nomad Office', href: '/office' },
 ];
 const MORE: { id: PageId; label: string; href: string }[] = [
@@ -32,7 +34,6 @@ function Brand() {
   return (
     <a className="brand" href="/" aria-label="Nomad home">
       <CamelMark height={17} />
-      <span>Nomad</span>
     </a>
   );
 }
@@ -121,32 +122,65 @@ export type LocalNavProps = {
   name: string;
   links: { label: string; href: string; current?: boolean }[];
   cta?: { label: string; href: string };
+  /** 'dark': black all the way down, its line appearing once the page scrolls (MeridianOS). */
+  tone?: 'dark';
 };
 
-/** The product's own bar: its name, its sections, its one verb. */
-function LocalNav({ name, links, cta }: LocalNavProps) {
+/**
+ * The product's own bar: its name, its sections, its one verb. A section link
+ * that goes where the verb goes is dropped (Rami, 2026-10-10: a "Download"
+ * link beside a "Download" button is the same thing twice).
+ *
+ * `tone: 'dark'` (Rami, 2026-10-10: "no bottom border; when I scroll the border appears, but
+ * keep the header black"): the bar is black throughout and its line shows only once the page has
+ * scrolled. An IntersectionObserver on a marker just above the bar decides when, and it sets a
+ * class directly: no scroll listener and no React render on the way.
+ */
+function LocalNav({ name, links, cta, tone }: LocalNavProps) {
+  const shown = cta ? links.filter((l) => l.href !== cta.href && l.label !== cta.label) : links;
+  const nav = useRef<HTMLElement>(null);
+  const marker = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (tone !== 'dark' || !nav.current || !marker.current) return;
+    const el = nav.current;
+    const io = new IntersectionObserver(([e]) => el.classList.toggle('is-scrolled', !e.isIntersecting), { threshold: 0 });
+    io.observe(marker.current);
+    return () => io.disconnect();
+  }, [tone]);
   return (
-    <nav className="lnav" aria-label={name}>
-      <div className="wrap lnav-row">
-        <span className="lnav-name">{name}</span>
-        <ul className="lnav-links">
-          {links.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} aria-current={l.current ? 'page' : undefined}>
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        {cta && (
-          <LinkButton href={cta.href} variant="primary" size="sm" className="lnav-cta">
-            {cta.label}
-          </LinkButton>
-        )}
-      </div>
-    </nav>
+    <>
+      {tone === 'dark' && <div className="lnav-marker" ref={marker} aria-hidden="true" />}
+      <nav className={tone === 'dark' ? 'lnav lnav-dark' : 'lnav'} aria-label={name} ref={nav}>
+        <div className="wrap lnav-row">
+          <span className="lnav-name">{name}</span>
+          <ul className="lnav-links">
+            {shown.map((l) => (
+              <li key={l.href}>
+                <a href={l.href} aria-current={l.current ? 'page' : undefined}>
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {cta && (
+            <LinkButton href={cta.href} variant="primary" size="sm" className="lnav-cta">
+              {cta.label}
+            </LinkButton>
+          )}
+        </div>
+      </nav>
+    </>
   );
 }
+
+/* The privacy promise at the foot of every page. Only what is true today. */
+const PRIVACY = [
+  { title: 'Safe in your account.', body: 'Your files live in your account, on protected, encrypted servers.' },
+  { title: 'No ads.', body: 'None on the desk or in the apps. Polaris blocks trackers too.' },
+  { title: 'Never sold.', body: 'Your data is never sold, rented or shared with advertisers.' },
+  { title: 'Never trains AI.', body: 'Your files, mail and chats are never used to train AI.' },
+  { title: 'Locked by you.', body: 'Citadel encrypts any file or folder behind your own PIN.' },
+]
 
 type Col = { title: string; links: { label: string; href: string }[] };
 
@@ -173,8 +207,8 @@ const FOOT: Col[] = [
   {
     title: 'Support',
     links: [
-      { label: 'Questions about AX', href: '/ax#questions' },
-      { label: 'Compare AX plans', href: '/pricing#compare' },
+      { label: 'Questions about MeridianOS', href: '/ax#questions' },
+      { label: 'Compare MeridianOS plans', href: '/pricing#compare' },
       { label: 'Which download is mine?', href: '/download#which' },
       { label: 'Your data', href: '/privacy#what-you-can-do' },
     ],
@@ -182,8 +216,8 @@ const FOOT: Col[] = [
   {
     title: 'Company',
     links: [
-      { label: 'About Nomad', href: '/#about' },
-      { label: 'One Nomad account', href: '/#account' },
+      { label: 'About Nomad', href: '/' },
+      { label: 'One Nomad account', href: '/#questions' },
     ],
   },
   {
@@ -200,13 +234,42 @@ const FOOT: Col[] = [
    radial gradient falling from the card's top edge, and the faint "Nomad" low
    in the card is type at a few percent: nothing animates and nothing filters,
    so scrolling past it costs the compositor nothing (the first law). */
-function Footer() {
+function Footer({ page }: { page: PageId }) {
+  const notes = footnotesFor(page);
   return (
     <footer className="foot">
+      {/* apple.com's fine print: its own block above the links, centred, plain paragraphs, each
+          with its number (this page's notes, then the ones that hold everywhere) */}
+      <div className="foot-fine">
+        {notes.map((n, i) => (
+          <p key={n}>
+            {i + 1}. {n}
+          </p>
+        ))}
+      </div>
+
+      {/* Then the privacy promise, on every page (Rami, 2026-10-11), the way apple.com ends a page:
+          small type on the white page, straight on the links. Only what is true today. */}
+      <section className="fine" aria-labelledby="privacy-title">
+        <div className="fine-inner">
+          <div className="fine-head">
+            <h2 id="privacy-title">Private by design.</h2>
+            <p>Nomad is paid for by its plans, never by your data.</p>
+          </div>
+          <ul className="fine-points">
+            {PRIVACY.map((x) => (
+              <li key={x.title}>
+                <h3>{x.title}</h3>
+                <p>{x.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
       <div className="foot-card">
         <div className="wrap foot-inner">
           <a className="foot-brand" href="/" aria-label="Nomad home">
-            <CamelMark height={14} />
+            <CamelMark height={17} />
             <span>Nomad</span>
           </a>
           <div className="foot-cols">
@@ -223,13 +286,9 @@ function Footer() {
               </section>
             ))}
           </div>
-          <p className="foot-note">
-            Prices in US dollars. AX, Reach, Drift and Nomad Office need a Nomad account; Polaris Browser works without one. AX
-            Starter's 14-day trial is for new accounts.
-          </p>
           <div className="foot-base">
             <p className="foot-legal">
-              <span>Copyright © 2026 Nomad. All rights reserved.</span>
+              <span>Copyright © 2026 Origins. Nomad is a product of Origins. All rights reserved.</span>
               <a href="/privacy">Privacy</a>
               <a href="/terms">Terms</a>
             </p>
@@ -242,9 +301,6 @@ function Footer() {
             </p>
           </div>
         </div>
-        <p className="foot-word" aria-hidden="true">
-          Nomad
-        </p>
       </div>
     </footer>
   );
@@ -259,7 +315,7 @@ export function Layout({ page, local, children }: { page: PageId; local?: LocalN
       <GlobalNav page={page} sticky={!local} />
       {local && <LocalNav {...local} />}
       <main id="main">{children}</main>
-      <Footer />
+      <Footer page={page} />
     </PeriodProvider>
   );
 }

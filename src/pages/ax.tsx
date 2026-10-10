@@ -1,63 +1,76 @@
 import { Layout } from '../ui/Layout';
-import { AX_DESK, AxPlans, Display, Features, Hero, Questions, SectionHead, WindowShot, type Feature } from '../ui/blocks';
-import { LinkButton, More, ProductMark } from '../ui/kit';
-import { checkout } from '../data';
+import { PlanCard } from '../ui/blocks';
+import { More } from '../ui/kit';
+import { PeriodSwitch } from '../ui/period';
+import { AX_PLANS, PRICE_FOOT } from '../data';
 import { ProBadge } from '@nd/controls/ProBadge';
+import { Band, BandHead, Columns, FAQ, Platforms, type Item } from '../ui/system';
+import { DarkZone } from '../ui/cinema';
+import { Collage } from '../ui/Collage';
+import { Versus } from '../ui/Versus';
+import { MeridianHero } from '../ui/MeridianHero';
+import { useSmoothScroll } from '../ui/smooth';
 
-/* The four places the old scroll scene walked through, each on one of the
-   wallpapers AX ships with: same desk, different light. */
-const PLACES = [
-  { title: 'At home.', body: 'Your apps, your files and your windows, just where you put them.', wall: 'graphite' },
-  { title: 'At the office.', body: 'Sign in on another computer and the same desk opens. Nothing to copy, nothing to set up again.', wall: 'ember' },
-  { title: 'Away.', body: "A hotel, a library, a friend's laptop. Your desk follows your account, not the machine.", wall: 'ocean' },
-  { title: 'Back again.', body: 'Everything you changed while you were out is already here.', wall: 'jade' },
+/* MeridianOS, shaped like apple.com's macOS and microsoft.com's Windows
+   (Rami, 2026-10-10): a black zone first (the opening, then the real Meridian to try and its
+   pictures in a collage, then a clean cut to white), then on white "and so much more", the plans, where it runs, and the questions. */
+
+const pro = <ProBadge plan="Pro" size="sm" />;
+const MORE: Item[] = [
+  { title: 'Nomad Office', icon: 'document', body: 'Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs. Nothing extra to buy.' },
+  { title: 'Polaris Browser', icon: 'globe', body: 'The browser is built in, and each desk keeps its own sign-ins, so work and home never mix.' },
+  { title: 'Reach', icon: 'mail', body: 'All your mail, chats and calls. Pro and Ultra add Reach Premium: longer meetings, recordings and your own mail domain.' },
+  { title: 'Drift', icon: 'send', body: 'Send any file with a link. Pro and Ultra add Drift Premium: bigger files, and sending straight to your phone.' },
+  { title: 'Snapshots', icon: 'seekSnapshot', body: 'A saved photo of your desktop: layout, open apps and tabs. Jump back to it any time. Your files keep their own history.' },
+  { title: 'File history', icon: 'clock', body: 'Go back to an earlier version of any file: 30 days on Starter, a year on Pro, forever on Ultra.' },
+  { title: 'More than one desk', icon: 'layers', tag: pro, body: 'Keep work and home on separate desks, each with its own apps, files and sign-ins. Three on Pro, eight on Ultra.' },
+  { title: 'Guest links', icon: 'seekGuest', tag: pro, body: 'Send someone a view of a desk. It opens in their browser, with nothing to install and no account. Links expire when you say.' },
+  { title: 'Lock, Convert and Fonts', icon: 'lock', tag: pro, body: 'Put a PIN on any file, folder or app. Turn a file into another format in place. Add your own fonts.' },
 ];
 
-const FEATURES: Feature[] = [
-  { title: 'Nomad Office', body: 'Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs. Nothing extra to buy.' },
-  { title: 'Polaris Browser', body: 'The browser is built in, and each desk keeps its own sign-ins, so work and home never mix.' },
-  { title: 'Reach', body: 'All your mail, chats and calls. AX Pro and Ultra add Reach Premium: longer meetings, recordings and your own mail domain.' },
-  { title: 'Drift', body: 'Send any file with a link. AX Pro and Ultra add Drift Premium, the Drift app and sending straight to your phone.' },
-  { title: 'Snapshots', body: 'A saved photo of your desktop: layout, open apps and tabs. Jump back to it any time. Your files keep their own history.' },
-  { title: 'File history', body: 'Go back to an earlier version of any file: 30 days on Starter, a year on Pro, forever on Ultra.' },
-  { title: 'More than one desk', pro: true, body: 'Keep work and home on separate desks, each with its own apps, files and sign-ins. Three on Pro, eight on Ultra.' },
-  { title: 'Guest links', pro: true, body: 'Send someone a view of a desk. It opens in their browser, with nothing to install and no account. Links expire when you say.' },
-  { title: 'Lock, Convert and Fonts', pro: true, body: 'Put a PIN on any file, folder or app. Turn a file into another format in place. Add your own fonts.' },
+/* What the privacy policy (pages/privacy.tsx) says, plus two lines Rami asked for (2026-10-11):
+   the encryption line (true as worded: storage encrypted at rest, sign-ins sealed per account; NOT
+   end-to-end), and the year after a subscription ends, which is his ruling of 2026-10-10 and NOT
+   BUILT yet (nomad-shell docs/pricing.md): it must exist before this page ships. */
+const PRIVATE: Item[] = [
+  { title: 'Safe in your account', icon: 'shield', body: 'Your files live in your Nomad account on protected servers, encrypted where they are stored, not on any one computer. A lost or broken laptop takes nothing with it.' },
+  { title: 'Work and home, apart', icon: 'layers', body: 'Each space keeps its own apps, files and sign-ins, so nothing from one shows up in the other.' },
+  { title: 'Never sold', icon: 'eye', body: 'We do not sell your data, show you ads, or use your files to train anything.' },
+  { title: 'Locked when you want', icon: 'lock', body: 'Put a PIN on anything private with Citadel. We keep only a protected form of the PIN.' },
+  { title: 'Always yours to take', icon: 'download', body: 'Export every file and your account data to your computer at any time. Delete your account and it is erased.' },
+  { title: 'A year to come back', icon: 'clock', body: 'If a subscription ends, we keep everything for a year and remind you to download it. Come back and pick up where you left off.' },
 ];
 
 const QA = [
   {
     q: 'What is a desk?',
-    a: 'A complete workspace: its own apps, files, windows and browser sign-ins. Most people need one. AX Pro gives you three, so work and home never meet; AX Ultra gives you eight.',
+    a: 'A complete workspace: its own apps, files, windows and browser sign-ins. Most people need one. Meridian Pro gives you three, so work and home never meet; Meridian Ultra gives you eight.',
   },
   {
     q: 'What happens when I use another computer?',
-    a: 'Install AX, sign in with your Nomad account, and your desk opens the way you left it. Your files and settings live in your account, not on the machine.',
+    a: 'Install MeridianOS, sign in with your Nomad account, and your desk opens the way you left it. Your files and settings live in your account, not on the machine.',
   },
   {
     q: 'How does the free trial work?',
-    a: 'AX Starter is free for 14 days. You start it, and later change or cancel it, in your Nomad account on the web. Nothing is ever paid inside the app.',
+    a: 'Meridian Starter is free for 14 days. You start it, and later change or cancel it, in your Nomad account on the web. Nothing is ever paid inside the app.',
   },
   {
     q: 'Can I change plans later?',
-    a: 'Yes. Moving up or down is priced on the spot, with credit for what is left of your current plan. If you already pay for Nomad Office, Reach Premium or Drift Premium on their own, an AX plan that includes them replaces that payment.',
+    a: 'Yes. Moving up or down is priced on the spot, with credit for what is left of your current plan.',
   },
   {
     q: 'Do I need a Google or Microsoft account?',
-    a: 'No. A Nomad account is your email and a passkey or password. If you want your Gmail, Outlook or Google Drive in AX, you connect them inside the apps.',
-  },
-  {
-    q: 'Which computers does AX run on?',
-    a: 'Windows 10 and 11 PCs, with Intel, AMD or ARM processors. The download page picks the right one for you.',
+    a: 'No. A Nomad account is your email and a passkey or password. If you want your Gmail, Outlook or Google Drive in MeridianOS, you connect them inside the apps.',
   },
 ];
 
 export default function AxPage() {
+  useSmoothScroll();
   return (
     <Layout
       page="ax"
       local={{
-        name: 'AX',
+        name: 'Meridian',
         links: [
           { label: 'Overview', href: '/ax', current: true },
           { label: 'Plans', href: '/ax#plans' },
@@ -65,102 +78,103 @@ export default function AxPage() {
           { label: 'Download', href: '/download#ax' },
         ],
         cta: { label: 'Buy', href: '/ax#plans' },
+        tone: 'dark',
       }}
     >
-      <Hero
-        mark={<ProductMark product="ax" size={96} />}
-        name="AX"
-        title="Access wherever you are."
-        lede="AX is a whole desktop that lives in your Nomad account. Sign in on any computer and your desk opens the way you left it: your apps, your files, your windows, the tabs you had open."
-        actions={
-          <>
-            <LinkButton href={checkout('ax:starter', 'yearly')} variant="primary" hero>
-              Start free trial
-            </LinkButton>
-            <More href="/download#ax">Download</More>
-          </>
-        }
-        note="AX Starter is free for 14 days. For Windows 10 and 11."
-      >
-        <div className="wrap hero-media">
-          <Display {...AX_DESK} priority />
-        </div>
-      </Hero>
+      <div data-light="ax">
+        <MeridianHero />
 
-      <section className="section band" aria-labelledby="places-title">
-        <div className="wrap">
-          <SectionHead id="places-title" eyebrow="The same desk" title="Wherever you sign in." />
-          <div className="places">
-            {PLACES.map((p) => (
-              <article className="place reveal" key={p.title}>
-                <img src={`/assets/wall/${p.wall}-sm.webp`} alt="" width={836} height={470} loading="lazy" decoding="async" />
-                <h3 className="title">{p.title}</h3>
-                <p className="body">{p.body}</p>
-              </article>
+        {/* The black zone (Rami, 2026-10-10): try the real Meridian (TryMeridian), then the
+            pictures in a collage for whoever would rather look; then the black ends in a clean cut to white. */}
+        <DarkZone>
+          <Collage
+            label="Meridian, close up"
+            items={[
+              { name: 'sq-seek', label: 'Search', title: 'Seek', body: 'One search for everything on your desk: apps, files, notes, and the web.', alt: 'Seek open over the desk, finding files and a note for “trip”.' },
+              { name: 'sq-notices', label: 'Notifications', title: 'One calm card', body: 'Downloads, timers and messages arrive the same way, and wait while your pointer is on them.', alt: 'Three notifications under the menu bar.' },
+              { name: 'row-gallery', label: 'Photos', title: 'Gallery', body: 'Your photographs grouped by day, with what happened on this day.', alt: 'Gallery showing photographs grouped by day.' },
+              { name: 'sq-spaces', label: 'Spaces', title: 'Work and home, apart', body: 'Each space keeps its own apps, files, wallpaper and sign-ins.', alt: 'Settings showing three spaces: Personal, Work and Studio.' },
+              { name: 'sq-stack', label: 'Windows', title: 'The Stack', body: 'Every open window at the same size. Pick one, or drop it into a layout.', alt: 'The Stack: Markup, Settings, Gallery and Files side by side.' },
+              { name: 'row-markup', label: 'PDF', title: 'Markup', body: 'Read, mark up, fill in and sign any PDF.', alt: 'Markup with two PDFs.' },
+              { name: 'sq-files', label: 'Files', title: 'In your account', body: 'Desktop, Documents, Downloads, Pictures and Music, the same on every computer.', alt: 'Files open on the Pictures folder over the desk.' },
+              { name: 'row-settings', label: 'Settings', title: 'Yours, everywhere', body: 'Your space, Focus and appearance follow you to the next computer too.', alt: 'Settings on its Home page.' },
+              { name: 'row-polaris', label: 'Browser', title: 'Polaris, built in', body: 'Each desk keeps its own sign-ins, so work and home never mix.', alt: 'Polaris Browser on a new tab.' },
+              { name: 'sq-dock', label: 'The dock', title: 'Every Nomad app', body: 'Polaris, Reach, Files, Nomad Office and the rest are there from the first day.', alt: 'The dock with the whole Nomad suite.' },
+            ]}
+          />
+          <Versus
+            id="vs-title"
+            title="Meridian vs Others"
+            lede="What changes when your desk lives in your account, not on one machine."
+            rows={[
+              {
+                when: 'On another computer',
+                usual: 'A different desktop. Your files, apps and windows stay on the machine you left.',
+                meridian: 'Open Meridian on any computer and sign in: your apps, files, windows, wallpaper and settings are all there, exactly the same.',
+              },
+              {
+                when: 'A new computer',
+                usual: 'A day of installing, copying and setting things up again.',
+                meridian: 'Install Meridian, sign in, and your desk is there.',
+              },
+              {
+                when: 'A lost or broken laptop',
+                usual: 'Whatever was not backed up goes with it.',
+                meridian: 'Your files and settings live in your Nomad account, not on the laptop.',
+              },
+              {
+                when: 'Work and home',
+                usual: 'One desktop for both, or separate user accounts to switch between.',
+                meridian: 'Separate spaces, each with its own apps, files, wallpaper and sign-ins.',
+              },
+              {
+                when: 'The apps you need',
+                usual: 'An office suite, mail and file sharing, each bought and installed on its own.',
+                meridian: 'Nomad Office, Polaris Browser, Reach and Drift come with every plan.',
+              },
+            ]}
+          />
+        </DarkZone>
+
+        <Band label="more-title">
+          <BandHead id="more-title" title="And so much more." lede="Every Nomad app comes installed. The plan you pick decides how much room you get and which extras switch on." />
+          <Columns items={MORE} cols={3} align="center" />
+          <p className="sys-foot">
+            Marked <ProBadge plan="Pro" size="sm" /> are on Meridian Pro and Meridian Ultra.
+          </p>
+        </Band>
+
+        {/* The question a cloud desktop raises: where is it, and who can see it (Rami, 2026-10-11).
+            Every line is what the privacy policy already promises. */}
+        <Band label="private-title">
+          <BandHead id="private-title" title="Private by design." lede="Your files, your sign-ins and what you do on your desk stay yours. No ads, no selling, no training on your files." />
+          <Columns items={PRIVATE} cols={3} align="center" />
+          <p className="sys-foot">
+            <More href="/privacy">Read how we handle your data</More>
+          </p>
+        </Band>
+
+        <Band id="plans" tone="mist" label="plans-title">
+          <BandHead id="plans-title" title="Pick the size of your desk." lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desks, and the extras.">
+            <PeriodSwitch />
+          </BandHead>
+          <div className="plans">
+            {AX_PLANS.map((p) => (
+              <PlanCard key={p.id} plan={p} />
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="apps-title">
-        <div className="wrap">
-          <SectionHead
-            id="apps-title"
-            eyebrow="Built in"
-            title="The apps you open every day."
-            lede="Files, Gallery, Notebook and Settings are part of AX itself, with your files in your account rather than on the machine."
-          />
-          <div className="shots">
-            <WindowShot
-              name="files"
-              className="reveal shots-wide"
-              sizes="(min-width: 1200px) 1100px, 92vw"
-              alt="Files showing the Pictures folder as a grid of photos, with Desktop, Documents, Downloads, Pictures and Music in the rail."
-              caption="Files"
-            />
-            <WindowShot
-              name="gallery"
-              className="reveal"
-              sizes="(min-width: 900px) 360px, 92vw"
-              alt="Gallery's Photos view: photographs grouped by day, with Videos, On this day and folders in the rail."
-              caption="Gallery"
-            />
-            <WindowShot
-              name="notes"
-              className="reveal"
-              sizes="(min-width: 900px) 360px, 92vw"
-              alt="Notebook with a note open: headings, a bulleted list, a quote and a checklist."
-              caption="Notebook"
-            />
-            <WindowShot
-              name="settings"
-              className="reveal"
-              sizes="(min-width: 900px) 360px, 92vw"
-              alt="Settings on its Home page: the current space, Focus, Appearance and shortcuts to Personalization, Apps, Accounts and Storage."
-              caption="Settings"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="inside-title">
-        <div className="wrap">
-          <SectionHead
-            id="inside-title"
-            eyebrow="On every desk"
-            title="Everything's already there."
-            lede="Every Nomad app comes installed. The plan you pick decides how much room you get and which extras switch on."
-          />
-          <Features items={FEATURES} />
-          <p className="small features-key">
-            Marked <ProBadge plan="Pro" size="sm" /> are on AX Pro and AX Ultra.
+          <p className="sys-foot">
+            {PRICE_FOOT} <More href="/pricing#compare">Compare every feature</More>
           </p>
-        </div>
-      </section>
+        </Band>
 
-      <AxPlans />
+        <Band label="where-title">
+          <BandHead id="where-title" title="Runs on the computer you have." lede="Install it once, sign in, and your desk is there." />
+          <Platforms anchor="ax" />
+        </Band>
 
-      <Questions id="questions" items={QA} />
+        <FAQ items={QA} />
+      </div>
     </Layout>
   );
 }

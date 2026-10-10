@@ -31,11 +31,13 @@ const EXTERNAL_OK = [
 ];
 
 /** Platform contract C3: what billing sells. */
-const PRODUCTS = new Set(['ax:starter', 'ax:pro', 'ax:ultra', 'office', 'reach:premium', 'drift:premium']);
+const PRODUCTS = new Set(['ax:starter', 'ax:pro', 'ax:ultra', 'office', 'reach:premium', 'drift:premium', 'citadel:premium']);
 /** THE LAW's prices (monthly, yearly, the yearly-per-month line), plus the extra mailbox. */
 const LAW_PRICES = new Set([
   '$9.99', '$99', '$8.25', '$16.99', '$169', '$14.08', '$29.99', '$299', '$24.92',
   '$4.99', '$49', '$4.08', '$2.99', '$29', '$2.42', '$5.99', '$59', '$4.92', '$1.99',
+  // Citadel Premium (2026-10-09): $1.99 a month, $19 a year, $1.58 a month yearly
+  '$19', '$1.58',
 ]);
 
 if (!existsSync(join(ROOT, 'index.html'))) {

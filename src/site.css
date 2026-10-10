@@ -36,7 +36,7 @@
   --site-foot-muted: #a1a1a6;
   --site-foot-faint: #939398;
   --site-foot-line: rgba(255, 255, 255, 0.12);
-  --site-foot-inset: 12px;
+  --site-foot-inset: 8px;
 
   /* Marketing type. tokens.css stops at --t-page (17px) because an app never
      needs a 56px headline; a product page does. Inter, tracked tighter as it
@@ -55,16 +55,26 @@
   --site-narrow: 760px;
   --site-gutter: var(--space-base);
   --site-section: calc(var(--space-xxl) * 2);
-  --site-bar: 52px;
+  --site-bar: 44px;
+  --site-nav-gap: clamp(20px, 2.6vw, 36px);
 
-  color-scheme: light;
+}
+
+/* The page's scrollbar is the browser's own, as on apple.com and microsoft.com (Rami,
+   2026-10-10). Two things on the root take it over: any scrollbar-color (Chrome then draws a flat
+   custom bar), and a declared color-scheme (`light` forces the white light-theme bar, where an
+   undeclared page gets the browser's own, which follows the system's light or dark). So the root
+   declares neither, over nomad-design's [data-appearance="light"] { color-scheme: light }; the
+   page inside is light either way, since `normal` means light-only. */
+html[data-appearance] {
+  color-scheme: normal;
 }
 
 @media (min-width: 768px) {
   :root {
     --site-gutter: var(--space-xl);
     --site-section: calc(var(--space-xxl) * 3);
-    --site-foot-inset: 16px;
+    --site-foot-inset: 8px;
   }
 }
 
@@ -325,31 +335,7 @@ img.icon {
   mask: var(--squircle) center / 100% 100% no-repeat;
 }
 
-/* AX has no logo yet: the name, on the house ink, until it does. */
-.plate-ax {
-  background: var(--ink);
-  color: var(--on-ink);
-  font-size: calc(var(--s, 64px) * 0.4);
-  font-weight: 750;
-  letter-spacing: -0.06em;
-  line-height: 1;
-}
-
-.plate-ax span {
-  transform: translateX(-0.03em);
-}
-
-/* Drift's placeholder plate, until its icon lands (artwork, not chrome). */
-.plate-drift {
-  background: linear-gradient(165deg, #2f6fe0 0%, #1d3f8f 58%, #13234f 100%);
-  color: #f4f8ff;
-}
-
-.plate-drift svg {
-  width: 56%;
-  height: 56%;
-}
-
+/* Nomad Office's mark: its four app icons in a 2x2 grid. */
 .office-stack {
   grid-template-columns: 1fr 1fr;
   gap: 8%;
@@ -364,10 +350,22 @@ img.icon {
 /* ── Global bar ───────────────────────────────────────────────────────── */
 
 .gnav {
+  /* White, to try the corporate look (Rami, 2026-10-09; it was black since
+     2026-10-08): the bar's own tokens are scoped here, so the menu panel
+     follows, and a hairline marks its bottom edge. To go back to black,
+     delete the four --site-foot lines and set color-scheme to dark. */
+  --site-foot: #ffffff;
+  --site-foot-text: #1d1d1f;
+  --site-foot-muted: #424245;
+  --site-foot-line: #d2d2d7;
   position: relative;
   z-index: 50;
-  background: var(--site-page);
-  border-bottom: var(--hairline) solid var(--site-line);
+  background: var(--site-foot);
+  border-bottom: var(--hairline) solid var(--site-foot-line);
+  --text-primary: var(--site-foot-text);
+  --text-secondary: var(--site-foot-muted);
+  color: var(--site-foot-text);
+  color-scheme: light;
 }
 
 .gnav.is-sticky {
@@ -376,17 +374,23 @@ img.icon {
 }
 
 .gnav-row {
+  /* One centred row, equal gaps between every item: the camel, the links,
+     Sign in and the menu (Rami, 2026-10-08). */
   display: flex;
   align-items: center;
-  gap: var(--space-xl);
+  justify-content: center;
+  gap: var(--site-nav-gap);
   height: var(--site-bar);
+}
+
+.gnav-row > .gnav-end {
+  display: contents;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
-  margin-right: auto;
   color: var(--text-primary);
   font-size: var(--t-page);
   font-weight: 700;
@@ -401,7 +405,7 @@ img.icon {
 
 .gnav-links ul {
   display: flex;
-  gap: var(--space-xl);
+  gap: var(--site-nav-gap);
   padding: 0;
   list-style: none;
 }
@@ -442,7 +446,9 @@ img.icon {
   color: var(--text-primary);
 }
 
-.gnav-menu {
+/* The menu button exists only where the links don't fit (phones and small
+   windows); on a wide screen every link is in the bar, so no burger. */
+.gnav .gnav-menu {
   display: none;
 }
 
@@ -452,8 +458,8 @@ img.icon {
   left: 0;
   right: 0;
   padding: var(--space-xs) 0 var(--space-xxl);
-  background: var(--site-page);
-  border-bottom: var(--hairline) solid var(--site-line);
+  background: var(--site-foot);
+  border-bottom: var(--hairline) solid var(--site-foot-line);
   animation: site-drop var(--t-slow) var(--e-entrance) both;
 }
 
@@ -507,12 +513,17 @@ img.icon {
     display: none;
   }
 
+  /* Phones: the camel left, the menu right. */
+  .gnav-row {
+    justify-content: space-between;
+  }
+
   .gnav-end {
     padding-left: 0;
     border-left: 0;
   }
 
-  .gnav-menu {
+  .gnav .gnav-menu {
     display: inline-flex;
     margin-right: calc(var(--space-sm) * -1);
   }
@@ -1460,33 +1471,34 @@ a.nm-btn.plan-cta {
 
 /* ── Footer ───────────────────────────────────────────────────────────── */
 
-/* A black card set into the white page, a small even gap from the window's
-   sides and bottom (Rami, 2026-10-08). Everything inside is small and quiet,
-   apple.com's footer in size: 12px type, muted greys, tight columns. */
+/* White and small, as apple.com and microsoft.com end a page (Rami,
+   2026-10-09; it was a black card): no block behind it, muted greys, small
+   type, hairlines between the parts. The black card moved to the home
+   page's MeridianOS panel. */
 .foot {
-  padding: 0 var(--site-foot-inset) var(--site-foot-inset);
+  --site-foot-text: #1d1d1f;
+  --site-foot-muted: #6e6e73;
+  --site-foot-faint: #86868b;
+  --site-foot-line: #d2d2d7;
+  padding: 0;
   background: var(--site-page);
 }
 
 .foot-card {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--r-sheet);
-  /* The light: a static radial gradient falling from the top edge onto the
-     columns, and a faint top rim. Painted once; nothing here moves. */
-  background:
-    radial-gradient(70% 85% at 50% 0%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.045) 42%, transparent 75%),
-    var(--site-foot);
-  box-shadow: inset 0 var(--hairline) 0 rgba(255, 255, 255, 0.1);
   color: var(--site-foot-muted);
-  font-size: var(--site-t-meta);
-  line-height: 1.5;
+  font-size: 12.5px;
+  line-height: 1.55;
 }
 
 .foot-inner {
   position: relative;
   z-index: 1;
-  padding-top: calc(var(--space-xxl) + var(--space-base));
+  max-width: none;
+  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-base);
+  border-top: var(--hairline) solid var(--site-foot-line);
 }
 
 .foot-brand {
@@ -1494,7 +1506,7 @@ a.nm-btn.plan-cta {
   align-items: center;
   gap: var(--space-sm);
   color: var(--site-foot-text);
-  font-size: var(--site-t-small);
+  font-size: 16px;
   font-weight: 650;
   letter-spacing: -0.01em;
   text-decoration: none;
@@ -1507,14 +1519,14 @@ a.nm-btn.plan-cta {
 .foot-cols {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: var(--space-xl);
-  padding: var(--space-xxl) 0 var(--space-xl);
+  gap: var(--space-xl) clamp(var(--space-xl), 4vw, 72px);
+  padding: var(--space-xxl) 0 calc(var(--space-xxl) + var(--space-sm));
 }
 
 .foot-col h2 {
   margin-bottom: var(--space-sm);
   color: var(--site-foot-text);
-  font-size: var(--site-t-meta);
+  font-size: 12.5px;
   font-weight: 600;
 }
 
@@ -1524,7 +1536,7 @@ a.nm-btn.plan-cta {
 }
 
 .foot-col li + li {
-  margin-top: var(--space-xs);
+  margin-top: var(--space-sm);
 }
 
 .foot a {
@@ -1551,10 +1563,22 @@ a.nm-btn.plan-cta {
   border-radius: var(--r-pip);
 }
 
-.foot-note {
-  padding: var(--space-base) 0;
-  border-top: var(--hairline) solid var(--site-foot-line);
+/* The fine print (apple.com's footnotes): first in the footer, full paragraphs at the footer's
+   own edges, small and grey with air between them. The strip under it draws the only line. */
+.foot-fine {
+  padding: clamp(32px, 3.4vw, 52px) clamp(var(--site-gutter), 6vw, 96px) var(--space-xl);
   color: var(--site-foot-faint);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.foot-fine p {
+  max-width: 1500px;
+  margin: 0;
+}
+
+.foot-fine p + p {
+  margin-top: 14px;
 }
 
 .foot-base {
@@ -1584,21 +1608,6 @@ a.nm-btn.plan-cta {
   align-items: center;
   gap: var(--space-xs);
   color: var(--site-foot-muted);
-}
-
-/* The faint wordmark low in the card: type, not an image, at a few percent.
-   It sits under the base line and is clipped by the card's own corners. */
-.foot-word {
-  margin: calc(var(--space-base) * -1) 0 -0.16em;
-  color: rgba(255, 255, 255, 0.045);
-  font-size: clamp(72px, 15vw, 210px);
-  font-weight: 750;
-  letter-spacing: -0.06em;
-  line-height: 0.74;
-  text-align: center;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
 }
 
 /* ── Motion: scroll-driven, compositor-only, absent under reduced motion ── */
@@ -1765,10 +1774,6 @@ a.nm-btn.plan-cta {
     align-items: flex-start;
   }
 
-  .foot-card {
-    border-radius: var(--r-float);
-  }
-
   .foot-legal span {
     flex-basis: 100%;
   }
@@ -1777,4 +1782,3440 @@ a.nm-btn.plan-cta {
     padding-left: 0;
     border-left: 0;
   }
+}
+
+/* ── The home stage (Rami, 2026-10-08) ─────────────────────────────────
+   A contained field like apple.com's black panel and microsoft.com's
+   gradient: ours takes its light from the desk's own desert wallpaper, so
+   the computers sit in the colour they show. Static gradients only. */
+.stage {
+  /* One finished picture (Rami, 2026-10-08): the light and the laptop are
+     composed together in the image, Microsoft-style, and the page's white
+     takes over where the picture's own bottom turns white. */
+  padding: 0;
+  /* Full width, lifted: the picture's top (empty sky) runs up behind the bar
+     so the laptop sits higher. The picture's own bottom is only nearly white,
+     so a fade to pure white runs over only its last 2.6vw, below the
+     laptop's shadow, where the picture is already 99% white (it ends at 42.39vw:
+     46.89vw tall, lifted 4.5vw), and the page's white continues with no
+     edge (Rami, 2026-10-10: "I see a faint border"). */
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) calc(41vw - 2.6vw), #ffffff calc(41vw - 1px)) no-repeat,
+    #ffffff url('/assets/hero/meridian-hero.webp') no-repeat;
+  background-size: 100% 41vw, 100% auto;
+  background-position: 0 0, center calc(-4.5vw);
+}
+
+.stage-card {
+  /* Full width and flush to the bar (Rami, 2026-10-08): the wallpaper's
+     light fills the top of the page and fades smoothly into the white page
+     before the computers' feet, so there is no edge anywhere. */
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: clamp(28px, 4vw, 48px);
+  padding: clamp(48px, 7vw, 88px) var(--site-gutter) 0;
+
+  text-align: center;
+}
+
+.stage-copy {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-base);
+  max-width: 760px;
+}
+
+.stage-name {
+  margin: 0;
+  color: #2a2b30;
+  font-size: var(--site-t-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.stage-title {
+  margin: 0;
+  color: #141518;
+  font-size: clamp(34px, 4.6vw, 60px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.stage-lede {
+  margin: 0;
+  max-width: 34em;
+  color: #3d3f45;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.5;
+}
+
+.stage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  margin-top: var(--space-sm);
+}
+
+/* Two computers, one desk: a monitor behind, a laptop in front. Drawn in
+   CSS so the screens are the real product, not an illustration. */
+.stage-devices {
+  position: relative;
+  /* Sized from the window's height too, so the whole stage fits on the
+     first screen with the next section peeking below it. */
+  width: clamp(420px, calc((100svh - 560px) * 2.3), min(100%, 1040px));
+  /* Tall enough for the monitor (16:10 screen + stand) so nothing rides up
+     over the buttons; the card's bottom edge crops the stand's foot. */
+  aspect-ratio: 1040 / 470;
+}
+
+.dev-screen {
+  overflow: hidden;
+  background: #111;
+}
+
+.dev-screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dev-monitor {
+  position: absolute;
+  left: 4%;
+  bottom: 0;
+  width: 64%;
+  display: grid;
+  justify-items: center;
+}
+
+.dev-monitor .dev-screen {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: clamp(5px, 0.7vw, 9px) solid #1b1c20;
+  border-radius: clamp(8px, 1vw, 14px);
+  box-shadow: 0 30px 60px -20px rgba(40, 32, 20, 0.45);
+}
+
+.dev-neck {
+  width: 12%;
+  height: clamp(18px, 2.4vw, 32px);
+  background: linear-gradient(90deg, #b9bcc2, #e3e5e8 50%, #b9bcc2);
+}
+
+.dev-foot {
+  width: 30%;
+  height: clamp(6px, 0.8vw, 10px);
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, #e7e9ec, #b4b7bd);
+}
+
+.dev-laptop {
+  position: absolute;
+  right: 4%;
+  bottom: 0;
+  width: 46%;
+  display: grid;
+  justify-items: center;
+}
+
+.dev-lid {
+  width: 86%;
+  padding: clamp(4px, 0.55vw, 7px);
+  border-radius: clamp(8px, 1vw, 12px) clamp(8px, 1vw, 12px) 2px 2px;
+  background: #1b1c20;
+  box-shadow: 0 30px 60px -20px rgba(40, 32, 20, 0.5);
+}
+
+.dev-lid .dev-screen {
+  aspect-ratio: 16 / 10;
+  border-radius: 3px;
+}
+
+.dev-base {
+  width: 100%;
+  height: clamp(8px, 1.1vw, 14px);
+  border-radius: 2px 2px clamp(8px, 1vw, 14px) clamp(8px, 1vw, 14px);
+  background: linear-gradient(180deg, #d9dbdf 0%, #a9acb2 100%);
+}
+
+/* The quick links under the stage, microsoft.com's row of tasks. */
+.stage-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm) clamp(24px, 4vw, 56px);
+  padding: var(--space-base) var(--site-gutter) var(--space-base);
+}
+
+.stage-links a {
+  color: var(--text-secondary);
+  font-size: var(--site-t-small);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .stage-links a:hover {
+    color: var(--text-primary);
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-devices {
+    width: 100%;
+    aspect-ratio: 1040 / 560;
+  }
+
+  .dev-monitor {
+    left: 0;
+    width: 78%;
+  }
+
+  .dev-laptop {
+    right: 0;
+    width: 58%;
+  }
+}
+
+/* ── The split stage (Rami, 2026-10-08, option A) ───────────────────── */
+.stage {
+  overflow-x: clip;
+}
+
+@media (min-width: 1040px) {
+  .stage-card {
+    /* Tall enough to show the picture's laptop whole: its own aspect. */
+    /* Ends just under the laptop's shadow (Rami, 2026-10-10), so the next
+       section's title shows at the bottom of the first screen, the way
+       apple.com and microsoft.com end their heroes early. */
+    min-height: min(41vw, 900px);
+    align-content: center;
+    justify-items: start;
+    padding-block: clamp(32px, 4vw, 64px) clamp(24px, 3vw, 48px);
+    /* Closer to the left edge than the page's column, so the copy and the
+       laptop balance across the whole banner. */
+    padding-inline: clamp(32px, 11vw, 220px) 0;
+    text-align: left;
+  }
+
+  .stage-copy {
+    justify-items: start;
+    max-width: min(560px, 42vw);
+  }
+
+  .stage-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1039px) {
+  .stage {
+    /* Phones: the laptop sits lower right; keep it in view under the copy. */
+    background-position: 78% bottom;
+    background-size: auto 100%;
+  }
+
+  .stage-card {
+    min-height: 92vw;
+    align-content: start;
+  }
+}
+
+/* ── Home: the Nomad suite as plates (Rami, 2026-10-09) ────────────────
+   White cards on the white page: a hairline and a soft static shadow give
+   the edge, a squircle corner, everything set left. Every card is the same
+   size, a quarter of the row: the four standalone apps on the first row, the
+   four Office apps on the second.
+   Scale (Rami, 2026-10-09: "feels like a small website, in space"): sized
+   the way apple.com and microsoft.com size a section, so it reads as a large
+   room: a deep band of air above and below, a display-size title, a wide
+   row (1560px), and roomy cards with large type. */
+.tiles-section {
+  padding-block: clamp(96px, 11vw, 200px);
+}
+
+.tiles-section .wrap {
+  /* The same side margins as the platforms, the privacy line and the footer
+     (Rami, 2026-10-10): full width, 6vw in, 96 px at most; the cards keep
+     their size and the space between them grows to fill the row. */
+  max-width: none;
+  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+  container-type: inline-size;
+}
+
+.tiles-title {
+  margin: 0 0 clamp(44px, 5vw, 96px);
+  color: var(--text-primary);
+  font-size: clamp(40px, 5.2vw, 80px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-align: center;
+}
+
+.suite {
+  /* A grid with every row as tall as the tallest card, so all eight cards
+     match whatever their descriptions wrap to (4 + 4 since Citadel joined). */
+  --suite-gap: 20px;
+  --suite-cols: 4;
+  display: grid;
+  /* Bigger (Rami, 2026-10-10): the four cards fill the row edge to edge,
+     the same gap across and down. */
+  --suite-gap: clamp(20px, 1.6vw, 28px);
+  grid-template-columns: repeat(var(--suite-cols), minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: var(--suite-gap);
+}
+
+.app-plate {
+  /* microsoft.com's product card (Rami, 2026-10-09): a quiet border, a large
+     soft corner, a lot of air inside; the icon, a small label, a benefit
+     headline, a sentence, and text links pinned to the foot. */
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  justify-items: start;
+  padding: clamp(20px, 1.7vw, 28px) clamp(20px, 1.7vw, 28px) clamp(22px, 1.9vw, 30px);
+  border: 1px solid #e5e5ea;
+  border-radius: clamp(20px, 1.6vw, 26px);
+  corner-shape: squircle;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgb(16 18 22 / 0.04);
+  color: #3d3f45;
+  text-align: left;
+}
+
+/* The app's icon, on its own: it is already a tile. */
+.app-icon {
+  width: clamp(48px, 3.6vw, 60px);
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0 0 clamp(20px, 1.8vw, 28px);
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.16));
+}
+
+/* The small label: the product's name. */
+.app-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0 0 6px;
+  color: #1d1d1f;
+  font-size: clamp(13px, 0.95vw, 15px);
+  font-weight: 600;
+}
+
+.app-tag {
+  color: #6e6e73;
+  font-size: clamp(12px, 0.85vw, 14px);
+  font-weight: 500;
+}
+
+.app-tagline {
+  margin: 0 0 8px;
+  color: #1d1d1f;
+  font-size: clamp(19px, 1.45vw, 23px);
+  font-weight: 650;
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+}
+
+.app-body {
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.55;
+}
+
+/* Text links at the foot, underlined like microsoft.com's. */
+.app-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 1.6vw, 28px);
+  margin: clamp(22px, 2vw, 32px) 0 0;
+}
+
+.app-links a {
+  color: #1d1d1f;
+  font-size: clamp(14px, 1vw, 15px);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .app-links a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .suite {
+    --suite-cols: 2;
+    --suite-gap: 20px;
+    /* two across: the cards fill the row instead of standing far apart */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 640px) {
+  .suite {
+    --suite-cols: 1;
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Home: two panels about all of Nomad (Rami, 2026-10-09) ────────────
+   Large coloured panels under the suite, as wide as it, squircle corners,
+   static gradient light (no filter, nothing animated: the first law).
+   MeridianOS is a plain black card. */
+.panel-section {
+  padding: 0 0 clamp(24px, 2.4vw, 40px);
+}
+
+.panel-section .wrap {
+  max-width: calc(1560px + 2 * var(--site-gutter));
+}
+
+.panel {
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 1.4vw, 24px);
+  padding: clamp(56px, 7vw, 128px) clamp(28px, 5vw, 96px);
+  border-radius: clamp(28px, 2.6vw, 44px);
+  corner-shape: squircle;
+  text-align: center;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: clamp(40px, 5.2vw, 80px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.panel-lede {
+  margin: 0;
+  max-width: 30em;
+  font-size: clamp(18px, 1.6vw, 26px);
+  line-height: 1.42;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+/* Full width, as the footer card was: the window's width less the small
+   even inset (Rami, 2026-10-09). */
+.panel-full-inner {
+  padding-inline: 0; /* edge to edge (Rami, 2026-10-10) */
+}
+
+/* MeridianOS: a plain black card, full width like the footer card was
+   (Rami, 2026-10-09: the top light was removed). No picture yet. */
+.panel-meridian {
+  /* apple.com's product tile (Rami, 2026-10-10): the photograph full width
+     (the arc reaches both edges) and only the lid's top bezel hidden, under
+     the fade behind the name. The photograph is 2:1: the screen starts at
+     24.6% of its height (12.3vw) and the base sits at 90%, so the screen's
+     top is pinned 136 px down (under the mark and the name, side by side)
+     and the tile is as tall as the laptop needs: 266 px of name and buttons
+     + 32.7vw, 724 px at the least. */
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  height: max(652px, calc(227px + 33.3vw));
+  overflow: hidden;
+  padding: 36px 0 36px;
+  border-radius: 0;
+  background: #000000;
+  color: #f5f5f7;
+  text-align: center;
+}
+
+/* No fade over the laptop (Rami, 2026-10-10): a dark band on a screen
+   reads as a shadow on the display, and hiding the lid's top made the
+   laptop a floating panel. The whole lid shows; the black above it is the
+   photograph's own. */
+
+/* The mark and the name side by side, no squircle (Rami, 2026-10-10). */
+.meridian-head {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* close, as apple.com sets its mark against the name */
+  height: 72px;
+  margin: 0;
+  color: #f5f5f7;
+  font-size: 62px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.meridian-head .meridian-lockup {
+  --h: 56px;
+}
+
+.meridian-head .meridian-lockup .meridian-mark {
+  height: var(--h);
+  width: auto;
+}
+
+.meridian-head .meridian-lockup .meridian-wordmark {
+  height: calc(var(--h) * 0.86);
+  width: auto;
+}
+
+.panel-meridian-photo {
+  position: absolute;
+  left: 0;
+  top: calc(136px - 11.7vw);
+  display: block;
+  width: 100%;
+  height: auto;
+  /* the reflection melts into the black under the base */
+  -webkit-mask-image: linear-gradient(180deg, #000 89%, rgb(0 0 0 / 0.45) 93%, transparent 99%);
+  mask-image: linear-gradient(180deg, #000 89%, rgb(0 0 0 / 0.45) 93%, transparent 99%);
+  pointer-events: none;
+}
+
+.meridian-foot {
+  position: relative;
+  z-index: 2;
+  grid-row: 3;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding-inline: var(--site-gutter);
+}
+
+.meridian-line {
+  margin: 0;
+  color: #f5f5f7;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.panel-meridian .panel-actions {
+  justify-content: center;
+  margin: 0;
+}
+
+/* Narrow windows: the tile follows the width, the photograph in the flow. */
+@media (max-width: 1068px) {
+  .panel-meridian {
+    height: auto;
+    padding-bottom: 40px;
+  }
+
+  .meridian-head {
+    font-size: clamp(36px, 5.6vw, 62px);
+  }
+
+  .meridian-head .meridian-lockup {
+    --h: clamp(34px, 5vw, 56px);
+  }
+
+  .panel-meridian-photo {
+    position: static;
+    grid-row: 2;
+    margin: calc(8px - 12.3vw) 0 calc(16px - 5vw);
+  }
+}
+
+/* The MeridianOS app icon, centred above the name (Rami, 2026-10-09). A
+   dark squircle on a black card needs its own light: a soft pool of light
+   behind it, a hairline rim that follows the squircle (a drop-shadow of
+   the icon's own alpha), and a deep shadow under it. All static: nothing
+   here moves, so none of it is re-painted while the page scrolls. */
+.panel-meridian-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin-bottom: clamp(4px, 0.8vw, 12px);
+}
+
+.panel-meridian-icon::before {
+  content: '';
+  position: absolute;
+  inset: -90%;
+  z-index: 0;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.05) 55%, transparent);
+  pointer-events: none;
+}
+
+.panel-meridian-icon img {
+  position: relative;
+  z-index: 1;
+  width: clamp(104px, 8.4vw, 152px);
+  height: auto;
+  aspect-ratio: 1;
+  filter: drop-shadow(0 0 0.75px rgb(255 255 255 / 0.55)) drop-shadow(0 22px 34px rgb(0 0 0 / 0.7));
+}
+
+.panel-eyebrow {
+  margin: 0;
+  color: rgb(244 244 246 / 0.7);
+  font-size: clamp(17px, 1.3vw, 22px);
+  font-weight: 600;
+}
+
+.panel-meridian .nm-btn[data-variant='primary'],
+.panel-meridian .nm-btn[data-variant='primary']:hover {
+  background: #ffffff;
+  color: #08080a;
+}
+
+.panel-meridian .more {
+  color: #f4f4f6;
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(16px, 1.6vw, 28px);
+  margin-top: clamp(8px, 1vw, 16px);
+}
+
+/* ── Home: the product rows (Rami, 2026-10-10) ─────────────────────────
+   "No background colours or images": everything on the white page. One row
+   per product, the copy on one side and the product itself on the other,
+   alternating, with a screen's worth of air between rows; no bands, no
+   fields, no boxes. */
+.rows {
+  padding-block: clamp(40px, 4vw, 80px) 0;
+}
+
+.row {
+  padding-block: clamp(72px, 7vw, 128px);
+}
+
+.row-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(40px, 6vw, 120px);
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: clamp(24px, 7vw, 120px);
+}
+
+.row-flip .row-inner {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+
+.row-flip .row-copy {
+  order: 2;
+}
+
+.row-copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(12px, 1.1vw, 18px);
+}
+
+.row-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(17px, 1.3vw, 21px);
+  font-weight: 600;
+}
+
+.row-name img {
+  width: clamp(32px, 2.6vw, 40px);
+  height: auto;
+  filter: drop-shadow(0 3px 6px rgb(0 0 0 / 0.16));
+}
+
+.row-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(40px, 4.2vw, 68px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.row-line {
+  margin: 0;
+  max-width: 32em;
+  color: #4a4d54;
+  font-size: clamp(17px, 1.4vw, 22px);
+  line-height: 1.5;
+}
+
+.row-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(10px, 1vw, 18px);
+}
+
+.row-visual {
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 900px) {
+  .row-inner,
+  .row-flip .row-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .row-flip .row-copy {
+    order: 0;
+  }
+}
+
+/* ── Home: what each row shows (Rami, 2026-10-10) ──────────────────────
+   MeridianOS's icon; Reach's real window; Polaris's address bar and what
+   it stopped; a Drift transfer; Citadel's shield with its PIN pad. On white,
+   so each piece has a hairline and a soft shadow. All static. */
+.bv-icon {
+  width: clamp(240px, 22vw, 360px);
+  height: auto;
+  filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.28));
+}
+
+.bv-window {
+  width: 100%;
+  height: auto;
+  border-radius: clamp(10px, 0.9vw, 16px);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 40px 80px -36px rgb(0 0 0 / 0.35);
+}
+
+.bv-polaris {
+  display: grid;
+  gap: 16px;
+  width: min(640px, 100%);
+}
+
+.bv-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 12px 12px 22px;
+  border-radius: 99px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.07), 0 30px 60px -28px rgb(0 0 0 / 0.3);
+}
+
+.bv-lock {
+  width: 18px;
+  height: 18px;
+  color: #6e6e73;
+}
+
+.bv-url {
+  color: #1d1d1f;
+  font-size: clamp(16px, 1.3vw, 19px);
+  font-weight: 500;
+}
+
+.bv-shield {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 99px;
+  background: #eef1fb;
+  color: #1f2a4d;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bv-shield img {
+  width: 28px;
+  height: 28px;
+}
+
+.bv-pop {
+  justify-self: end;
+  width: min(380px, 78%);
+  padding: 20px 22px;
+  border-radius: 20px;
+  corner-shape: squircle;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.07), 0 30px 60px -28px rgb(0 0 0 / 0.3);
+  color: #1d1d1f;
+}
+
+.bv-pop-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.bv-pop-line {
+  margin: 4px 0 14px;
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.bv-pop ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bv-pop li {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid #ececf0;
+  font-size: 15px;
+}
+
+.bv-drift {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  width: min(640px, 100%);
+}
+
+.bv-card {
+  width: 100%;
+  padding: clamp(24px, 2.2vw, 34px);
+  border-radius: 24px;
+  corner-shape: squircle;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.07), 0 40px 80px -36px rgb(0 0 0 / 0.3);
+  color: #1d1d1f;
+}
+
+.bv-card-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.bv-file {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 76px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f08a3c, #d9601c);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bv-title {
+  margin: 0;
+  font-size: clamp(19px, 1.5vw, 23px);
+  font-weight: 650;
+}
+
+.bv-meta {
+  margin: 4px 0 0;
+  color: #6e6e73;
+  font-size: 15px;
+}
+
+.bv-card-head img {
+  width: 48px;
+  height: 48px;
+}
+
+.bv-progress {
+  height: 10px;
+  margin: 26px 0 12px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #e5ecec;
+}
+
+.bv-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2a8a8c, #0f5557);
+}
+
+.bv-card-foot {
+  display: flex;
+  justify-content: space-between;
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.bv-targets {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bv-targets li {
+  padding: 8px 16px;
+  border-radius: 99px;
+  background: #f2f2f4;
+  color: #3d3f45;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.bv-targets li.is-on {
+  background: #0f5557;
+  color: #ffffff;
+}
+
+.bv-citadel {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.bv-citadel > img {
+  width: clamp(260px, 24vw, 400px);
+  height: auto;
+  filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.28));
+}
+
+.bv-pin {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 18px 28px 20px;
+  border-radius: 20px;
+  corner-shape: squircle;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.06), 0 24px 48px -22px rgb(0 0 0 / 0.35);
+  transform: translateX(-50%);
+}
+
+.bv-pin p {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bv-dots {
+  display: flex;
+  gap: 12px;
+}
+
+.bv-dots i {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #8a6430;
+  border-radius: 50%;
+}
+
+.bv-dots i.on {
+  background: #6e4814;
+  border-color: #6e4814;
+}
+
+/* ── Home: Nomad Office (Rami, 2026-10-10) ────────────────────────────
+   On white: the head centred, then the four apps as large icons with their
+   names and a line, no cards and no fields behind them. */
+.office-row {
+  padding-block: clamp(96px, 9vw, 168px);
+  border-top: var(--hairline) solid #e5e5ea;
+}
+
+.office-row .wrap {
+  max-width: calc(1440px + 2 * var(--site-gutter));
+}
+
+.office-head {
+  display: grid;
+  justify-items: center;
+  gap: clamp(8px, 0.8vw, 12px);
+  text-align: center;
+}
+
+.office-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(44px, 4.8vw, 80px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.office-line {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(21px, 1.9vw, 30px);
+}
+
+.office-sub {
+  margin: 0;
+  color: #6e6e73;
+  font-size: clamp(15px, 1.1vw, 18px);
+}
+
+.office-head .row-links {
+  justify-content: center;
+}
+
+.office-apps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  margin: clamp(56px, 6vw, 104px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.office-apps a {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: #1d1d1f;
+  text-align: center;
+  text-decoration: none;
+}
+
+.office-apps img {
+  width: clamp(110px, 10vw, 168px);
+  height: auto;
+  margin-bottom: clamp(10px, 1vw, 16px);
+  filter: drop-shadow(0 20px 28px rgb(0 0 0 / 0.22));
+}
+
+.office-app-name {
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 600;
+}
+
+.office-app-line {
+  color: #6e6e73;
+  font-size: clamp(15px, 1.1vw, 17px);
+}
+
+@media (max-width: 900px) {
+  .office-apps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ── Home: where it runs (Rami, 2026-10-09) ─────────────────────────────
+   microsoft.com's shape: on the white page with no block, the promise set
+   left in two columns with the platforms, a ruled list where every row has
+   its mark (one ink colour), its name, a note and its own download. */
+.where {
+  padding-block: clamp(88px, 9vw, 176px);
+}
+
+.where .wrap {
+  max-width: calc(1560px + 2 * var(--site-gutter));
+}
+
+.where-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  gap: clamp(40px, 6vw, 120px);
+  align-items: center;
+}
+
+.where-copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(16px, 1.4vw, 24px);
+}
+
+.where-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(36px, 3.6vw, 60px); /* two lines at most (Rami, 2026-10-09) */
+  text-wrap: balance;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+
+.where-lede {
+  margin: 0;
+  max-width: 30em;
+  color: #4a4d54;
+  font-size: clamp(18px, 1.5vw, 24px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.where-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(16px, 1.6vw, 28px);
+  margin-top: clamp(8px, 1vw, 16px);
+}
+
+.where-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--hairline) solid #d2d2d7;
+}
+
+.where-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(20px, 2vw, 36px);
+  padding: clamp(24px, 2.4vw, 40px) clamp(4px, 0.6vw, 12px);
+  border-bottom: var(--hairline) solid #d2d2d7;
+}
+
+.where-list > li > svg {
+  width: clamp(32px, 2.8vw, 44px);
+  height: clamp(32px, 2.8vw, 44px);
+  color: #1d1d1f;
+}
+
+.where-name h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(20px, 1.7vw, 28px);
+  font-weight: 650;
+  letter-spacing: -0.018em;
+}
+
+.where-name p {
+  margin: 4px 0 0;
+  color: #6e6e73;
+  font-size: clamp(14px, 1.05vw, 17px);
+}
+
+@media (max-width: 960px) {
+  .where-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Home: how it works (Rami, 2026-10-10) ───────────────────────────────
+   The hero's promise in three plain steps on the white page: a symbol in
+   ink, a line and a sentence; no cards, no mockups, a hairline over each. */
+.how {
+  padding-block: clamp(72px, 7vw, 128px);
+}
+
+.how .wrap {
+  max-width: calc(1240px + 2 * var(--site-gutter));
+}
+
+.how-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(40px, 4.6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.how-lede {
+  margin: 14px auto 0;
+  color: #4a4d54;
+  font-size: clamp(18px, 1.5vw, 22px);
+  text-align: center;
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  margin: clamp(48px, 5vw, 80px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.how-steps li {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+  padding-top: 24px;
+  border-top: 1px solid #d2d2d7;
+  color: #1d1d1f;
+  text-align: center;
+}
+
+.how-steps li > svg {
+  margin-bottom: 8px;
+  color: #1d1d1f;
+}
+
+.how-steps h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(20px, 1.6vw, 24px);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.how-steps p {
+  max-width: 24em;
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .how-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Home: one rhythm between sections (Rami, 2026-10-10: "the gaps
+   between the sections the same everywhere, not too big or too small").
+   Every gap, from one block's last content to the next block's first, is
+   --rhythm: the hero's links to "Sign in", the steps to the black
+   MeridianOS section, that section to "Nomad Suite", the cards to "On
+   every computer", and that to the privacy line. Last in the cascade, so
+   these win over each section's own padding. */
+:root {
+  --rhythm: clamp(72px, 7vw, 112px);
+}
+
+.how {
+  /* Close under the hero, so its title peeks above the fold. */
+  padding-block: clamp(20px, 2.4vw, 40px) var(--rhythm);
+}
+
+.tiles-section {
+  /* the title's line box sits about half its size above its letters */
+  padding-block: calc(var(--rhythm) - 0.48 * clamp(40px, 5.2vw, 80px)) 0;
+}
+
+.tiles-title {
+  margin-bottom: clamp(36px, 3.6vw, 56px);
+}
+
+.where {
+  padding-block: var(--rhythm) 0;
+}
+
+.where-inner {
+  /* the copy centred against the list, so no empty corner under it */
+  align-items: center;
+}
+
+/* The same side margins as the privacy line and the footer under it
+   (Rami, 2026-10-10), so the three line up: full width, 6vw in, 96 px at most. */
+.where .wrap {
+  max-width: none;
+  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+}
+
+/* ── Home: the downloads, balanced (Rami, 2026-10-10: "I still feel there
+   is no balance") ──────────────────────────────────────────────────────
+   One centred column: the title, the line and the button; then the three
+   platforms as three equal columns under it, each centred with a hairline
+   over it, the same rhythm as "Sign in. It's all there." Last in the
+   cascade, so it wins over the two-column layout above. */
+.where-inner {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: clamp(40px, 4vw, 64px);
+}
+
+.where-copy {
+  justify-items: center;
+  text-align: center;
+}
+
+.where-title {
+  font-size: clamp(40px, 4.6vw, 72px);
+  text-wrap: balance;
+}
+
+.where-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  width: 100%;
+  border-top: 0;
+}
+
+.where-list li {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+  padding: 28px 0 0;
+  border-top: 1px solid #d2d2d7;
+  border-bottom: 0;
+  text-align: center;
+}
+
+.where-list > li > svg {
+  margin-bottom: 6px;
+}
+
+/* The visitor's own computer: its rule darkens; its Download is the same
+   link as the others (Rami, 2026-10-10). */
+.where-list li.is-mine {
+  border-top-color: #1d1d1f;
+}
+
+@media (max-width: 900px) {
+  .where-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Home: the questions, last before the privacy line (Rami, 2026-10-10).
+   The site's .qa list in one centred column, titled like "Get Meridian on
+   your computer." above it, with the page's one rhythm around it. */
+.home-qa {
+  /* the privacy line carries 24 px of its own padding */
+  padding-block: var(--rhythm) calc(var(--rhythm) - 24px);
+}
+
+.home-qa-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(40px, 4.6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* Full width, with the side margins of the downloads, the privacy line and
+   the footer (Rami, 2026-10-10). */
+.home-qa .wrap {
+  max-width: none;
+  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+}
+
+.home-qa .qa {
+  margin: clamp(36px, 3.6vw, 56px) 0 0;
+  border-top-color: #d2d2d7;
+}
+
+.home-qa .qa details {
+  border-bottom-color: #d2d2d7;
+}
+
+.home-qa .qa summary {
+  color: #1d1d1f;
+  font-size: clamp(17px, 1.3vw, 20px);
+}
+
+.home-qa .qa details p {
+  max-width: none; /* the answer runs the full width of its question (Rami, 2026-10-10) */
+  margin: 0;
+  color: #4a4d54;
+  font-size: 17px;
+}
+
+/* The one purchase line under the suite's cards. */
+.suite-office {
+  margin: clamp(28px, 2.6vw, 40px) 0 0;
+  color: #4a4d54;
+  font-size: clamp(15px, 1.1vw, 17px);
+  text-align: center;
+}
+
+.suite-office a {
+  color: #1d1d1f;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* ── Home: the privacy promise, small, on the footer (Rami, 2026-10-09) ─
+   apple.com's closing fine print in size: small type on white, no block,
+   the same inset as the footer so the two read as one. */
+.fine {
+  background: var(--site-page);
+}
+
+.fine-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 3fr);
+  gap: var(--space-xl) clamp(var(--space-xl), 4vw, 72px);
+  padding: var(--space-xl) clamp(var(--site-gutter), 6vw, 96px) var(--space-xl);
+  border-top: var(--hairline) solid #d2d2d7;
+  color: #6e6e73;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.fine-head {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  /* the same rhythm as each point beside it, so every title and every line start on one line */
+  gap: 6px;
+  color: #1d1d1f;
+}
+
+.fine-head h2 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+}
+
+.fine-head p {
+  margin: 0;
+  color: #6e6e73;
+}
+
+.fine-points {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-xl) clamp(var(--space-xl), 3vw, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fine-points h3 {
+  margin: 0 0 6px;
+  color: #1d1d1f;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.fine-points p {
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .fine-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .fine-points {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .fine-points {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══ The page system (Rami, 2026-10-10: "lock the theme and style and rules,
+   and do it for every page") ═════════════════════════════════════════════
+   The parts in src/ui/system.tsx, in the home page's language. Last in the
+   cascade, so it governs. The rules in words: docs/site-style.md.
+   - White ground; a section is set apart by apple.com's mist (#f5f5f7) at
+     most once a page, and by black at most once a page.
+   - One rhythm (--rhythm) between sections; consecutive bands of one tone
+     share it rather than doubling it.
+   - Side margins: the footer's, clamp(gutter, 6vw, 96px), full width.
+   - One title scale: 40-72px, 700, -0.035em; ledes 18-24px; body 15-17px.
+   - Buttons are nomad-design's; secondary links are "More ›".
+   - The hero takes its product's colours (the icon's ground) as a static
+     wash that turns into the white page with no edge; MeridianOS opens dark.
+   - Static gradients only; motion is opacity on the compositor, absent under
+     reduced motion. */
+
+/* The product lights: each product's icon ground, sampled from its icon. */
+[data-light] {
+  --tint: #f5f5f7;
+  --bloom: #c9ccd4;
+  --bloom2: #e3e5ea;
+}
+
+[data-light='polaris'] {
+  --tint: #e7ebf6;
+  --bloom: #4a5883;
+  --bloom2: #1e2849;
+}
+
+[data-light='reach'] {
+  --tint: #f7e7ef;
+  --bloom: #98366c;
+  --bloom2: #68063e;
+}
+
+[data-light='drift'] {
+  --tint: #e3f1f1;
+  --bloom: #439597;
+  --bloom2: #125356;
+}
+
+[data-light='citadel'] {
+  --tint: #f5ecdf;
+  --bloom: #b48545;
+  --bloom2: #6d4814;
+}
+
+[data-light='office'] {
+  --tint: #eef3fc;
+  --bloom: #1e57c8;
+  --bloom2: #1aa156;
+}
+
+[data-light='ax'] {
+  --tint: #141417;
+  --bloom: #6e6e78;
+  --bloom2: #2a2a31;
+}
+
+.sys-wrap {
+  width: 100%;
+  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+}
+
+/* ── Bands ── */
+
+.band-white,
+.band-mist,
+.band-black {
+  padding-block: var(--rhythm);
+}
+
+.band-white {
+  background: #ffffff;
+}
+
+.band-mist {
+  background: #f5f5f7;
+}
+
+.band-black {
+  background: #000000;
+  color: #f5f5f7;
+}
+
+.band-white + .band-white,
+.band-mist + .band-mist {
+  padding-top: 0;
+}
+
+/* Close under the hero, so the next title shows on the first screen (the
+   home page's rule). */
+.ph + .band-white {
+  padding-top: clamp(20px, 2.4vw, 40px);
+}
+
+/* ── Heads ── */
+
+.sys-head {
+  display: grid;
+  gap: clamp(14px, 1.2vw, 20px);
+  margin-bottom: clamp(40px, 4.4vw, 72px);
+}
+
+.sys-head-center {
+  justify-items: center;
+  text-align: center;
+}
+
+.sys-head-start {
+  justify-items: start;
+}
+
+.sys-eyebrow {
+  margin: 0;
+  color: #6e6e73;
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 600;
+}
+
+.sys-title {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(40px, 4.6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.sys-lede {
+  margin: 0;
+  max-width: 36em;
+  color: #4a4d54;
+  font-size: clamp(18px, 1.5vw, 24px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.sys-head-center .sys-lede {
+  margin-inline: auto;
+}
+
+.band-black .sys-title {
+  color: #f5f5f7;
+}
+
+.band-black .sys-lede,
+.band-black .sys-eyebrow {
+  color: #a1a1a6;
+}
+
+.band-black .more {
+  color: #f5f5f7;
+}
+
+.sys-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-base) var(--space-xl);
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+
+.sys-actions-center {
+  justify-content: center;
+}
+
+.sys-head .sys-actions {
+  margin-top: 6px;
+}
+
+/* ── The hero ── */
+
+.ph {
+  position: relative;
+  overflow-x: clip;
+  background:
+    radial-gradient(52% 64% at 76% 36%, color-mix(in srgb, var(--bloom) 30%, transparent), transparent 72%),
+    radial-gradient(44% 56% at 12% 0%, color-mix(in srgb, var(--bloom2) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--tint) 0%, color-mix(in srgb, var(--tint) 50%, #ffffff) 62%, #ffffff 100%);
+}
+
+.ph-center {
+  background:
+    radial-gradient(56% 58% at 50% 62%, color-mix(in srgb, var(--bloom) 26%, transparent), transparent 72%),
+    radial-gradient(60% 40% at 50% 0%, color-mix(in srgb, var(--bloom2) 14%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--tint) 0%, color-mix(in srgb, var(--tint) 50%, #ffffff) 62%, #ffffff 100%);
+}
+
+/* Nomad Office: its four apps' colours, one at each corner of the light. */
+.ph[data-light='office'] {
+  background:
+    radial-gradient(34% 46% at 70% 18%, rgb(30 87 200 / 0.2), transparent 72%),
+    radial-gradient(30% 42% at 92% 46%, rgb(26 161 86 / 0.16), transparent 72%),
+    radial-gradient(30% 40% at 60% 74%, rgb(219 99 28 / 0.15), transparent 72%),
+    radial-gradient(28% 40% at 84% 86%, rgb(211 57 41 / 0.13), transparent 72%),
+    linear-gradient(180deg, #f2f5fb 0%, #f8f9fc 60%, #ffffff 100%);
+}
+
+/* MeridianOS: Obsidian. It opens dark and ends square, apple.com's macOS. */
+.ph[data-light='ax'] {
+  background:
+    radial-gradient(50% 60% at 50% 70%, rgb(110 110 120 / 0.2), transparent 72%),
+    linear-gradient(180deg, #000000 0%, #0b0b0d 100%);
+}
+
+.ph-inner {
+  display: grid;
+  align-items: center;
+  gap: clamp(32px, 4vw, 72px);
+  min-height: min(38vw, 620px);
+  padding: clamp(48px, 6vw, 96px) clamp(var(--site-gutter), 6vw, 96px) clamp(40px, 4vw, 64px);
+}
+
+.ph-split .ph-inner {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+}
+
+.ph-center .ph-inner {
+  justify-items: center;
+  text-align: center;
+}
+
+.ph-copy {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-base);
+  max-width: 600px;
+}
+
+.ph-center .ph-copy {
+  justify-items: center;
+  max-width: 860px;
+}
+
+.ph-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #1d1d1f;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.ph-title {
+  margin: 0;
+  color: #141518;
+  font-size: clamp(40px, 5vw, 76px);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.ph-lede {
+  margin: 0;
+  max-width: 34em;
+  color: #3d3f45;
+  font-size: clamp(17px, 1.4vw, 21px);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.ph-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-base) var(--space-xl);
+  margin-top: var(--space-sm);
+}
+
+.ph-center .ph-actions {
+  justify-content: center;
+}
+
+.ph-note {
+  margin: 0;
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.ph[data-light='ax'] .ph-eyebrow,
+.ph[data-light='ax'] .ph-title {
+  color: #f5f5f7;
+}
+
+.ph[data-light='ax'] .ph-lede {
+  color: #c7c7cc;
+}
+
+.ph[data-light='ax'] .ph-note {
+  color: #8e8e93;
+}
+
+.ph[data-light='ax'] .more {
+  color: #f5f5f7;
+}
+
+/* On the dark hero, the primary button is the light one. */
+.ph[data-light='ax'] .nm-btn[data-variant='primary'] {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.ph-visual {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.ph-center .ph-visual {
+  max-width: 1100px;
+}
+
+/* ── The mockup slot ── */
+
+.mockup-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Until a product's mockup is made: its icon, at size, in its own light. */
+.mockup-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 520px);
+  aspect-ratio: 4 / 3;
+}
+
+.mockup-slot::before {
+  content: '';
+  position: absolute;
+  inset: 6% 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bloom) 34%, transparent), transparent);
+}
+
+.mockup-slot .icon,
+.mockup-slot .office-stack {
+  position: relative;
+  width: clamp(140px, 15vw, 220px);
+  height: auto;
+  filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.2));
+}
+
+/* A chapter's or a tab's picture until its mockup is made. */
+.sys-shot {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 28px;
+  background:
+    radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--bloom) 16%, transparent), transparent 72%),
+    #f5f5f7;
+}
+
+.band-mist .sys-shot {
+  background:
+    radial-gradient(60% 70% at 50% 50%, color-mix(in srgb, var(--bloom) 16%, transparent), transparent 72%),
+    #ffffff;
+}
+
+.sys-shot .icon,
+.sys-shot .office-stack {
+  width: clamp(72px, 7vw, 112px);
+  height: auto;
+  opacity: 0.9;
+}
+
+/* ── Columns ── */
+
+.sys-cols {
+  display: grid;
+  gap: clamp(28px, 3vw, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sys-cols.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sys-cols.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sys-cols.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sys-cols li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-top: 24px;
+  border-top: 1px solid #d2d2d7;
+}
+
+.sys-cols-center li {
+  justify-items: center;
+  text-align: center;
+}
+
+.sys-cols li > svg {
+  margin-bottom: 8px;
+  color: #1d1d1f;
+}
+
+.sys-n {
+  margin-bottom: 6px;
+  color: #1d1d1f;
+  font-size: clamp(34px, 3vw, 48px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.sys-cols h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(20px, 1.6vw, 24px);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.sys-cols-center h3 {
+  justify-content: center;
+}
+
+.sys-cols p {
+  max-width: 26em;
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+
+.band-black .sys-cols li {
+  border-top-color: rgb(255 255 255 / 0.18);
+}
+
+.band-black .sys-cols h3,
+.band-black .sys-cols li > svg,
+.band-black .sys-n {
+  color: #f5f5f7;
+}
+
+.band-black .sys-cols p {
+  color: #a1a1a6;
+}
+
+/* ── A statement ── */
+
+.sys-statement {
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 1.6vw, 24px);
+  text-align: center;
+}
+
+.sys-statement h2 {
+  max-width: 16ch;
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(44px, 6vw, 96px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.sys-statement p {
+  max-width: 34em;
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(18px, 1.5vw, 24px);
+  line-height: 1.45;
+}
+
+/* ── Chapters ── */
+
+.sys-chapters {
+  display: grid;
+  gap: var(--rhythm);
+}
+
+.sys-chapter {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 96px);
+}
+
+.sys-chapter.flip .sys-chapter-copy {
+  order: 2;
+}
+
+.sys-chapter-copy,
+.sys-panel-copy {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  max-width: 30em;
+}
+
+.sys-chapter-copy > svg {
+  margin-bottom: 6px;
+  color: #1d1d1f;
+}
+
+.sys-chapter-copy h3,
+.sys-panel-copy h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(30px, 3.2vw, 48px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.sys-chapter-copy p,
+.sys-panel-copy p {
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(17px, 1.35vw, 21px);
+  line-height: 1.5;
+}
+
+/* ── Tabs ── */
+
+.sys-tablist {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: clamp(36px, 3.6vw, 56px);
+}
+
+.sys-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  corner-shape: squircle;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.band-mist .sys-tab {
+  background: #ffffff;
+}
+
+.sys-tab[aria-selected='true'] {
+  background: #1d1d1f;
+  color: #ffffff;
+}
+
+.sys-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 96px);
+  animation: sys-settle 220ms ease-out both;
+}
+
+.sys-panel[hidden] {
+  display: none;
+}
+
+@keyframes sys-settle {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Tiles (dark, one idea each) ── */
+
+.sys-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sys-tiles li {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: clamp(260px, 22vw, 340px);
+  padding: clamp(28px, 2.6vw, 40px);
+  border-radius: 28px;
+  background: #111114;
+  color: #f5f5f7;
+}
+
+.sys-tiles li > svg {
+  margin-bottom: 12px;
+  color: color-mix(in srgb, var(--bloom) 60%, #ffffff);
+}
+
+.sys-tiles h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: clamp(22px, 1.9vw, 28px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.sys-tiles p {
+  margin: 0;
+  color: #a1a1a6;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.5;
+}
+
+/* ── Plans ── */
+
+.sys-period {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(28px, 2.6vw, 40px);
+}
+
+.sys-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 460px));
+  justify-content: center;
+  gap: clamp(16px, 2vw, 32px);
+}
+
+.sys-plan {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: clamp(28px, 2.6vw, 40px);
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px #d2d2d7;
+}
+
+.sys-plan.lit {
+  box-shadow: inset 0 0 0 2px #1d1d1f;
+}
+
+.sys-plan h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.sys-plan-pitch {
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+
+.sys-plan-free {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(34px, 3vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.sys-plan .sys-plan-cta {
+  justify-self: start;
+}
+
+.sys-foot {
+  margin: clamp(24px, 2.2vw, 32px) auto 0;
+  max-width: 52em;
+  color: #6e6e73;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ── A short comparison ── */
+
+.sys-mini {
+  overflow-x: auto;
+}
+
+.sys-mini table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(15px, 1.15vw, 17px);
+}
+
+.sys-mini th,
+.sys-mini td {
+  padding: clamp(16px, 1.4vw, 22px) 12px;
+  border-bottom: 1px solid #d2d2d7;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.sys-mini thead th {
+  color: #1d1d1f;
+  font-size: clamp(19px, 1.5vw, 24px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sys-mini tbody th {
+  width: 40%;
+  color: #4a4d54;
+  font-weight: 500;
+}
+
+.sys-mini td {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+/* ── The black moment: MeridianOS ── */
+
+.sys-meridian .sys-wrap {
+  display: grid;
+  justify-items: center;
+  gap: clamp(14px, 1.2vw, 20px);
+  text-align: center;
+}
+
+.sys-meridian-mark {
+  margin-bottom: 8px;
+  color: #f5f5f7;
+}
+
+.sys-meridian .sys-lede {
+  margin-inline: auto;
+}
+
+.sys-meridian .sys-actions {
+  margin-top: 8px;
+}
+
+/* ── Questions ── */
+
+.sys-faq .sys-faq-title {
+  text-align: center;
+}
+
+.sys-faq .qa {
+  margin: clamp(36px, 3.6vw, 56px) 0 0;
+  border-top: 1px solid #d2d2d7;
+}
+
+.sys-faq .qa details {
+  border-bottom: 1px solid #d2d2d7;
+}
+
+.sys-faq .qa summary {
+  color: #1d1d1f;
+  font-size: clamp(17px, 1.3vw, 20px);
+}
+
+.sys-faq .qa details p {
+  max-width: none;
+  margin: 0;
+  color: #4a4d54;
+  font-size: 17px;
+}
+
+.band-black.sys-faq .qa,
+.band-black.sys-faq .qa details {
+  border-color: rgb(255 255 255 / 0.18);
+}
+
+.band-black.sys-faq .qa summary {
+  color: #f5f5f7;
+}
+
+.band-black.sys-faq .qa details p,
+.band-black.sys-faq .qa-caret {
+  color: #a1a1a6;
+}
+
+/* ── Where it runs, on a product page ── */
+
+.sys-platforms {
+  margin-top: 0;
+}
+
+/* ── Narrower windows ── */
+
+@media (max-width: 1039px) {
+  .ph-split .ph-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .sys-cols.cols-2,
+  .sys-cols.cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .sys-cols.cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sys-chapter,
+  .sys-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .sys-chapter.flip .sys-chapter-copy {
+    order: 0;
+  }
+
+  .sys-tiles,
+  .sys-plans {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .sys-cols.cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sys-panel {
+    animation: none;
+  }
+}
+
+.sys-plans-solo {
+  grid-template-columns: minmax(0, 520px);
+}
+
+/* After the dark hero the page starts a full rhythm down: there is an edge to
+   leave room under, not a wash to peek through. */
+.ph[data-light='ax'] + .band-white {
+  padding-top: var(--rhythm);
+}
+
+/* ── A gallery: pictures in a row, a title and a line under each ── */
+
+.sys-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 28px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sys-gallery li {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.sys-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.sys-gallery h3 {
+  margin: 0;
+  color: #1d1d1f;
+  font-size: clamp(19px, 1.5vw, 22px);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.sys-gallery p {
+  margin: 0;
+  color: #4a4d54;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .sys-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .sys-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+/* A plan's name on a dark tile (Citadel's Premium). */
+.sys-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.12);
+  color: #e8e8ed;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* An app's icon over its column (Nomad Office's four). */
+.sys-cols .sys-app {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+}
+
+/* The download page's one paragraph, centred under its title. */
+.which-copy {
+  max-width: 44em;
+  margin-inline: auto;
+  text-align: center;
+}
+/* A real window in a chapter or a tab, set as the window shots are. */
+.sys-window,
+.sys-chapter-visual .window-shot img,
+.sys-panel-visual .window-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-window);
+  box-shadow: 0 0 0 var(--hairline) var(--border-soft), var(--lift-1);
+}
+
+.sys-chapter-visual .window-shot,
+.sys-panel-visual .window-shot {
+  max-width: none;
+}
+/* Every light hero ends in pure white over its last quarter, whatever its
+   blooms do above, so there is never an edge where the page begins. */
+.ph {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 72%, #ffffff 100%),
+    radial-gradient(52% 64% at 76% 36%, color-mix(in srgb, var(--bloom) 30%, transparent), transparent 72%),
+    radial-gradient(44% 56% at 12% 0%, color-mix(in srgb, var(--bloom2) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--tint) 0%, color-mix(in srgb, var(--tint) 50%, #ffffff) 62%, #ffffff 100%);
+}
+
+.ph-center {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 72%, #ffffff 100%),
+    radial-gradient(56% 58% at 50% 62%, color-mix(in srgb, var(--bloom) 26%, transparent), transparent 72%),
+    radial-gradient(60% 40% at 50% 0%, color-mix(in srgb, var(--bloom2) 14%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--tint) 0%, color-mix(in srgb, var(--tint) 50%, #ffffff) 62%, #ffffff 100%);
+}
+
+.ph[data-light='office'] {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 72%, #ffffff 100%),
+    radial-gradient(30% 40% at 70% 20%, rgb(30 87 200 / 0.2), transparent 72%),
+    radial-gradient(26% 36% at 90% 38%, rgb(26 161 86 / 0.16), transparent 72%),
+    radial-gradient(26% 34% at 62% 56%, rgb(219 99 28 / 0.15), transparent 72%),
+    radial-gradient(24% 34% at 84% 62%, rgb(211 57 41 / 0.13), transparent 72%),
+    linear-gradient(180deg, #f2f5fb 0%, #f8f9fc 60%, #ffffff 100%);
+}
+
+/* MeridianOS: pure black, so the laptop picture's own black meets it, and the
+   picture's edges feathered so no rectangle shows. */
+.ph[data-light='ax'] {
+  background: #000000;
+}
+
+.ph[data-light='ax'] .mockup-img {
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+}
+/* The picture's own black runs a fifth of its height above the lid: pull it
+   up under the buttons so the laptop follows the copy. */
+.ph[data-light='ax'] .ph-inner {
+  gap: 0;
+}
+
+.ph[data-light='ax'] .mockup-img {
+  margin-top: clamp(-150px, -8vw, -24px);
+}
+/* The copy always above the picture (MeridianOS's picture rises under it). */
+.ph-copy {
+  position: relative;
+  z-index: 1;
+}
+
+/* A centred hero's icon stand-in is shallow, so the next section still
+   shows on the first screen; a real mockup sets its own height. */
+.ph-center .mockup-slot {
+  width: min(100%, 640px);
+  aspect-ratio: 16 / 7;
+}
+
+.ph-center .mockup-slot .icon {
+  width: clamp(120px, 11vw, 168px);
+}
+.ph-center .ph-inner {
+  gap: clamp(20px, 2.4vw, 40px);
+}
+.ph-center .ph-inner {
+  padding-top: clamp(40px, 4.4vw, 72px);
+}
+
+.ph-center .mockup-slot {
+  aspect-ratio: 16 / 6;
+}
+/* The page wrapper and its bands never grow to fit a wide child (the
+   comparison table scrolls inside its own frame instead). */
+[data-light],
+.band-white,
+.band-mist,
+.band-black,
+.sys-wrap {
+  min-width: 0;
+}
+/* The table's screen-reader labels are absolutely placed; the scroll frame
+   is their containing block, so they cannot widen the page on a phone. */
+.compare-wrap,
+.sys-mini {
+  position: relative;
+}
+/* The laptop's lid sits 11.7% of the picture's width down from its top (the picture is 2:1).
+   Margin percentages are of the width, so this lifts the picture until its lid lands 40px under
+   the hero's note, at every window size, never through it (Rami, 2026-10-10: "fix this overlap"). */
+.ph[data-light='ax'] .mockup-img {
+  margin-top: calc(-11.7% + 40px);
+}
+
+/* ══ The black zone (Rami, 2026-10-10: like apple.com/os/macos; cinema arrivals; ends black to
+   white). src/ui/cinema.tsx. ══ */
+
+.cz {
+  --cz-side: clamp(var(--site-gutter), 6vw, 96px);
+  background: #000000;
+  color: #f5f5f7;
+  overflow-x: clip;
+}
+
+.cz-section {
+  padding-top: var(--rhythm);
+}
+
+.cz-head {
+  display: grid;
+  justify-items: start;
+  gap: clamp(12px, 1.1vw, 18px);
+  max-width: 900px;
+  margin: 0 var(--cz-side) clamp(36px, 3.6vw, 56px);
+}
+
+.cz-eyebrow {
+  margin: 0;
+  color: #a1a1a6;
+  font-size: clamp(15px, 1.1vw, 17px);
+  font-weight: 600;
+}
+
+.cz-title {
+  margin: 0;
+  color: #f5f5f7;
+  font-size: clamp(40px, 4.6vw, 72px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.cz-lede {
+  margin: 0;
+  max-width: 36em;
+  color: #a1a1a6;
+  font-size: clamp(18px, 1.5vw, 24px);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+
+/* The arrivals: from the left, from the right, rising; scroll-driven, compositor only. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cz-from-left,
+    .cz-from-right,
+    .cz-fade-up {
+      will-change: transform, opacity;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 32%;
+    }
+
+    .cz-from-left {
+      animation-name: cz-left;
+    }
+
+    .cz-from-right {
+      animation-name: cz-right;
+    }
+
+    .cz-fade-up {
+      animation-name: cz-up;
+    }
+  }
+}
+
+@keyframes cz-left {
+  from {
+    opacity: 0;
+    transform: translateX(-72px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cz-right {
+  from {
+    opacity: 0;
+    transform: translateX(72px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cz-up {
+  from {
+    opacity: 0;
+    transform: translateY(64px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ══ The MeridianOS bar: black all the way down (Rami, 2026-10-10) ══
+   No line under it over the opening; once the page has scrolled, a faint one appears, so the bar
+   reads as lifted over what passes beneath. The class is set by an IntersectionObserver
+   (Layout.tsx), and the line changes in one step: nothing animates. */
+.lnav-dark {
+  background: #000000;
+  border-bottom-color: transparent;
+  /* the bar ends on a fractional pixel: a pixel of black below it keeps the page's white from
+     showing through as a hairline over the black opening */
+  box-shadow: 0 1px 0 #000000;
+}
+
+.lnav-dark.is-scrolled {
+  border-bottom-color: rgb(255 255 255 / 0.14);
+}
+
+.lnav-dark .lnav-name,
+.lnav-dark .lnav-links a[aria-current='page'] {
+  color: #f5f5f7;
+}
+
+.lnav-dark .lnav-links a:not([aria-current='page']) {
+  color: #a1a1a6;
+}
+
+@media (hover: hover) {
+  .lnav-dark .lnav-links a:hover {
+    color: #f5f5f7;
+  }
+}
+
+.lnav-dark .nm-btn.lnav-cta {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.lnav-marker {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
+/* ══ MeridianOS's opening: an arc of sunlight along a planet's edge (Rami, 2026-10-10) ══
+   src/ui/MeridianHero.tsx. A window's height of black, the arc low across it, and over the sky
+   the words set the way apple.com sets a product's first screen (the mark and the name small,
+   the line large, one sentence, a price pill), centred above the arc.
+
+   The arc's curve is a circle 292vw across (the laptop picture's), flat enough that it always
+   leaves through the screen's sides and never meets the section's bottom edge: the horizon (--hz)
+   sits the curve's drop at the edges (about 8.6vw) plus a margin above the stage's bottom. It is drawn by gradients on
+   stage-sized layers, circles centred far below the stage, so no layer is larger than the window.
+
+   Every layer is a static gradient from the first paint; only opacity and transform move.
+   Reduced motion gets the lit arc at rest. */
+
+.mxh {
+  position: relative;
+  background: #000000;
+  color: #f5f5f7;
+  overflow-x: clip;
+}
+
+.mxh-stage {
+  --hz: calc(100% - 9vw - clamp(120px, 16vh, 190px));
+  position: relative;
+  height: calc(100vh - 2 * var(--site-bar));
+  min-height: 680px;
+  max-height: 1200px;
+  overflow: hidden;
+}
+
+.mxh-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mxh-sky > * {
+  position: absolute;
+}
+
+/* The arc as the laptop picture has it (Rami, 2026-10-10: "the realistic one is the generated
+   one … see how it is exactly"), measured from design-assets/meridian-laptop-2026-10-10 and set
+   at 1x:
+
+   - the curve is the picture's: a circle 1.46 times the width across, its top on the horizon;
+   - the line is white-hot over the middle three quarters, turning yellow, then orange, only over
+     the last stretch to each corner, where it ends as a dim orange line;
+   - around it the desk's sunset orange (rgb 249 115 22, the halo 235 95 16; Rami: "more
+     sunset orange"), the same above and below and gone by about
+     150px; each ring's profile is a soft (Gaussian) falloff with no edge, so the line reads as
+     light blooming, not as a stroke (Rami: "still like a line");
+   - the glow strengthens toward the middle, but still reaches the corners (Rami: "the glow must
+     reach more the edges"), and the line blooms into it rather than stopping at a hard edge
+     ("the beam is too clear, it looks like a line").
+
+   Three rings on one centre (50%, --hz + 146vw), each with stops in pixels around 146vw, and each
+   with its own fade across the width (a horizontal mask: the light depends on how far along the
+   curve it is, not on height). Nothing else is in the sky. */
+
+/* The glow: a sunset-orange glow (about ±35px) over a faint wide halo (about ±120px), above and below
+   the line alike, reaching the screen's corners. */
+.mxh-glow {
+  inset: 0;
+  background:
+    radial-gradient(
+      circle 160vw at 50% calc(var(--hz) + 146vw),
+      transparent calc(146vw - 60px),
+      rgb(249 115 22 / 0.006) calc(146vw - 49.11px),
+      rgb(249 115 22 / 0.031) calc(146vw - 39.14px),
+      rgb(249 115 22 / 0.105) calc(146vw - 30.12px),
+      rgb(249 115 22 / 0.239) calc(146vw - 22.09px),
+      rgb(249 115 22 / 0.397) calc(146vw - 15.12px),
+      rgb(249 115 22 / 0.524) calc(146vw - 9.27px),
+      rgb(249 115 22 / 0.594) calc(146vw - 4.65px),
+      rgb(249 115 22 / 0.618) calc(146vw - 1.43px),
+      rgb(249 115 22 / 0.620) 146vw,
+      rgb(249 115 22 / 0.618) calc(146vw + 1.43px),
+      rgb(249 115 22 / 0.594) calc(146vw + 4.65px),
+      rgb(249 115 22 / 0.524) calc(146vw + 9.27px),
+      rgb(249 115 22 / 0.397) calc(146vw + 15.12px),
+      rgb(249 115 22 / 0.239) calc(146vw + 22.09px),
+      rgb(249 115 22 / 0.105) calc(146vw + 30.12px),
+      rgb(249 115 22 / 0.031) calc(146vw + 39.14px),
+      rgb(249 115 22 / 0.006) calc(146vw + 49.11px),
+      transparent calc(146vw + 60px)
+    ),
+    radial-gradient(
+      circle 160vw at 50% calc(var(--hz) + 146vw),
+      transparent calc(146vw - 170px),
+      rgb(235 95 16 / 0.010) calc(146vw - 139.15px),
+      rgb(235 95 16 / 0.031) calc(146vw - 110.89px),
+      rgb(235 95 16 / 0.072) calc(146vw - 85.33px),
+      rgb(235 95 16 / 0.126) calc(146vw - 62.59px),
+      rgb(235 95 16 / 0.177) calc(146vw - 42.83px),
+      rgb(235 95 16 / 0.214) calc(146vw - 26.26px),
+      rgb(235 95 16 / 0.233) calc(146vw - 13.18px),
+      rgb(235 95 16 / 0.239) calc(146vw - 4.06px),
+      rgb(235 95 16 / 0.240) 146vw,
+      rgb(235 95 16 / 0.239) calc(146vw + 4.06px),
+      rgb(235 95 16 / 0.233) calc(146vw + 13.18px),
+      rgb(235 95 16 / 0.214) calc(146vw + 26.26px),
+      rgb(235 95 16 / 0.177) calc(146vw + 42.83px),
+      rgb(235 95 16 / 0.126) calc(146vw + 62.59px),
+      rgb(235 95 16 / 0.072) calc(146vw + 85.33px),
+      rgb(235 95 16 / 0.031) calc(146vw + 110.89px),
+      rgb(235 95 16 / 0.010) calc(146vw + 139.15px),
+      transparent calc(146vw + 170px)
+    );
+  --fade: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 0.38) 0%,
+    rgb(0 0 0 / 0.48) 4.5%,
+    rgb(0 0 0 / 0.62) 9.5%,
+    rgb(0 0 0 / 0.76) 14%,
+    rgb(0 0 0 / 0.89) 18.5%,
+    #000 24%,
+    #000 76%,
+    rgb(0 0 0 / 0.89) 81.5%,
+    rgb(0 0 0 / 0.76) 86%,
+    rgb(0 0 0 / 0.62) 90.5%,
+    rgb(0 0 0 / 0.48) 95.5%,
+    rgb(0 0 0 / 0.38) 100%
+  );
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+}
+
+/* The bloom: the bright orange light right around the line (about ±10px); it holds on along the curve
+   longer than the glow does, and is what the line becomes toward the corners. */
+.mxh-near {
+  inset: 0;
+  background: radial-gradient(
+      circle 160vw at 50% calc(var(--hz) + 146vw),
+      transparent calc(146vw - 20px),
+      rgb(252 150 60 / 0.014) calc(146vw - 15.94px),
+      rgb(252 150 60 / 0.079) calc(146vw - 12.26px),
+      rgb(252 150 60 / 0.249) calc(146vw - 9px),
+      rgb(252 150 60 / 0.507) calc(146vw - 6.16px),
+      rgb(252 150 60 / 0.751) calc(146vw - 3.77px),
+      rgb(252 150 60 / 0.896) calc(146vw - 1.89px),
+      rgb(252 150 60 / 0.945) calc(146vw - 0.58px),
+      rgb(252 150 60 / 0.950) 146vw,
+      rgb(252 150 60 / 0.945) calc(146vw + 0.58px),
+      rgb(252 150 60 / 0.896) calc(146vw + 1.89px),
+      rgb(252 150 60 / 0.751) calc(146vw + 3.77px),
+      rgb(252 150 60 / 0.507) calc(146vw + 6.16px),
+      rgb(252 150 60 / 0.249) calc(146vw + 9px),
+      rgb(252 150 60 / 0.079) calc(146vw + 12.26px),
+      rgb(252 150 60 / 0.014) calc(146vw + 15.94px),
+      transparent calc(146vw + 20px)
+    );
+  --fade: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 0.75) 0%,
+    rgb(0 0 0 / 0.82) 4.5%,
+    rgb(0 0 0 / 0.94) 14%,
+    #000 24%,
+    #000 76%,
+    rgb(0 0 0 / 0.94) 86%,
+    rgb(0 0 0 / 0.82) 95.5%,
+    rgb(0 0 0 / 0.75) 100%
+  );
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+}
+
+/* The warm white core (about 4px across, soft at its edges), running out through both sides of
+   the screen, dimming a little toward them (Rami: "the beam ends before the edges"). */
+.mxh-core {
+  inset: 0;
+  background: radial-gradient(
+      circle 160vw at 50% calc(var(--hz) + 146vw),
+      transparent calc(146vw - 7px),
+      rgb(255 228 196 / 0.026) calc(146vw - 5.13px),
+      rgb(255 228 196 / 0.182) calc(146vw - 3.51px),
+      rgb(255 228 196 / 0.527) calc(146vw - 2.15px),
+      rgb(255 228 196 / 0.851) calc(146vw - 1.08px),
+      rgb(255 228 196 / 0.985) calc(146vw - 0.33px),
+      rgb(255 228 196 / 1.000) 146vw,
+      rgb(255 228 196 / 0.985) calc(146vw + 0.33px),
+      rgb(255 228 196 / 0.851) calc(146vw + 1.08px),
+      rgb(255 228 196 / 0.527) calc(146vw + 2.15px),
+      rgb(255 228 196 / 0.182) calc(146vw + 3.51px),
+      rgb(255 228 196 / 0.026) calc(146vw + 5.13px),
+      transparent calc(146vw + 7px)
+    );
+  --fade: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 0.55) 0%,
+    rgb(0 0 0 / 0.75) 5%,
+    #000 11.5%,
+    #000 88.5%,
+    rgb(0 0 0 / 0.75) 95%,
+    rgb(0 0 0 / 0.55) 100%
+  );
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+}
+
+/* ── The words, after apple.com's product openings ── */
+
+.mxh-copy {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--hz);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px var(--site-gutter) clamp(40px, 9vh, 120px);
+  text-align: center;
+}
+
+.mxh-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0;
+  color: #f5f5f7;
+  font-size: clamp(19px, 1.5vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.mxh-slogan {
+  /* clear air under the lockup (Rami, 2026-10-11: "space out the top content from the logo") */
+  margin: clamp(26px, 4.5vh, 52px) 0 0;
+  max-width: 14ch;
+  font-size: clamp(44px, min(6.2vw, 8.4vh), 96px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  /* plain white (Rami, 2026-10-11); a text-clipped gradient also cut the descenders */
+  color: #f5f5f7;
+}
+
+@media (min-width: 900px) {
+  .mxh-slogan {
+    max-width: none;
+  }
+}
+
+.mxh-sub {
+  margin: clamp(12px, 1.6vh, 20px) 0 0;
+  color: #f5f5f7;
+  font-size: clamp(18px, min(1.7vw, 2.6vh), 28px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* The price pill: what it costs and the one verb. It stands on the planet, under the arc, at the
+   opening's foot (Rami, 2026-10-10: "switch places"; "put the buy at the bottom"). */
+.mxh-offer {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  /* at the bottom of the opening (Rami, 2026-10-10: "put the buy at the bottom") */
+  bottom: clamp(24px, 4.5vh, 52px);
+  translate: -50% 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 12px 12px 22px;
+  border-radius: 22px;
+  corner-shape: squircle;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  text-align: left;
+}
+
+.mxh-offer p {
+  margin: 0;
+  color: #f5f5f7;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.mxh-offer .nm-btn.mxh-buy {
+  flex: none;
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+@media (max-width: 559px) {
+  .mxh-offer {
+    gap: 14px;
+    padding: 12px 10px 12px 18px;
+  }
+
+  .mxh-offer p {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the glow comes up first and the line's core brightens inside it: in place, nothing drawn */
+  .mxh-glow {
+    will-change: opacity;
+    animation: mxh-light 1800ms cubic-bezier(0.45, 0, 0.2, 1) 200ms both;
+  }
+
+  .mxh-near {
+    will-change: opacity;
+    animation: mxh-light 1200ms ease-out 600ms both;
+  }
+
+  .mxh-core {
+    will-change: opacity;
+    animation: mxh-light 1000ms ease-out 900ms both;
+  }
+
+  .mxh-in {
+    will-change: transform, opacity;
+    animation: mxh-rise 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms) both;
+  }
+}
+
+@keyframes mxh-light {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+@keyframes mxh-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 759px) {
+  .mxh-stage {
+    --hz: calc(100% - 9vw - 128px);
+    min-height: 640px;
+  }
+}
+
+/* The hero and the black zone end on fractional pixels; what follows each tucks one pixel under
+   it so the white page never shows through as a hairline between them. */
+.mxh + .cz {
+  margin-top: -1px;
+}
+
+/* ══ Every screenshot wears the house squircle (Rami, 2026-10-10: "all screenshots need to be our
+   corner radius"), set once here for every page: the window shots, the Polaris picture, the shot
+   in "In MeridianOS", and the display's bezel and its screen. ══ */
+.window-shot img,
+.sys-window,
+.sys-chapter-visual .window-shot img,
+.sys-panel-visual .window-shot img,
+.in-ax-shot {
+  border-radius: clamp(16px, 1.8vw, 26px);
+  corner-shape: squircle;
+}
+
+.display-bezel,
+.display-bezel img {
+  corner-shape: squircle;
+}
+
+/* ══ Try Meridian (Rami, 2026-10-10): the real shell, in a window that grows out of its button ══
+   src/ui/TryMeridian.tsx. */
+.mxh-try {
+  margin-top: clamp(22px, 3.4vh, 40px);
+}
+
+.mxh .nm-btn.tm-button {
+  height: 50px;
+  padding: 0 28px;
+  border-radius: 16px;
+  corner-shape: squircle;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.tm-layer {
+  position: fixed;
+  /* under the site's main header (TryMeridian measures it at the press) */
+  inset: var(--tm-top, 0px) 0 0;
+  z-index: 200;
+}
+
+/* The page's scrollbar stays where it is (Rami, 2026-10-11: "without covering the scrollbar"):
+   the window is a fixed layer, which never covers it, and nothing turns the page's scroll off
+   (Lenis is not stopped either: stopping it clips the page's overflow); the demo keeps its own
+   scrolls to itself and the scrim swallows the wheel. */
+
+.tm-layer[hidden] {
+  display: none;
+}
+
+.tm-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.72);
+  opacity: 0;
+  transition: opacity 360ms ease;
+}
+
+.tm-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  /* full height under the main header, not full width (Rami, 2026-10-10/11); the layer is
+     fixed, so its box is the viewport without the page's scrollbar, which stays in view */
+  /* wide, with the same small gap left and right; on the right it ends before the scrollbar
+     (Rami, 2026-10-11: "bigger horizontally, only enough before the scrollbar, left and right same") */
+  left: clamp(8px, 0.8vw, 14px);
+  right: clamp(8px, 0.8vw, 14px);
+  top: clamp(10px, 2vh, 22px);
+  bottom: clamp(10px, 2vh, 22px);
+  overflow: hidden;
+  border-radius: clamp(14px, 1.4vw, 22px);
+  corner-shape: squircle;
+  background: #000000;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 40px 120px rgb(0 0 0 / 0.6);
+  opacity: 0;
+  transform: translate(var(--tx, 0), var(--ty, 40vh)) scale(var(--s, 0.1));
+  transition:
+    transform 560ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 200ms ease 300ms;
+  will-change: transform, opacity;
+}
+
+.tm-layer.is-open .tm-scrim {
+  opacity: 1;
+}
+
+.tm-layer.is-open .tm-window {
+  opacity: 1;
+  transform: none;
+  transition:
+    transform 620ms cubic-bezier(0.2, 0.9, 0.25, 1),
+    opacity 140ms ease;
+}
+
+.tm-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 14px;
+  height: 44px;
+  padding: 0 8px 0 18px;
+  background: #0b0b0c;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  color: #f5f5f7;
+}
+
+.tm-name {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.tm-note {
+  flex: 1;
+  overflow: hidden;
+  color: #86868b;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tm-bar .nm-btn.tm-get {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.tm-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  corner-shape: squircle;
+  background: transparent;
+  color: #f5f5f7;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .tm-close:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+}
+
+.tm-screen {
+  position: relative;
+  flex: 1;
+  background: #000000;
+}
+
+.tm-screen iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .tm-note {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tm-scrim,
+  .tm-window,
+  .tm-layer.is-open .tm-window {
+    transition: none;
+  }
+}
+
+/* ══ The collage (Rami, 2026-10-11: "this style", after his portfolio's project list) ══
+   src/ui/Collage.tsx. Two columns of big pictures, the right one set lower; under each picture a
+   small spaced label, a large title and one quiet line. */
+.cg {
+  /* starts well under the fold, so nothing of it peeks into the opening */
+  /* a little in from the edges, with air between the columns (Rami, 2026-10-11: "a bit smaller,
+     more gaps") */
+  padding: clamp(120px, 22vh, 240px) clamp(24px, 19vw, 420px) clamp(40px, 5vw, 80px);
+}
+
+.cg-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(36px, 5.5vw, 110px);
+}
+
+.cg-col {
+  display: grid;
+  align-content: start;
+  gap: clamp(64px, 8vw, 140px);
+}
+
+/* the right column starts lower, so the two never line up */
+.cg-col-low {
+  padding-top: clamp(120px, 14vw, 260px);
+}
+
+.cg-pic {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: clamp(12px, 1.2vw, 20px);
+  corner-shape: squircle;
+  background: #101012;
+}
+
+.cg-item.tall .cg-pic {
+  aspect-ratio: 4 / 5;
+}
+
+.cg-pic img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cg-label {
+  margin: clamp(16px, 1.4vw, 22px) 0 0;
+  color: #86868b;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.cg-title {
+  margin: 10px 0 0;
+  color: #f5f5f7;
+  font-size: clamp(26px, 2.4vw, 40px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.cg-body {
+  max-width: 30em;
+  margin: 12px 0 0;
+  color: #86868b;
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.5;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cg-item {
+      will-change: transform, opacity;
+      animation: cg-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%;
+    }
+  }
+}
+
+@keyframes cg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(64px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* A phone: one column, in order. */
+@media (max-width: 760px) {
+  .cg-cols {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+
+  .cg-col {
+    display: contents;
+  }
+}
+
+/* ══ The Meridian lockup: the mark and the traced wordmark (Rami, 2026-10-10) ══ */
+.meridian-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32em;
+  line-height: 0;
+}
+
+.meridian-lockup svg {
+  display: block;
+  flex: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ══ Meridian against the computer as it comes (Rami, 2026-10-11) ══
+   src/ui/Versus.tsx. On black: a title, then rows of a situation, what happens without Meridian
+   (quiet grey) and with it (white), on hairlines. */
+.vs {
+  padding: clamp(80px, 12vh, 160px) clamp(24px, 14vw, 300px) clamp(40px, 6vw, 96px);
+}
+
+.vs .sys-title {
+  color: #f5f5f7;
+}
+
+.vs .sys-lede {
+  color: #86868b;
+}
+
+.vs-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 56px);
+  align-items: baseline;
+  padding: clamp(20px, 2.2vw, 30px) 0;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.vs-cols {
+  align-items: end;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.vs-usual-h {
+  /* as large and as heavy as the Meridian wordmark beside it (Rami, 2026-10-11), in grey */
+  color: #86868b;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.vs-meridian-h {
+  color: #f5f5f7;
+}
+
+.vs-when {
+  color: #f5f5f7;
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.vs-usual {
+  color: #6e6e73;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.45;
+}
+
+.vs-meridian {
+  color: #f5f5f7;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.45;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .vs-row:not(.vs-cols) {
+      will-change: transform, opacity;
+      animation: cg-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+/* A phone: the situation on top, then the two answers one under the other. */
+@media (max-width: 760px) {
+  .vs-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .vs-cols {
+    display: none;
+  }
+
+  .vs-usual::before {
+    content: 'Other systems: ';
+    color: #86868b;
+  }
+
+  .vs-meridian::before {
+    content: 'With Meridian: ';
+    color: #86868b;
+  }
+}
+
+/* ══ Real captures (system.tsx RealShot) and the hero that shows one large ══ */
+.sys-real-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: clamp(14px, 1.4vw, 24px);
+  corner-shape: squircle;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.06), 0 30px 70px -30px rgb(0 0 0 / 0.45);
+}
+
+/* apple.com's product opening: the name and the line centred, then the product itself, large */
+.ph-center .ph-visual:has(.sys-real-shot) {
+  max-width: 1300px;
+  margin-top: clamp(8px, 2vw, 32px);
 }

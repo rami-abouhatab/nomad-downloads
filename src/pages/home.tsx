@@ -1,207 +1,202 @@
 import { Layout } from '../ui/Layout';
-import { AX_DESK, Display, Hero, SectionHead } from '../ui/blocks';
-import { LinkButton, More, ProductMark, type ProductKey } from '../ui/kit';
-import { SIGN_IN, SIGN_UP, checkout } from '../data';
+import { LinkButton, MeridianLockup, More, Sym } from '../ui/kit';
+import { AppCards } from '../ui/SuiteCards';
+import { checkout } from '../data';
+import { PLATFORMS, PlatformMark, useMyPlatform } from '../ui/system';
 
-type Card = {
-  product: ProductKey;
-  name: string;
-  title: string;
-  body: string;
-  price: string;
-  href: string;
-  verb: { label: string; href: string };
-};
 
-const CARDS: Card[] = [
+/* Where the apps run, the platforms' marks and which one this computer is
+   live in ui/system.tsx, shared with every product page. */
+
+/* The questions people ask before they start (Rami, 2026-10-10). Every
+   answer repeats what /ax, /pricing and the terms already say; platforms are
+   left to the section above and privacy to the line below. */
+const FAQ = [
   {
-    product: 'polaris',
-    name: 'Polaris Browser',
-    title: 'The browser, complete.',
-    body: 'Fast and quiet. It blocks ads and trackers on its own, and helps you find the pages you read last week.',
-    price: 'Free',
-    href: '/polaris',
-    verb: { label: 'Download', href: '/download#polaris' },
+    q: 'What is MeridianOS?',
+    a: 'A whole desktop that lives in your Nomad account: your apps, your files, your windows and your settings. Sign in on any computer and it opens the way you left it.',
   },
   {
-    product: 'reach',
-    name: 'Reach',
-    title: 'Mail, chat and calls, together.',
-    body: 'Every mail account you have, chats with anyone on Nomad, calls and meetings, in one calm window.',
-    price: 'Free · Premium from $4.99 a month',
-    href: '/reach',
-    verb: { label: 'Download', href: '/download#reach' },
+    q: 'What happens when I use another computer?',
+    a: 'Install MeridianOS, sign in with your Nomad account, and your desk opens as you left it. Your files and settings live in your account, not on the machine.',
   },
   {
-    product: 'drift',
-    name: 'Drift',
-    title: 'Send a file with a link.',
-    body: 'Drop a file up to 2 GB, share the link, done. Premium sends straight to your phone or another PC.',
-    price: 'Free · Premium from $2.99 a month',
-    href: '/drift',
-    verb: { label: 'Send a file', href: 'https://drift.nomad.ax' },
+    q: 'How does the free trial work?',
+    a: 'Meridian Starter is free for 14 days. You start it, and later change or cancel it, in your Nomad account on the web. Nothing is ever paid inside the app.',
   },
   {
-    product: 'office',
-    name: 'Nomad Office',
-    title: 'Documents, sheets, slides and PDFs.',
-    body: 'Folio, Grids, Expo and Markup, installed on your own computer. Already inside every AX plan.',
-    price: '$5.99 a month · in every AX plan',
-    href: '/office',
-    verb: { label: 'Buy', href: checkout('office', 'yearly') },
+    q: 'Can I cancel at any time?',
+    a: 'Yes. Cancelling stops the next renewal, and your plan runs to the end of the period you paid for.',
+  },
+  {
+    q: 'Can I use the apps without MeridianOS?',
+    a: 'Yes. Polaris Browser, Reach and Citadel are free, and Nomad Office and the Premium plans of Reach, Drift and Citadel can be bought on their own. Inside MeridianOS, every plan includes Nomad Office and Pro and Ultra add the Premium plans; outside it, each app has its own subscription.',
+  },
+  {
+    q: 'Do I need a Google or Microsoft account?',
+    a: 'No. A Nomad account is your email and a passkey or password. If you want your Gmail, Outlook or Google Drive in MeridianOS, you connect them inside the apps.',
   },
 ];
 
 export default function HomePage() {
+  const mine = useMyPlatform();
   return (
     <Layout page="home">
-      <Hero
-        name="Nomad"
-        title={
-          <>
-            Wherever
-            <br />
-            you are.
-          </>
-        }
-        lede="Nomad makes a desktop that lives in your account, and the apps that go with it: a browser, a home for your mail and calls, a quick way to send files, and an office suite. One Nomad account opens all of them."
-        actions={
-          <>
-            <LinkButton href="/ax" variant="primary" hero>
-              Meet AX
-            </LinkButton>
-            <More href="/pricing">See pricing</More>
-          </>
-        }
-      >
-        <div className="wrap hero-media">
-          <Display {...AX_DESK} priority />
+      {/* The hero is a stage, as on apple.com and microsoft.com: a contained
+          field with the flagship inside it, kept shorter than the screen so
+          the next section shows (the illusion-of-completeness fix). The same
+          desk on two computers is the promise, shown rather than said. */}
+      <section className="stage" aria-labelledby="stage-title">
+        <div className="stage-card">
+          <div className="stage-copy">
+            <h1 id="stage-title" className="stage-title">
+              Your desktop,
+              <br />
+              wherever you are.
+            </h1>
+            <p className="stage-lede">
+              Your whole computer lives in your Nomad account and opens on any computer, exactly as you left it.
+            </p>
+            <div className="stage-actions">
+              <LinkButton href="/ax" variant="primary" hero>
+                Meet MeridianOS
+              </LinkButton>
+              <More href="/pricing">See pricing</More>
+            </div>
+          </div>
         </div>
-      </Hero>
+      </section>
 
-      <section className="section band" id="products" aria-labelledby="products-title">
-        <div className="wrap">
-          <SectionHead id="products-title" eyebrow="Products" title="Everything Nomad makes." />
+      {/* Order (Rami, 2026-10-10): MeridianOS's story together (how it works,
+          then the trial), then the suite, then where it runs. */}
+      <div className="flow">
+        {/* How it works (Rami, 2026-10-10): the hero's promise in three plain
+            steps, no device and no mockup: a symbol, a line and a sentence. */}
+        <section className="how" aria-labelledby="how-title">
+          <div className="wrap">
+            <h2 id="how-title" className="how-title">
+              Sign in. It&rsquo;s all there.
+            </h2>
+            <p className="how-lede">Your desktop lives in your Nomad account, not in a computer.</p>
+            <ol className="how-steps">
+              <li>
+                <Sym name="account" size={36} />
+                <h3>Sign in on any computer.</h3>
+                <p>Your Nomad account is the key. Nothing to set up on the computer in front of you.</p>
+              </li>
+              <li>
+                <Sym name="display" size={36} />
+                <h3>Your desk opens as you left it.</h3>
+                <p>Apps, files and windows, exactly where they were, down to the open tab.</p>
+              </li>
+              <li>
+                <Sym name="cloud" size={36} />
+                <h3>Walk away.</h3>
+                <p>Close the lid. Everything is saved, ready for the next computer you sit at.</p>
+              </li>
+            </ol>
+          </div>
+        </section>
 
-          <article className="ax-card reveal" aria-labelledby="card-ax">
-            <div className="ax-card-copy">
-              <ProductMark product="ax" size={64} />
-              <p className="eyebrow">AX · the desktop</p>
-              <h3 id="card-ax" className="title-lg">
-                Your whole desk, in your account.
-              </h3>
-              <p className="body">
-                Sign in on any computer and your desk opens as you left it: your apps, your files, your windows, even the tabs you had open.
-              </p>
-              <p className="card-price">From $9.99 a month · 14 days free</p>
-              <div className="card-links">
-                <More href="/ax">Learn more</More>
-                <More href={checkout('ax:starter', 'yearly')}>Start free trial</More>
+        <section className="panel-section panel-full" aria-labelledby="meridian-title">
+          <div className="panel-full-inner">
+            <div className="panel panel-meridian">
+              {/* apple.com's product tile (Rami, 2026-10-10): 692 px tall like
+                  theirs; the name on top, the laptop whole between, the line and
+                  the buttons under it. */}
+              <h2 id="meridian-title" className="meridian-head">
+                <MeridianLockup height={64} label="MeridianOS" className="meridian-head-lockup" />
+              </h2>
+              <img
+                className="panel-meridian-photo"
+                src="/assets/hero/meridian-laptop-golden-1774.webp"
+                srcSet="/assets/hero/meridian-laptop-golden-1774.webp 1774w, /assets/hero/meridian-laptop-golden-3548.webp 3548w"
+                sizes="100vw"
+                width={3548}
+                height={1774}
+                alt="MeridianOS on a laptop: the desktop with its menu bar and dock over a golden desert at sunrise."
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="meridian-foot">
+                <p className="meridian-line">Every Nomad app built in. Free for 14 days.</p>
+                <div className="panel-actions">
+                  <LinkButton href={checkout('ax:starter', 'yearly')} variant="primary" hero>
+                    Start free trial
+                  </LinkButton>
+                </div>
               </div>
             </div>
-            <img
-              className="ax-card-shot"
-              src="/assets/shots/ax-desk-800.webp"
-              srcSet="/assets/shots/ax-desk-800.webp 800w, /assets/shots/ax-desk-1280.webp 1280w"
-              sizes="(min-width: 900px) 560px, 92vw"
-              width={1920}
-              height={1080}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-          </article>
-
-          <div className="cards">
-            {CARDS.map((c) => (
-              <article className="card reveal" key={c.product} aria-labelledby={`card-${c.product}`}>
-                <ProductMark product={c.product} size={56} />
-                <p className="eyebrow">{c.name}</p>
-                <h3 id={`card-${c.product}`} className="title">
-                  {c.title}
-                </h3>
-                <p className="body">{c.body}</p>
-                <p className="card-price">{c.price}</p>
-                <div className="card-links">
-                  <More href={c.href}>Learn more</More>
-                  <More href={c.verb.href}>{c.verb.label}</More>
-                </div>
-              </article>
-            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section" id="account" aria-labelledby="account-title">
-        <div className="wrap split">
-          <div className="split-copy reveal">
-            <p className="eyebrow">One Nomad account</p>
-            <h2 id="account-title" className="headline">
-              One account.
-              <br />
-              <span className="dim">Everything opens with it.</span>
+        <section className="section tiles-section" aria-labelledby="tiles-title">
+          <div className="wrap">
+            <h2 id="tiles-title" className="tiles-title">
+              Nomad Suite
             </h2>
+            <AppCards />
+            <p className="suite-office">
+              Folio, Grids, Expo and Markup come together in Nomad Office.{' '}
+              <a href={checkout('office', 'yearly')}>Buy Nomad Office</a>
+            </p>
           </div>
-          <div className="split-copy reveal">
-            <p className="lede">
-              Make it once with your email, then sign in with a passkey or a password. Your plans, your apps and your desk all belong to
-              that one account.
-            </p>
-            <p className="body">
-              You never need a Google, Apple or Microsoft account to use Nomad. Bringing in your Gmail or Google Drive is something you can
-              do later, inside the apps, and undo any time.
-            </p>
-            <div className="actions">
-              <LinkButton href={SIGN_UP} variant="primary" hero>
-                Create your account
-              </LinkButton>
-              <More href={SIGN_IN}>Sign in</More>
+        </section>
+
+
+        {/* Where it runs (Rami, 2026-10-09): microsoft.com's shape for it. No
+            block behind it; the promise on the left, the platforms on the right
+            as a ruled list, each with its own mark and its own download. */}
+        <section className="where" aria-labelledby="everywhere-title">
+          <div className="wrap where-inner">
+            <div className="where-copy">
+              <h2 id="everywhere-title" className="where-title">
+                Get Meridian on your computer.
+              </h2>
+              <p className="where-lede">The desktop and every Nomad app, for Mac and Windows.</p>
+            </div>
+            <ul className="where-list" aria-label="Available on">
+              {PLATFORMS.map((x) => (
+                <li key={x.name} className={mine === x ? 'is-mine' : undefined}>
+                  <PlatformMark mark={x.mark} />
+                  <div className="where-name">
+                    <h3>{x.name}</h3>
+                    <p>{x.note}</p>
+                  </div>
+                  {/* One Download each, the same link for every platform (Rami,
+                      2026-10-10); the visitor's own reads "for this computer"
+                      and its rule is darker. */}
+                  <More href={x.href}>{mine === x ? 'Download for this computer' : 'Download'}</More>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* The questions, last before the privacy line: the site's own
+            disclosure list (.qa, as on /ax), in one centred column like the
+            sections above it. */}
+        <section className="home-qa" id="questions" aria-labelledby="faq-title">
+          <div className="wrap">
+            <h2 id="faq-title" className="home-qa-title">
+              Frequently asked questions.
+            </h2>
+            <div className="qa">
+              {FAQ.map((it) => (
+                <details key={it.q}>
+                  <summary>
+                    <span>{it.q}</span>
+                    <Sym name="caretDown" size={16} className="qa-caret" />
+                  </summary>
+                  <p>{it.a}</p>
+                </details>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section band" id="about" aria-labelledby="about-title">
-        <div className="wrap split">
-          <div className="split-copy reveal">
-            <p className="eyebrow">About Nomad</p>
-            <h2 id="about-title" className="headline">
-              Software that follows you,
-              <br />
-              <span className="dim">not your computer.</span>
-            </h2>
-          </div>
-          <div className="split-copy reveal">
-            <p className="body">
-              Nomad is the company. It makes AX, the desktop that lives in your account, and the apps that go with it: Polaris Browser,
-              Reach, Drift and Nomad Office. Every one of them works inside AX, and most work on their own on your computer too.
-            </p>
-            <p className="body">
-              Plans and payments happen on the web, in your Nomad account, and never inside an app. We do not sell your data, we do not
-              show you ads, and we do not use your files to train anything.
-            </p>
-            <More href="/privacy">How Nomad handles your data</More>
-          </div>
-        </div>
-      </section>
+      </div>
 
-      <section className="section" aria-labelledby="start-title">
-        <div className="wrap">
-          <SectionHead
-            id="start-title"
-            center
-            title="Try AX free for 14 days."
-            lede="Start on AX Starter. Office, Polaris Browser, Reach and Drift come with it."
-          >
-            <div className="actions">
-              <LinkButton href={checkout('ax:starter', 'yearly')} variant="primary" hero>
-                Start free trial
-              </LinkButton>
-              <More href="/pricing">Compare plans</More>
-            </div>
-          </SectionHead>
-        </div>
-      </section>
     </Layout>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Layout } from '../ui/Layout';
-import { Hero } from '../ui/blocks';
+import { Band, BandHead, PageHero } from '../ui/system';
 import { ProductMark, Sym, type ProductKey } from '../ui/kit';
 import { DRIFT_WEB } from '../data';
 
@@ -24,16 +24,16 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode }[] = [
   {
     id: 'ax',
-    name: 'AX',
-    short: 'AX',
+    name: 'MeridianOS',
+    short: 'MeridianOS',
     what: 'The desktop that lives in your account.',
     need: (
       <>
-        Needs an AX plan. <a href="/ax#plans">AX Starter is free for 14 days.</a>
+        Needs a MeridianOS plan. <a href="/ax#plans">Meridian Starter is free for 14 days.</a>
       </>
     ),
   },
-  { id: 'polaris', name: 'Polaris Browser', short: 'Polaris', what: 'The browser, complete.', need: 'Free. A Nomad account is optional.' },
+  { id: 'polaris', name: 'Polaris Browser', short: 'Polaris', what: 'The browser, complete.', need: 'Free. No account needed to browse.' },
   {
     id: 'reach',
     name: 'Reach',
@@ -52,7 +52,18 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     what: 'The Drift app, for sending straight to your devices.',
     need: (
       <>
-        Needs <a href="/drift#premium">Drift Premium</a>, AX Pro or AX Ultra. To send a link, no download: <a href={DRIFT_WEB}>drift.nomad.ax</a>.
+        Needs <a href="/drift#premium">Drift Premium</a>. To send a link, no download: <a href={DRIFT_WEB}>drift.nomad.ax</a>.
+      </>
+    ),
+  },
+  {
+    id: 'citadel',
+    name: 'Citadel',
+    short: 'Citadel',
+    what: 'Lock what is yours.',
+    need: (
+      <>
+        Free. <a href="/citadel#premium">Citadel Premium</a> locks apps too.
       </>
     ),
   },
@@ -63,7 +74,7 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     what: 'Folio, Grids, Expo and Markup.',
     need: (
       <>
-        Needs <a href="/office#buy">Nomad Office</a> or any AX plan.
+        Needs <a href="/office#buy">Nomad Office</a>. Already on every MeridianOS desk.
       </>
     ),
   },
@@ -107,14 +118,20 @@ export default function DownloadPage() {
 
   return (
     <Layout page="download">
-      <Hero
-        name="Download"
+      <div data-light="neutral">
+      <PageHero
+        light="neutral"
+        layout="center"
+        eyebrow="Download"
         title="Get Nomad's apps."
         lede="Everything here runs on Windows 10 and 11. Each app has a build for Intel and AMD PCs and one for ARM; we point out the one that fits this computer."
       />
 
-      <section className="section-tight" aria-label="Downloads">
-        <div className="wrap dl-list">
+      <Band label="dl-title">
+        <h2 id="dl-title" className="vh">
+          Downloads
+        </h2>
+        <div className="dl-list">
           {PRODUCTS.map((p) => {
             const info = manifest?.products?.[p.id];
             return (
@@ -159,20 +176,17 @@ export default function DownloadPage() {
             );
           })}
         </div>
-      </section>
+      </Band>
 
-      <section className="section-tight" id="which" aria-labelledby="which-title">
-        <div className="wrap narrow">
-          <h2 id="which-title" className="title">
-            Which download is mine?
-          </h2>
-          <p className="body">
+      <Band id="which" tone="mist" label="which-title">
+        <BandHead id="which-title" title="Which download is mine?" />
+          <p className="sys-lede which-copy">
             Not sure which PC you have? Intel and AMD is the usual answer; ARM means a Snapdragon or similar chip. The apps install for your
             Windows user alone, so they need no administrator, and they uninstall from Windows' own list of apps. Until our builds are
             code-signed, Windows may warn that the publisher is unknown.
           </p>
-        </div>
-      </section>
+      </Band>
+      </div>
     </Layout>
   );
 }

@@ -1,6 +1,18 @@
 import { Layout } from '../ui/Layout';
-import { Features, Hero, InAx, SectionHead, SinglePlan, WindowShot } from '../ui/blocks';
-import { LinkButton, More, ProductMark } from '../ui/kit';
+import { LinkButton, More } from '../ui/kit';
+import { Band, BandHead, Chapters, Columns, FAQ, InMeridian, PageHero, PlanPair, ProductName, RealShot, Tabs } from '../ui/system';
+
+/* Reach, shaped like microsoft.com's Outlook (Rami, 2026-10-10): the name and the line centred and
+   the real app large under them (2026-10-11), the app in tabs, each with its own real capture, the
+   rest in a row, then free beside Premium, the own-domain story, its place in MeridianOS, and the
+   questions. */
+
+const QA = [
+  { q: 'Is Reach free?', a: 'Yes, for everyone with a Nomad account: as many mail accounts as you have, chat, one-to-one calls, meetings up to 40 minutes and 10 people, events and people. Reach Premium adds more.' },
+  { q: 'Which mail accounts can I add?', a: 'Gmail and Outlook accounts, as many as you have, all in one app. With Reach Premium you can also have a mailbox at your own domain.' },
+  { q: 'How long can meetings be?', a: 'Up to 40 minutes and 10 people on Reach, 4 hours and 50 people on Reach Premium, and 24 hours and 100 people on Meridian Ultra.' },
+  { q: 'How does mail at my own domain work?', a: 'Bring a domain you own and Reach sets up a mailbox on it, plus as many aliases as you want. The mailbox is hosted by Zoho Mail and lives in Reach beside your other accounts. A second mailbox on the same domain is $1.99 a month.' },
+];
 
 export default function ReachPage() {
   return (
@@ -16,99 +28,117 @@ export default function ReachPage() {
         cta: { label: 'Download', href: '/download#reach' },
       }}
     >
-      <Hero
-        mark={<ProductMark product="reach" size={112} />}
-        name="Reach"
-        title={
-          <>
-            Everyone,
-            <br />
-            in one place.
-          </>
-        }
-        lede="Your mail, your chats and your calls, in one calm window. Bring every mail account you have, talk to anyone on Nomad, and meet face to face. Free."
-        actions={
-          <>
-            <LinkButton href="/download#reach" variant="primary" hero>
-              Download Reach
-            </LinkButton>
-            <More href="#premium">Reach Premium</More>
-          </>
-        }
-        note="Free for everyone with a Nomad account. For Windows 10 and 11."
-      >
-        <div className="wrap hero-media">
-          <WindowShot
-            name="reach-chat"
-            priority
-            alt="Reach on Chat: a list of conversations on the left and one open conversation, with voice call, video call and search above it."
-          />
-        </div>
-      </Hero>
+      <div data-light="reach">
+        <PageHero
+          light="reach"
+          layout="center"
+          eyebrow={<ProductName product="reach" name="Reach" />}
+          title="Everyone, in one place."
+          lede="Your mail, your chats and your calls, in one calm window. Bring every mail account you have, talk to anyone on Nomad, and meet face to face. Free."
+          actions={
+            <>
+              <LinkButton href="/download#reach" variant="primary" hero>
+                Download Reach
+              </LinkButton>
+              <More href="#premium">Reach Premium</More>
+            </>
+          }
+          note="Free for everyone with a Nomad account."
+          visual={<RealShot name="reach-conversation" ratio="16 / 10" eager alt="Reach with a chat open: two people agreeing to meet at three, the chats listed beside it." />}
+        />
 
-      <section className="section band" aria-labelledby="free-title">
-        <div className="wrap">
-          <SectionHead id="free-title" eyebrow="Reach · free" title="Everything you need to keep in touch." />
-          <Features
+        <Band label="parts-title">
+          <BandHead id="parts-title" title="Everything you need to keep in touch." />
+          <Tabs
+            product="reach"
             items={[
-              { title: 'All your mail', body: 'Add as many Gmail and Outlook accounts as you have, and keep them all in one app.' },
-              { title: 'Chat', body: 'Message anyone on Nomad by their handle.' },
-              { title: 'Calls', body: 'Voice and video calls between two people, as long as you like.' },
-              { title: 'Meetings', body: 'Meet with up to 10 people for up to 40 minutes, with a link anyone can open.' },
-              { title: 'Events', body: 'Your calendar beside your conversations, so the plan and the thread stay together.' },
-              { title: 'People', body: 'Everyone you write to, call or meet, in one list you never had to build.' },
+              {
+                title: 'Chat',
+                icon: 'send',
+                body: 'Message anyone on Nomad by their handle. Unread, groups, pinned and muted chats each have their place, with your recent calls beside them.',
+                visual: <RealShot name="reach-chatlist" ratio="16 / 10" alt="The chats in Reach: all chats, unread, groups, pinned and muted, and recent calls." />,
+              },
+              {
+                title: 'Meetings',
+                icon: 'devices',
+                body: 'Meet with up to 10 people for up to 40 minutes, with a link anyone can open.',
+                visual: <RealShot name="reach-meetings" ratio="16 / 10" alt="Meetings in Reach, with New meeting and nothing scheduled yet." />,
+              },
+              {
+                title: 'Events',
+                icon: 'clock',
+                body: 'Your calendar beside your conversations, so the plan and the thread stay together.',
+                visual: <RealShot name="reach-calendar" ratio="16 / 10" alt="The calendar in Reach: a week of October with the month beside it." />,
+              },
+              {
+                title: 'Your way',
+                icon: 'layers',
+                body: 'Choose which parts of Reach run along the top, in the order you use them, and how it looks.',
+                visual: <RealShot name="reach-settings" ratio="16 / 10" alt="Reach Settings: the theme, and the tabs along the top, each one switched on." />,
+              },
             ]}
           />
-        </div>
-      </section>
+          <Columns
+            cols={3}
+            items={[
+              { title: 'Mail', icon: 'mail', body: 'Add as many Gmail and Outlook accounts as you have, and keep them all in one app.' },
+              { title: 'Calls', icon: 'camera', body: 'Voice and video calls between two people, as long as you like.' },
+              { title: 'People', icon: 'account', body: 'Everyone you write to, call or meet, in one list you never had to build.' },
+            ]}
+          />
+        </Band>
 
-      <SinglePlan
-        id="premium"
-        eyebrow="Reach Premium"
-        title={
-          <>
-            Longer meetings.
-            <br />
-            <span className="dim">Your own address.</span>
-          </>
-        }
-        lede="For people who meet a lot, and want mail at their own domain."
-        product="reach:premium"
-        name="Reach Premium"
-        cta="Buy Reach Premium"
-        lead="Everything in Reach, plus"
-        lines={[
-          'Meetings up to **4 hours** and **50 people**',
-          'Meeting recordings',
-          'Scheduled send and snooze',
-          'Your own domain, with one mailbox and unlimited aliases',
-          'More mailboxes for $1.99 a month each',
-        ]}
-      />
+        <Band id="premium" tone="mist" label="premium-title">
+          <BandHead id="premium-title" title="Choose your Reach." lede="Reach is free for everyone. Reach Premium is for people who meet a lot, and want mail at their own domain." />
+          <PlanPair
+            free={{
+              name: 'Reach',
+              price: 'free',
+              pitch: 'Everything you need to keep in touch.',
+              lines: ['As many **Gmail and Outlook** accounts as you have', 'Chat with anyone on Nomad', 'One-to-one voice and video calls', 'Meetings up to **40 minutes** and **10 people**', 'Events and people'],
+              action: { label: 'Download Reach', href: '/download#reach' },
+            }}
+            paid={{
+              name: 'Reach Premium',
+              price: 'reach:premium',
+              pitch: 'Longer meetings. Your own address.',
+              lead: 'Everything in Reach, plus',
+              lines: [
+                'Meetings up to **4 hours** and **50 people**',
+                'Meeting recordings',
+                'Scheduled send and snooze',
+                'Your own domain, with one mailbox and unlimited aliases',
+                'More mailboxes for $1.99 a month each',
+              ],
+              action: { label: 'Buy Reach Premium', buy: 'reach:premium' },
+            }}
+          />
+        </Band>
 
-      <section className="section" aria-labelledby="domain-title">
-        <div className="wrap split">
-          <div className="split-copy reveal">
-            <p className="eyebrow">Reach Premium</p>
-            <h2 id="domain-title" className="headline">
-              Mail at your own domain.
-            </h2>
-          </div>
-          <div className="split-copy reveal">
-            <p className="body">
-              Bring a domain you own and Reach sets up a mailbox on it, like you@yourname.com, plus as many aliases as you want: hello@,
-              invoices@, anything@. The mailbox is hosted by Zoho Mail and lives in Reach beside your other accounts. Need a second mailbox
-              on the same domain? Add one for $1.99 a month.
-            </p>
-          </div>
-        </div>
-      </section>
+        <Band label="domain-title">
+          <h2 id="domain-title" className="vh">
+            Mail at your own domain
+          </h2>
+          <Chapters
+            product="reach"
+            items={[
+              {
+                title: 'Mail at your own domain.',
+                icon: 'mail',
+                body: 'Bring a domain you own and Reach sets up a mailbox on it, like you@yourname.com, plus as many aliases as you want: hello@, invoices@, anything@. It lives in Reach beside your other accounts.',
+              },
+            ]}
+          />
+        </Band>
 
-      <InAx
-        id="ax-title"
-        title="Reach in AX."
-        body="Reach is on every AX desk. AX Pro and Ultra include Reach Premium, and Ultra stretches meetings to 24 hours and 100 people."
-      />
+        <InMeridian
+          id="ax-title"
+          title="Reach in MeridianOS."
+          body="Reach is on every MeridianOS desk. Meridian Pro and Ultra include Reach Premium, and Ultra stretches meetings to 24 hours and 100 people."
+        />
+
+        <FAQ items={QA} />
+      </div>
     </Layout>
   );
 }

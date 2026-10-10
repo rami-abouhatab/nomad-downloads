@@ -12,14 +12,14 @@ export default function PrivacyPage() {
         <p className="when">Last updated 8 October 2026</p>
 
         <p>
-          Nomad makes AX, a desktop that lives in your account, and the apps Polaris Browser, Reach, Drift and Nomad Office. One Nomad
-          account signs you in to all of them. To bring your desk back on another machine, AX keeps your files, your desks and your settings
+          Nomad makes MeridianOS, a desktop that lives in your account, and the apps Polaris Browser, Reach, Drift and Nomad Office. One Nomad
+          account signs you in to all of them. To bring your desk back on another machine, MeridianOS keeps your files, your desks and your settings
           on our servers. This page says what we keep, why, who helps us keep it, and what you can do about it.
         </p>
 
         <h2 id="who">Who we are</h2>
         <p>
-          Nomad is run by <Todo>[LEGAL ENTITY NAME, REGISTERED ADDRESS]</Todo>. For anything on this page, write to{' '}
+          Nomad is run by Origins, <Todo>[REGISTERED ADDRESS]</Todo>. For anything on this page, write to{' '}
           <Todo>[PRIVACY CONTACT EMAIL]</Todo>.
         </p>
 
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             plain text. We do not offer sign-in with Google, Apple or Microsoft.
           </li>
           <li>
-            <strong>What you put in AX:</strong> your files, their earlier versions, your desks, their layouts, snapshots, wallpapers,
+            <strong>What you put in MeridianOS:</strong> your files, their earlier versions, your desks, their layouts, snapshots, wallpapers,
             installed apps and settings.
           </li>
           <li>
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
 
         <h2 id="how-long">How long</h2>
         <p>
-          As long as you have a Nomad account. Earlier versions of files are kept for as long as your AX plan's history allows: 30 days, a
+          As long as you have a Nomad account. Earlier versions of files are kept for as long as your MeridianOS plan's history allows: 30 days, a
           year, or for as long as you keep the plan. Drift files are deleted soon after their link expires. When you delete your account,
           everything above is erased from our servers, except payments, receipts and the record of what you bought, which tax law requires us
           to keep.

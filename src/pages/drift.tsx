@@ -1,13 +1,26 @@
 import { Layout } from '../ui/Layout';
-import { Hero, InAx, SectionHead, SinglePlan } from '../ui/blocks';
-import { LinkButton, More, ProductMark } from '../ui/kit';
-import { DRIFT_WEB } from '../data';
+import { LinkButton, More, Sym } from '../ui/kit';
+import { PeriodSwitch, PriceText, usePeriod } from '../ui/period';
+import { DRIFT_WEB, checkout } from '../data';
+import { Actions, Band, BandHead, Chapters, Columns, InMeridian, MiniCompare, PageHero, ProductName, RealShot } from '../ui/system';
 
-const STEPS = [
-  { title: 'Drop the file', body: 'Open drift.nomad.ax and drop in anything up to 2 GB.' },
-  { title: 'Copy the link', body: 'Drift uploads it and hands you a link. Send it however you like.' },
-  { title: 'They download it', body: 'Whoever has the link can download the file for a day. Then it is gone.' },
-];
+/* Drift, shaped like a send page (Rami, 2026-10-10): one centred verb in
+   the opening, the three steps, free against Premium row by row, sending to
+   your own devices, and its place in MeridianOS. */
+
+function Choose() {
+  const period = usePeriod();
+  return (
+    <Actions>
+      <LinkButton href={DRIFT_WEB} variant="secondary" hero>
+        Send a file
+      </LinkButton>
+      <LinkButton href={checkout('drift:premium', period)} variant="primary" hero>
+        Buy Drift Premium
+      </LinkButton>
+    </Actions>
+  );
+}
 
 export default function DriftPage() {
   return (
@@ -23,84 +36,99 @@ export default function DriftPage() {
         cta: { label: 'Send a file', href: DRIFT_WEB },
       }}
     >
-      <Hero
-        mark={<ProductMark product="drift" size={112} />}
-        name="Drift"
-        title={
-          <>
-            Send it
-            <br />
-            with a link.
-          </>
-        }
-        lede="Drop a file, get a link, send it to anyone. Drift works right in your browser, with nothing to install. Files up to 2 GB, links that last a day. Free."
-        actions={
-          <>
-            <LinkButton href={DRIFT_WEB} variant="primary" hero>
-              Send a file
-            </LinkButton>
-            <More href="#premium">Drift Premium</More>
-          </>
-        }
-        note="Opens drift.nomad.ax in your browser."
-      />
+      <div data-light="drift">
+        <PageHero
+          light="drift"
+          layout="center"
+          eyebrow={<ProductName product="drift" name="Drift" />}
+          title="Send it with a link."
+          lede="Drop a file, get a link, send it to anyone. Drift works right in your browser with your free Nomad account, with nothing to install. Files up to 2 GB, links that last a day. Free."
+          actions={
+            <>
+              <LinkButton href={DRIFT_WEB} variant="primary" hero>
+                Send a file
+              </LinkButton>
+              <More href="#premium">Drift Premium</More>
+            </>
+          }
+          note="Opens drift.nomad.ax in your browser."
+          visual={<RealShot name="drift-send" ratio="16 / 10" eager alt="The Drift send panel: a PDF ready to go to anyone with a link, lasting an hour, and Create link." />}
+        />
 
-      <section className="section band" aria-labelledby="how-title">
-        <div className="wrap">
-          <SectionHead
-            id="how-title"
-            title={
-              <>
-                Three steps.
-                <br />
-                <span className="dim">Nothing to install on either end.</span>
-              </>
-            }
+        <Band label="how-title">
+          <BandHead id="how-title" title="Three steps." lede="Nothing to install on either end." />
+          <Columns
+            numbered
+            align="center"
+            items={[
+              { title: 'Drop the file', body: 'Open drift.nomad.ax and drop in anything up to 2 GB.' },
+              { title: 'Copy the link', body: 'Drift uploads it and hands you a link. Send it however you like.' },
+              { title: 'They download it', body: 'Whoever has the link can download the file for a day. Then it is gone.' },
+            ]}
           />
-          {/* A real sequence, so it is numbered. */}
-          <ol className="steps">
-            {STEPS.map((s, i) => (
-              <li className="step reveal" key={s.title}>
-                <span className="step-n" aria-hidden="true">
-                  {i + 1}
-                </span>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+          <Chapters
+            product="drift"
+            items={[
+              {
+                title: 'A link, and a code for a phone.',
+                icon: 'link',
+                body: 'Drift hands you the link to copy, and a QR code any phone camera can scan to download the file there.',
+                visual: <RealShot name="drift-link-ready" ratio="16 / 10" alt="Drift with the link ready: Copy link, and a QR code to scan with a phone camera." />,
+              },
+              {
+                title: 'The other end is just a page.',
+                icon: 'download',
+                body: 'Whoever you send it to opens the link in any browser and downloads the file, with nothing to install and no account.',
+                visual: <RealShot name="drift-web" ratio="16 / 10" alt="A Drift link opened in a browser: the file name and size, when the link expires, and Download." />,
+              },
+            ]}
+          />
+        </Band>
 
-      <SinglePlan
-        id="premium"
-        eyebrow="Drift Premium"
-        title={
-          <>
-            Straight to your phone.
-            <br />
-            <span className="dim">Or your other PC.</span>
-          </>
-        }
-        lede="The Drift app pairs your devices once, then sends to them directly. On your phone there is nothing to install: scan a QR code and it opens in the browser."
-        product="drift:premium"
-        name="Drift Premium"
-        cta="Buy Drift Premium"
-        lead="Everything in Drift, plus"
-        lines={[
-          'The Drift app for your PC',
-          'Device pairing: send straight to your phone or another PC',
-          'Files up to **10 GB**',
-          'Links that last **7 days**',
-        ]}
-        after={<More href="/download#drift">Download the Drift app</More>}
-      />
+        <Band id="premium" tone="mist" label="premium-title">
+          <BandHead id="premium-title" title="Drift or Drift Premium." lede="Drift is free in your browser. Premium sends bigger files for longer, and straight to your own devices.">
+            <PeriodSwitch />
+          </BandHead>
+          <MiniCompare
+            heads={['Drift', 'Drift Premium']}
+            rows={[
+              { label: 'Price', cells: ['Free', <PriceText key="p" product="drift:premium" />] },
+              { label: 'Largest file', cells: ['2 GB', '10 GB'] },
+              { label: 'Links last', cells: ['1 day', '7 days'] },
+              { label: 'Send from your browser', cells: [<Sym key="a" name="check" size={18} />, <Sym key="b" name="check" size={18} />] },
+              { label: 'The Drift app for your PC', cells: ['—', <Sym key="c" name="check" size={18} />] },
+              { label: 'Send straight to your phone or another PC', cells: ['—', <Sym key="d" name="check" size={18} />] },
+            ]}
+          />
+          <Choose />
+        </Band>
 
-      <InAx
-        id="ax-title"
-        title="Built into your desk."
-        body="Every AX desk can send with Drift. AX Pro and Ultra include Drift Premium and the app, and AX Ultra is the only way to send files up to 50 GB."
-      />
+        <Band label="pair-title">
+          <h2 id="pair-title" className="vh">
+            Sending to your own devices
+          </h2>
+          <Chapters
+            product="drift"
+            items={[
+              {
+                title: 'Straight to your phone. Or your other PC.',
+                icon: 'driftDevice',
+                body: 'The Drift app pairs your devices once, then sends to them directly. What is sent to you arrives as a notice, to take or to turn down. On your phone there is nothing to install: scan a QR code and it opens in the browser.',
+                visual: <RealShot name="drift-receive" ratio="16 / 10" alt="A Drift notice at the top of the screen: someone wants to send you a document, with Decline and Accept." />,
+              },
+            ]}
+          />
+          <Actions align="start">
+            <More href="/download#drift">Download the Drift app</More>
+          </Actions>
+        </Band>
+
+        <InMeridian
+          id="ax-title"
+          title="Built into your desk."
+          body="Every MeridianOS desk can send with Drift. Meridian Pro and Ultra include Drift Premium on the desk, and Meridian Ultra is the only way to send files up to 50 GB."
+        />
+      </div>
     </Layout>
   );
 }

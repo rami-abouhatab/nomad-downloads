@@ -1,9 +1,15 @@
 import type { ReactNode } from 'react';
 import { Layout } from '../ui/Layout';
-import { Compare, Hero, PlanCard, SectionHead } from '../ui/blocks';
+import { Compare, PlanCard } from '../ui/blocks';
 import { LinkButton, More, ProductMark, type ProductKey } from '../ui/kit';
 import { PeriodSwitch, PriceText, usePeriod } from '../ui/period';
 import { AX_PLANS, DRIFT_WEB, PRICE_FOOT, checkout, type ProductId } from '../data';
+import { Band, BandHead, FAQ, PageHero } from '../ui/system';
+
+/* Pricing, shaped like apple.com's Apple One and microsoft.com's plan
+   comparison (Rami, 2026-10-10): the period switch in the opening, the
+   MeridianOS plans, every feature side by side, the apps on their own, and
+   the billing questions in the black band. */
 
 type Tier = {
   name: string;
@@ -30,7 +36,7 @@ const APPS: App[] = [
         more: '/polaris',
       },
     ],
-    inAx: 'Polaris is the browser on every AX desk.',
+    inAx: 'Polaris is the browser on every MeridianOS desk.',
   },
   {
     id: 'reach',
@@ -51,7 +57,7 @@ const APPS: App[] = [
         more: '/reach',
       },
     ],
-    inAx: 'Reach is on every AX desk. AX Pro and Ultra include Reach Premium.',
+    inAx: 'Reach is on every MeridianOS desk. Meridian Pro and Ultra include Reach Premium on the desk.',
   },
   {
     id: 'drift',
@@ -72,7 +78,28 @@ const APPS: App[] = [
         more: '/drift',
       },
     ],
-    inAx: 'Drift is on every AX desk. AX Pro and Ultra include Drift Premium, and Ultra sends up to 50 GB.',
+    inAx: 'Drift is on every MeridianOS desk. Meridian Pro and Ultra include Drift Premium on the desk, and Ultra sends up to 50 GB.',
+  },
+  {
+    id: 'citadel',
+    name: 'Citadel',
+    tagline: 'Lock what is yours.',
+    tiers: [
+      {
+        name: 'Citadel',
+        price: 'free',
+        what: 'Lock any folder or file behind one PIN, encrypted.',
+        get: { label: 'Download', href: '/download#citadel' },
+      },
+      {
+        name: 'Citadel Premium',
+        price: 'citadel:premium',
+        what: 'Lock apps too, unlock with Windows Hello or Touch ID, auto-lock, and lock external drives.',
+        buy: { label: 'Buy Citadel Premium', product: 'citadel:premium' },
+        more: '/citadel',
+      },
+    ],
+    inAx: 'Every MeridianOS desk can lock folders and files. Meridian Pro and Ultra include Citadel Premium on the desk.',
   },
   {
     id: 'office',
@@ -87,8 +114,19 @@ const APPS: App[] = [
         more: '/office',
       },
     ],
-    inAx: 'Every AX plan has Nomad Office. Buy it alone only to use it outside AX.',
+    inAx: 'Every MeridianOS plan has Nomad Office. Buy it alone only to use it outside MeridianOS.',
   },
+];
+
+const QA = [
+  { q: 'How does the free trial work?', a: 'Meridian Starter is free for 14 days. You start it, and later change or cancel it, in your Nomad account on the web. Nothing is ever paid inside the app.' },
+  { q: 'Can I cancel at any time?', a: 'Yes. Cancelling stops the next renewal, and your plan runs to the end of the period you paid for.' },
+  { q: 'Can I change plans later?', a: 'Yes. Moving up or down is priced on the spot, with credit for what is left of your current plan.' },
+  {
+    q: 'I already pay for an app. What happens if I buy MeridianOS?',
+    a: 'Nothing changes. They are separate subscriptions: MeridianOS covers the apps inside your desk, and the app you bought keeps its own subscription for using it outside MeridianOS. Your plans list each one, and your data is the same in both.',
+  },
+  { q: 'Is yearly cheaper?', a: 'Yes. Yearly plans are two months free.' },
 ];
 
 function TierView({ t }: { t: Tier }) {
@@ -120,49 +158,35 @@ function TierView({ t }: { t: Tier }) {
 export default function PricingPage() {
   return (
     <Layout page="pricing">
-      <Hero
-        name="Pricing"
-        title={
-          <>
-            One account.
-            <br />
-            <span className="dim">Pick what you need.</span>
-          </>
-        }
-        lede="AX is the whole desktop, with every Nomad app inside. Or take an app on its own. Yearly plans are two months free."
-        actions={<PeriodSwitch />}
-      />
+      <div data-light="neutral">
+        <PageHero
+          light="neutral"
+          layout="center"
+          eyebrow="Pricing"
+          title="One account. Pick what you need."
+          lede="MeridianOS is the whole desktop, with every Nomad app inside. Or take an app on its own. Yearly plans are two months free."
+          actions={<PeriodSwitch />}
+        />
 
-      <section className="section-tight band" id="ax" aria-labelledby="ax-title">
-        <div className="wrap">
-          <SectionHead
-            id="ax-title"
-            eyebrow="AX · the desktop"
-            title="AX plans."
-            lede="Every plan is the full AX desktop with Nomad Office, Polaris Browser, Reach and Drift inside. Start with 14 days of AX Starter, free."
-          />
+        <Band id="ax" label="ax-title">
+          <BandHead id="ax-title" title="MeridianOS plans." lede="Every plan is the full MeridianOS desktop with Nomad Office, Polaris Browser, Reach, Drift and Citadel inside. Start with 14 days of Meridian Starter, free." />
           <div className="plans">
             {AX_PLANS.map((p) => (
               <PlanCard key={p.id} plan={p} />
             ))}
           </div>
-        </div>
-      </section>
+        </Band>
 
-      <section className="section" id="compare" aria-labelledby="compare-title">
-        <div className="wrap">
-          <SectionHead id="compare-title" title="Every AX feature, side by side." />
+        <Band id="compare" label="compare-title">
+          <BandHead id="compare-title" title="Every feature, side by side." />
           <Compare />
-        </div>
-      </section>
+        </Band>
 
-      <section className="section band" id="apps" aria-labelledby="apps-title">
-        <div className="wrap">
-          <SectionHead
+        <Band id="apps" tone="mist" label="apps-title">
+          <BandHead
             id="apps-title"
-            eyebrow="Apps on their own"
             title="Just the app you need."
-            lede="Use Nomad's apps without AX, on your own computer. They sign in with the same Nomad account, and every one of them is already part of AX."
+            lede="Use Nomad's apps without MeridianOS, on your own computer. They sign in with the same Nomad account and work on the same data. Each one is its own subscription, separate from MeridianOS."
           />
           <div className="apps">
             {APPS.map((a) => (
@@ -182,18 +206,17 @@ export default function PricingPage() {
                 <p className="in-ax-line">
                   <ProductMark product="ax" size={22} />
                   <span>
-                    <b>Included in AX.</b> {a.inAx}
+                    <b>Included in MeridianOS.</b> {a.inAx}
                   </span>
                 </p>
               </article>
             ))}
           </div>
-          <p className="plans-foot small">
-            {PRICE_FOOT} If you buy an AX plan that includes an app you already pay for, the app's own plan ends and what is left of it is
-            credited to your AX bill.
-          </p>
-        </div>
-      </section>
+          <p className="sys-foot">{PRICE_FOOT}</p>
+        </Band>
+
+        <FAQ title="Questions? Answers." items={QA} tone="black" />
+      </div>
     </Layout>
   );
 }

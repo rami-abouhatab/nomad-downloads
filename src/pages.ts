@@ -14,6 +14,7 @@ export type PageId =
   | 'polaris'
   | 'reach'
   | 'drift'
+  | 'citadel'
   | 'office'
   | 'pricing'
   | 'download'
@@ -35,18 +36,18 @@ export const PAGES: PageMeta[] = [
     id: 'home',
     route: '/',
     file: 'index.html',
-    title: 'Nomad — Wherever you are',
+    title: 'Nomad',
     description:
-      'Nomad makes AX, the desktop that lives in your account, and the apps that go with it: Polaris Browser, Reach, Drift and Nomad Office. One Nomad account opens all of them.',
+      'Nomad makes MeridianOS, the desktop that lives in your account, and the apps that go with it: Polaris Browser, Reach, Drift and Nomad Office. One Nomad account opens all of them.',
   },
   {
     id: 'ax',
     route: '/ax',
     file: 'ax.html',
-    title: 'AX — Access wherever you are · Nomad',
-    ogTitle: 'AX — Access wherever you are',
+    title: 'MeridianOS · Nomad',
+    ogTitle: 'MeridianOS — Access wherever you are',
     description:
-      'AX is a whole desktop that lives in your Nomad account. Sign in on any computer and your desk opens as you left it. AX Starter, Pro and Ultra, from $9.99 a month, 14 days free.',
+      'MeridianOS is a whole desktop that lives in your Nomad account. Sign in on any computer and your desk opens as you left it. Meridian Starter, Pro and Ultra, from $9.99 a month, 14 days free.',
   },
   {
     id: 'polaris',
@@ -73,12 +74,20 @@ export const PAGES: PageMeta[] = [
       'Drift sends a file with a link: up to 2 GB, free, nothing to install. Drift Premium adds the app and device pairing, 10 GB for 7 days, from $2.99 a month.',
   },
   {
+    id: 'citadel',
+    route: '/citadel',
+    file: 'citadel.html',
+    title: 'Citadel · Nomad',
+    description:
+      'Citadel locks any folder or file on your computer behind one PIN, with real encryption. Free. Citadel Premium adds app locking, Windows Hello and auto-lock, from $1.99 a month.',
+  },
+  {
     id: 'office',
     route: '/office',
     file: 'office.html',
-    title: 'Nomad Office · Nomad',
+    title: 'Nomad Office',
     description:
-      'Nomad Office: Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs, installed on your computer. $5.99 a month or $59 a year, and included in every AX plan.',
+      'Nomad Office: Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs, installed on your computer. $5.99 a month or $59 a year, and included in every MeridianOS plan.',
   },
   {
     id: 'pricing',
@@ -86,14 +95,14 @@ export const PAGES: PageMeta[] = [
     file: 'pricing.html',
     title: 'Pricing · Nomad',
     description:
-      "AX Starter, Pro and Ultra, and Nomad's apps on their own: Polaris Browser and Reach are free; Reach Premium, Drift Premium and Nomad Office from $2.99 a month. Yearly plans are two months free.",
+      "Meridian Starter, Pro and Ultra, and Nomad's apps on their own: Polaris Browser and Reach are free; Reach Premium, Drift Premium and Nomad Office from $2.99 a month. Yearly plans are two months free.",
   },
   {
     id: 'download',
     route: '/download',
     file: 'download.html',
     title: 'Download · Nomad',
-    description: 'Download AX, Polaris Browser, Reach, Drift and Nomad Office for Windows 10 and 11, on Intel, AMD or ARM.',
+    description: 'Download MeridianOS, Polaris Browser, Reach, Drift and Nomad Office for Windows 10 and 11, on Intel, AMD or ARM.',
   },
   {
     id: 'privacy',
@@ -107,7 +116,7 @@ export const PAGES: PageMeta[] = [
     route: '/terms',
     file: 'terms.html',
     title: 'Terms · Nomad',
-    description: "The terms for using Nomad's products: AX, Polaris Browser, Reach, Drift and Nomad Office.",
+    description: "The terms for using Nomad's products: MeridianOS, Polaris Browser, Reach, Drift and Nomad Office.",
   },
 ];
 

@@ -7,7 +7,7 @@
  */
 
 export type Period = 'yearly' | 'monthly';
-export type ProductId = 'ax:starter' | 'ax:pro' | 'ax:ultra' | 'reach:premium' | 'drift:premium' | 'office';
+export type ProductId = 'ax:starter' | 'ax:pro' | 'ax:ultra' | 'reach:premium' | 'drift:premium' | 'citadel:premium' | 'office';
 
 export const ACCOUNT = 'https://account.nomad.ax';
 export const SIGN_IN = `${ACCOUNT}/signin`;
@@ -28,6 +28,7 @@ export const PRICES: Record<ProductId, Price> = {
   'ax:ultra': { monthly: '$29.99', yearly: '$299', perMonthYearly: '$24.92' },
   'reach:premium': { monthly: '$4.99', yearly: '$49', perMonthYearly: '$4.08' },
   'drift:premium': { monthly: '$2.99', yearly: '$29', perMonthYearly: '$2.42' },
+  'citadel:premium': { monthly: '$1.99', yearly: '$19', perMonthYearly: '$1.58' },
   office: { monthly: '$5.99', yearly: '$59', perMonthYearly: '$4.92' },
 };
 
@@ -46,11 +47,11 @@ export type Plan = {
 export const AX_PLANS: Plan[] = [
   {
     id: 'ax:starter',
-    name: 'AX Starter',
+    name: 'Meridian Starter',
     note: '14 days free',
     pitch: 'One desk with everything you need to get on with things.',
     cta: 'Start free trial',
-    lead: 'The full AX desktop',
+    lead: 'The full MeridianOS desktop',
     lines: [
       '**128 GB** of storage',
       '**1 desk**',
@@ -64,17 +65,17 @@ export const AX_PLANS: Plan[] = [
   },
   {
     id: 'ax:pro',
-    name: 'AX Pro',
+    name: 'Meridian Pro',
     note: 'Every feature',
     pitch: 'Keep work and home apart, and work with other people.',
-    cta: 'Buy AX Pro',
+    cta: 'Buy Meridian Pro',
     lead: 'Everything in Starter, plus every built-in feature',
     lit: true,
     lines: [
       '**512 GB** of storage',
       '**3 desks**',
       'Reach Premium: meetings up to 4 hours and 50 people, recordings, your own mail domain',
-      'Drift Premium: 10 GB for 7 days, the Drift app and device pairing',
+      'Drift Premium: 10 GB for 7 days and device pairing',
       'Lock, Convert and Fonts',
       'Guest links',
       'Working together live in Folio, Grids and Expo',
@@ -85,10 +86,10 @@ export const AX_PLANS: Plan[] = [
   },
   {
     id: 'ax:ultra',
-    name: 'AX Ultra',
+    name: 'Meridian Ultra',
     note: 'The most room',
     pitch: 'Many desks, many computers, and room for all of it.',
-    cta: 'Buy AX Ultra',
+    cta: 'Buy Meridian Ultra',
     lead: 'Everything in Pro, plus',
     lines: [
       '**1 TB** of storage',

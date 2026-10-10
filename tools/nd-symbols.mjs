@@ -14,7 +14,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const SITE_MARKS = ['caretDown', 'caretRight', 'download', 'globe', 'check', 'menu', 'close', 'display', 'lock'];
+export const SITE_MARKS = ['caretDown', 'caretRight', 'download', 'globe', 'check', 'menu', 'close', 'display', 'lock', 'account', 'cloud', 'search', 'mail', 'send', 'clock', 'shield', 'eye', 'unlock', 'folder', 'document', 'devices', 'layers', 'share', 'storage', 'seekSnapshot', 'seekGuest', 'driftLink', 'driftDevice', 'driftPerson', 'camera', 'home', 'sliders', 'grid', 'image', 'play', 'pause', 'back', 'forward', 'refresh', 'plus', 'more', 'copy', 'convert', 'music', 'trash'];
 
 const ND = fileURLToPath(new URL('../../nomad-design/src/', import.meta.url));
 const ID = '\0nd-symbols';
@@ -47,7 +47,9 @@ function generate() {
   for (const name of SITE_MARKS) {
     const comp = ix[name];
     if (comp) {
-      imports.push(`import ${comp} from 'iconsax-react/dist/esm/${comp}.js';`);
+      // two names can share one drawing (display and driftDevice are both Monitor): import it once
+      const line = `import ${comp} from 'iconsax-react/dist/esm/${comp}.js';`;
+      if (!imports.includes(line)) imports.push(line);
       libs.push(`  ${name}: ${comp},`);
       continue;
     }

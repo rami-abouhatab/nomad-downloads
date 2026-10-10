@@ -140,7 +140,7 @@ test('manifest without a product keeps the original AX shape and urls', async ()
 test('manifest?product=all lists every product; drafts and pre-releases never show', async () => {
   const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=all'), fakeFetch());
   const { products } = await res.json();
-  assert.deepEqual(Object.keys(products).sort(), ['ax', 'drift', 'office', 'polaris', 'reach']);
+  assert.deepEqual(Object.keys(products).sort(), ['ax', 'citadel', 'drift', 'office', 'polaris', 'reach']);
   assert.equal(products.drift.builds.x64, null);
   assert.equal(products.ax.builds.arm64.file, 'AX-0.2.0-arm64-setup.exe');
   assert.equal(products.reach.builds.arm64.url, '/dl/reach/arm64');

@@ -7,6 +7,7 @@ import ax from './pages/ax';
 import polaris from './pages/polaris';
 import reach from './pages/reach';
 import drift from './pages/drift';
+import citadel from './pages/citadel';
 import office from './pages/office';
 import pricing from './pages/pricing';
 import download from './pages/download';
@@ -15,7 +16,7 @@ import terms from './pages/terms';
 
 export { PAGES } from './pages';
 
-const COMPONENTS: Record<PageId, ComponentType> = { home, ax, polaris, reach, drift, office, pricing, download, privacy, terms };
+const COMPONENTS: Record<PageId, ComponentType> = { home, ax, polaris, reach, drift, citadel, office, pricing, download, privacy, terms };
 
 export function render(id: PageId): string {
   const Page = COMPONENTS[id];

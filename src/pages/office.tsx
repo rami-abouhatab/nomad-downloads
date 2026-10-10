@@ -1,17 +1,31 @@
 import { Layout } from '../ui/Layout';
-import { Hero, InAx, SectionHead, SinglePlan, WindowShot } from '../ui/blocks';
-import { LinkButton, More, ProductMark } from '../ui/kit';
+import { LinkButton, More } from '../ui/kit';
 import { usePeriod } from '../ui/period';
 import { checkout } from '../data';
+import { Band, BandHead, Chapters, Columns, FAQ, InMeridian, PageHero, PlanSolo, ProductName, RealShot } from '../ui/system';
+
+/* Nomad Office, shaped like microsoft.com's Microsoft 365 (Rami,
+   2026-10-10): the four apps' colours in the opening, the apps side by side,
+   one of them at work, the one price, its place in MeridianOS, and the
+   questions. */
 
 const APPS = [
-  { id: 'folio', name: 'Folio', title: 'Documents.', body: 'Letters, reports, notes and everything in between, on a page that stays out of your way.' },
-  { id: 'grids', name: 'Grids', title: 'Spreadsheets.', body: 'Budgets, lists and the numbers behind them, with the formulas you already know.' },
-  { id: 'expo', name: 'Expo', title: 'Presentations.', body: 'Slides for the meeting, the class or the pitch, built quickly and shown full screen.' },
-  { id: 'markup', name: 'Markup', title: 'PDFs.', body: 'Read, highlight, comment on and sign PDFs, right on your own computer.' },
+  { id: 'folio', name: 'Folio', body: 'Letters, reports, notes and everything in between, on a page that stays out of your way.' },
+  { id: 'grids', name: 'Grids', body: 'Budgets, lists and the numbers behind them, with the formulas you already know.' },
+  { id: 'expo', name: 'Expo', body: 'Slides for the meeting, the class or the pitch, built quickly and shown full screen.' },
+  { id: 'markup', name: 'Markup', body: 'Read, highlight, comment on and sign PDFs, right on your own computer.' },
 ];
 
-function BuyOffice() {
+const QA = [
+  { q: 'Is there a free version?', a: 'No. Nomad Office is a paid suite: $59 a year or $5.99 a month for all four apps.' },
+  { q: 'Where are my files saved?', a: 'On your own computer, in Documents › Nomad Office, where you can find them.' },
+  {
+    q: 'Do I need it if I have MeridianOS?',
+    a: 'Not on your desk: every MeridianOS plan includes Nomad Office inside MeridianOS. Buy it on its own to use it outside MeridianOS. The two are separate subscriptions, and your files are the same in both.',
+  },
+];
+
+function Buy() {
   const period = usePeriod();
   return (
     <LinkButton href={checkout('office', period)} variant="primary" hero>
@@ -34,80 +48,82 @@ export default function OfficePage() {
         cta: { label: 'Buy', href: '/office#buy' },
       }}
     >
-      <Hero
-        mark={<ProductMark product="office" size={112} label="Folio, Grids, Expo and Markup" />}
-        name="Nomad Office"
-        title={
-          <>
-            Four apps.
-            <br />
-            <span className="dim">One quiet office.</span>
-          </>
-        }
-        lede="Folio, Grids, Expo and Markup: documents, spreadsheets, presentations and PDFs, installed on your own computer and saved where you can find them."
-        actions={
-          <>
-            <BuyOffice />
-            <More href="/download#office">Download</More>
-          </>
-        }
-        note="$59 a year or $5.99 a month. Already included in every AX plan."
-      >
-        <div className="wrap hero-media">
-          <WindowShot
-            name="folio"
-            height={1538}
-            priority
-            alt="Folio with a one-page launch plan open: the ribbon across the top, and a page with headings and a bulleted list."
+      <div data-light="office">
+        <PageHero
+          light="office"
+          layout="center"
+          eyebrow={<ProductName product="office" name="Nomad Office" />}
+          title="Four apps. One quiet office."
+          lede="Folio, Grids, Expo and Markup: documents, spreadsheets, presentations and PDFs, installed on your own computer and saved where you can find them."
+          actions={
+            <>
+              <Buy />
+              <More href="/download#office">Download</More>
+            </>
+          }
+          note="$59 a year or $5.99 a month. Already in every MeridianOS plan."
+          visual={<RealShot name="office-folio" ratio="16 / 10" eager alt="Folio with a design brief open: a title, headings, a bulleted list and paragraphs on a white page." />}
+        />
+
+        <Band label="apps-title">
+          <BandHead id="apps-title" title="Everything an office does." />
+          <Columns
+            cols={4}
+            items={APPS.map((a) => ({
+              id: a.id,
+              title: a.name,
+              body: a.body,
+              mark: <img className="icon sys-app" src={`/assets/icons/${a.id}.webp`} alt="" width={56} height={56} loading="lazy" />,
+            }))}
           />
-        </div>
-      </Hero>
+        </Band>
 
-      <section className="section band" aria-labelledby="apps-title">
-        <div className="wrap">
-          <SectionHead id="apps-title" eyebrow="The four apps" title="Everything an office does." />
-          <div className="cards cards-4">
-            {APPS.map((a) => (
-              <article className="card reveal" key={a.id}>
-                <img className="icon" src={`/assets/icons/${a.id}.webp`} alt="" width={64} height={64} loading="lazy" />
-                <p className="eyebrow">{a.name}</p>
-                <h3 className="title">{a.title}</h3>
-                <p className="body">{a.body}</p>
-              </article>
-            ))}
-          </div>
-          <WindowShot
-            name="grids"
-            className="reveal follow-shot"
-            alt="Grids with a small table of months, revenue, costs and profit, and a total row worked out by formulas."
-            caption="Grids: the numbers, and the formulas behind them."
+        <Band tone="mist" label="grids-title">
+          <h2 id="grids-title" className="vh">
+            The apps at work
+          </h2>
+          <Chapters
+            product="office"
+            items={[
+              {
+                title: 'The numbers, and the formulas behind them.',
+                body: 'Grids works the way the spreadsheets you know do, with the formulas you already use, on your own computer.',
+                visual: <RealShot name="office-grids" ratio="16 / 10" alt="Grids with a budget by month, its totals worked out by SUM formulas, one shown in the formula bar." />,
+              },
+              {
+                title: 'Slides for the room.',
+                body: 'Expo builds the deck one slide at a time, and lays them all out side by side when you want to see the whole story.',
+                visual: <RealShot name="office-expo-overview" ratio="16 / 10" alt="The slide sorter in Expo: five slides of a design review, side by side." />,
+              },
+              {
+                title: 'Mark up any PDF.',
+                body: 'Markup reads, highlights and comments on PDFs, right on your own computer.',
+                visual: <RealShot name="office-markup" ratio="16 / 10" alt="Markup with a PDF open, two lines highlighted, and the highlight colours beside it." />,
+              },
+            ]}
           />
-        </div>
-      </section>
+        </Band>
 
-      <SinglePlan
-        id="buy"
-        eyebrow="Nomad Office"
-        title={
-          <>
-            One price,
-            <br />
-            <span className="dim">all four apps.</span>
-          </>
-        }
-        lede="Nomad Office is a paid suite with no free tier. Your files stay on your computer, in Documents › Nomad Office."
-        product="office"
-        name="Nomad Office"
-        cta="Buy Nomad Office"
-        lines={['Folio, Grids, Expo and Markup', 'Installed on your own Windows PC', 'Signs in with your Nomad account']}
-        after={<More href="/download#office">Download Nomad Office</More>}
-      />
+        <Band id="buy" label="buy-title">
+          <BandHead id="buy-title" title="One price, all four apps." lede="Nomad Office is a paid suite with no free tier. Your files stay on your computer." />
+          <PlanSolo
+            product="office"
+            name="Nomad Office"
+            pitch="Documents, spreadsheets, presentations and PDFs."
+            cta="Buy Nomad Office"
+            lines={['Folio, Grids, Expo and Markup', 'Installed on your own computer', 'Signs in with your Nomad account']}
+            after={<More href="/download#office">Download Nomad Office</More>}
+          />
+        </Band>
 
-      <InAx
-        id="ax-title"
-        title="Already in every AX plan."
-        body="Every AX desk comes with Nomad Office installed. Buy it on its own only if you want it outside AX. If you move to AX later, your Office plan ends and what is left of it is credited to your AX bill."
-      />
+        <InMeridian
+          id="ax-title"
+          title="Already in every MeridianOS plan."
+          body="Every MeridianOS desk comes with Nomad Office installed. Buy it on its own only if you want it outside MeridianOS."
+        />
+
+        <FAQ items={QA} />
+      </div>
     </Layout>
   );
 }

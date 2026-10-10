@@ -12,14 +12,14 @@ export default function TermsPage() {
         <p className="when">Last updated 8 October 2026</p>
 
         <p>
-          These terms are the agreement between you and <Todo>[LEGAL ENTITY NAME]</Todo> ("we") for using Nomad's products: AX, Polaris
+          These terms are the agreement between you and Origins ("we") for using Nomad's products: MeridianOS, Polaris
           Browser, Reach, Drift and Nomad Office. By creating a Nomad account you accept them.
         </p>
 
         <h2 id="account">Your account</h2>
         <p>
-          One Nomad account signs you in to every Nomad product. You need one to use AX, Reach, Drift and Nomad Office; Polaris Browser works
-          without one. You sign in with your email and a passkey or a password. Keep your password and PIN to yourself; what happens in your
+          One Nomad account signs you in to every Nomad product. You need one, free or paid, to use MeridianOS, Reach, Drift, Citadel and
+          Nomad Office; Polaris Browser browses without one, and these terms apply to it whether or not you sign in. You sign in with your email and a passkey or a password. Keep your password and PIN to yourself; what happens in your
           account is your responsibility. You must be old enough to agree to these terms where you live.
         </p>
 
@@ -32,18 +32,18 @@ export default function TermsPage() {
 
         <h2 id="plans">Plans and payment</h2>
         <p>
-          We sell AX (AX Starter, AX Pro and AX Ultra), Reach Premium, Drift Premium and Nomad Office, each paid monthly or yearly, in
+          We sell MeridianOS (Meridian Starter, Meridian Pro and Meridian Ultra), Reach Premium, Drift Premium and Nomad Office, each paid monthly or yearly, in
           advance, and renewing until you cancel. Polaris Browser, Reach and Drift on the web are free. Plans, payments, receipts and
           cancelling happen only at billing.nomad.ax; nothing is sold inside our apps.
         </p>
         <p>
           What you buy is recorded on your Nomad account as an entitlement: which product you have, and until when. Each app checks your
-          entitlements to decide what it unlocks. Every AX plan includes Nomad Office; AX Pro and AX Ultra also include Reach Premium and
-          Drift Premium. If you buy an AX plan that includes something you already pay for on its own, that separate plan ends at once and
-          what is left of it is credited to your AX bill.
+          entitlements to decide what it unlocks. Every MeridianOS plan includes Nomad Office; Meridian Pro and Meridian Ultra also include Reach Premium and
+          Drift Premium. These are the apps inside MeridianOS. An app you buy on its own, to use outside MeridianOS, is a separate subscription:
+          buying, changing or cancelling one never ends, refunds or credits the other.
         </p>
         <p>
-          AX Starter can begin with a 14-day free trial. Cancelling stops the next renewal; your plan runs to the end of the period you paid
+          Meridian Starter can begin with a 14-day free trial. Cancelling stops the next renewal; your plan runs to the end of the period you paid
           for. Changing plan is priced on the spot, with credit for what is left of the current one. If a payment fails we will tell you and
           try again; a plan that stays unpaid falls back to its limits, and nothing is deleted without warning.
         </p>

@@ -141,7 +141,7 @@ export const AX_DESK = {
   srcSet: '/assets/shots/ax-desk-800.webp 800w, /assets/shots/ax-desk-1280.webp 1280w, /assets/shots/ax-desk-1920.webp 1920w',
   width: 1920,
   height: 1080,
-  alt: 'An AX desk: a desert wallpaper, files and apps on the desktop, Polaris Browser open in a window, and the dock along the bottom.',
+  alt: 'A MeridianOS desk: a desert wallpaper, files and apps on the desktop, Polaris Browser open in a window, and the dock along the bottom.',
 };
 
 /* ── Section scaffolding ──────────────────────────────────────────────── */
@@ -175,7 +175,7 @@ export function SectionHead({
 
 export type Feature = { title: string; body: ReactNode; pro?: boolean; id?: string };
 
-/** A calm grid of one-idea features. `pro` marks the ones that start at AX Pro. */
+/** A calm grid of one-idea features. `pro` marks the ones that start at Meridian Pro. */
 export function Features({ items, cols = 3 }: { items: Feature[]; cols?: 2 | 3 }) {
   return (
     <div className={`features cols-${cols}`}>
@@ -221,9 +221,9 @@ export function AxPlans({ id = 'plans', compareLink = true }: { id?: string; com
         <SectionHead
           id={`${id}-title`}
           center
-          eyebrow="AX plans"
+          eyebrow="MeridianOS plans"
           title="Pick the size of your desk."
-          lede="Every plan is the full AX desktop. What changes is how much room you get, how many desks, and the extras."
+          lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desks, and the extras."
         >
           <PeriodSwitch />
         </SectionHead>
@@ -436,7 +436,7 @@ export function Questions({ id, items }: { id: string; items: { q: string; a: Re
   );
 }
 
-/* ── "Included in AX" band ─────────────────────────────────────────────── */
+/* ── "Included in MeridianOS" band ─────────────────────────────────────────────── */
 
 export function InAx({ id, title, body }: { id: string; title: string; body: ReactNode }) {
   return (
@@ -444,12 +444,12 @@ export function InAx({ id, title, body }: { id: string; title: string; body: Rea
       <div className="wrap">
         <div className="in-ax reveal">
           <div className="in-ax-copy">
-            <p className="eyebrow">Included in AX</p>
+            <p className="eyebrow">Included in MeridianOS</p>
             <h2 id={id} className="title-lg">
               {title}
             </h2>
             <p className="body">{body}</p>
-            <More href="/ax">Learn more about AX</More>
+            <More href="/ax">Learn more about MeridianOS</More>
           </div>
           <img
             className="in-ax-shot"
