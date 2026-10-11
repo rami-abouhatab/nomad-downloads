@@ -108,27 +108,27 @@ export default function AxPage() {
             lede="What changes when your desk lives in your account, not on one machine."
             rows={[
               {
-                when: 'On another computer',
+                when: 'What do I see on another computer?',
                 usual: 'A different desktop. Your files, apps and windows stay on the machine you left.',
                 meridian: 'Open Meridian on any computer and sign in: your apps, files, windows, wallpaper and settings are all there, exactly the same.',
               },
               {
-                when: 'A new computer',
+                when: 'What happens when I get a new computer?',
                 usual: 'A day of installing, copying and setting things up again.',
                 meridian: 'Install Meridian, sign in, and your desk is there.',
               },
               {
-                when: 'A lost or broken laptop',
+                when: 'What if my laptop is lost or broken?',
                 usual: 'Whatever was not backed up goes with it.',
                 meridian: 'Your files and settings live in your Nomad account, not on the laptop.',
               },
               {
-                when: 'Work and home',
+                when: 'How do I keep work and home apart?',
                 usual: 'One desktop for both, or separate user accounts to switch between.',
                 meridian: 'Separate spaces, each with its own apps, files, wallpaper and sign-ins.',
               },
               {
-                when: 'The apps you need',
+                when: 'Do I have to buy my apps separately?',
                 usual: 'An office suite, mail and file sharing, each bought and installed on its own.',
                 meridian: 'Nomad Office, Polaris Browser, Reach and Drift come with every plan.',
               },
