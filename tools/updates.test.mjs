@@ -78,7 +78,7 @@ test('a managed app’s published release wins over a newer upload in the downlo
   assert.equal(all.products.reach.builds.x64.file, 'Reach-0.5.0-x64-setup.exe');
   assert.equal(all.products.drift.version, null, 'managed with nothing live: nothing offered');
   const unmanaged = await (await handleManifest(new URL('https://nomad.ax/dl/manifest?product=all'), platform({ downloads: {} }))).json();
-  assert.equal(unmanaged.products.reach.version, '0.6.0', 'an app the back office does not manage yet reads GitHub as before');
+  assert.equal(unmanaged.products.reach.version, null, 'every app but MeridianOS is the back office’s: an upload alone offers nothing');
 });
 
 test('/dl serves the published installer, and one exact version to the back office with its CORS header', async () => {

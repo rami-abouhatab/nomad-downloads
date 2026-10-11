@@ -194,7 +194,12 @@ export function findVersion(releases, slug, arch, version) {
  */
 export async function managedReleases(fetchImpl = fetch) {
   const map = await rpc('release_downloads', {}, fetchImpl);
-  return map && typeof map === 'object' ? map : {};
+  const out = map && typeof map === 'object' ? { ...map } : {};
+  /* Every app but MeridianOS is the back office's from the start (2026-10-11): an installer uploaded
+     to the downloads repository reaches nobody until it is published there. MeridianOS keeps its
+     August builds from GitHub until its first release in the back office. */
+  for (const slug of Object.keys(PRODUCTS)) if (slug !== 'meridian' && !(slug in out)) out[slug] = null;
+  return out;
 }
 
 /** A managed app's live release as the manifest describes a product. */

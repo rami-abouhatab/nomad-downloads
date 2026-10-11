@@ -143,7 +143,8 @@ test('manifest?product=all lists every product; drafts and pre-releases never sh
   assert.deepEqual(Object.keys(products).sort(), ['citadel', 'drift', 'meridian', 'office', 'polaris', 'reach']);
   assert.equal(products.drift.builds.x64, null);
   assert.equal(products.meridian.builds.arm64.file, 'AX-0.2.0-arm64-setup.exe');
-  assert.equal(products.reach.builds.arm64.url, '/dl/reach/arm64');
+  // Every app but MeridianOS is published through the back office only: an upload alone offers nothing.
+  assert.equal(products.reach.builds.arm64, null);
 });
 
 test('manifest?product=unknown is a 404 with the list of products', async () => {
@@ -152,13 +153,18 @@ test('manifest?product=unknown is a 404 with the list of products', async () => 
   assert.ok((await res.json()).products.includes('office'));
 });
 
-test('serveBuild streams the asset with a download filename', async () => {
+test('serveBuild streams the asset with a download filename (MeridianOS, still read from the repository)', async () => {
   const f = fakeFetch();
-  const res = await serveBuild('reach', 'arm64', f);
+  const res = await serveBuild('meridian', 'arm64', f);
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('Content-Disposition'), 'attachment; filename="AX-0.2.0-arm64-setup.exe"');
+  assert.equal(await res.text(), 'installer-bytes');
+});
+
+test('an exact version is still served from the repository, for the back office to measure', async () => {
+  const res = await serveBuild('reach', 'arm64', fakeFetch(), { version: '0.5.0' });
   assert.equal(res.status, 200);
   assert.equal(res.headers.get('Content-Disposition'), 'attachment; filename="Reach-0.5.0-arm64-setup.exe"');
-  assert.equal(await res.text(), 'installer-bytes');
-  assert.equal(f.calls.at(-1), 'https://gh.example/Reach-0.5.0-arm64-setup.exe');
 });
 
 test('serveBuild says plainly when a build is not out yet', async () => {
