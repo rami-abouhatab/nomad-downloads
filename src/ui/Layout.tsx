@@ -65,12 +65,14 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
   };
 
   /* While it is open: the page holds still, Escape closes, and a window grown past the phone
-     layout closes it. Opening moves focus to the first row. */
+     layout closes it. Opening moves focus into the menu. */
   useEffect(() => {
     if (!open) return;
     const root = document.documentElement;
     root.dataset.menu = 'open';
-    panel.current?.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    /* Focus goes into the menu itself, not onto its first row: a tap must not light a ring; a key's
+       next Tab lands on the first row. */
+    panel.current?.querySelector<HTMLElement>('nav')?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setOpen(false);
@@ -126,7 +128,7 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
         </div>
       </div>
       <div className="gnav-panel" id={panelId} ref={panel} inert={!open} aria-hidden={!open}>
-        <nav className="wrap" aria-label="Main, small screens">
+        <nav className="wrap" aria-label="Main, small screens" tabIndex={-1}>
           <ul className="gnav-panel-products">
             {PRODUCTS.map((l, i) => (
               <li key={l.id} style={{ '--i': i } as CSSProperties}>

@@ -533,6 +533,21 @@ img.icon {
   height: 30px;
 }
 
+/* Nomad Office's four editors fill the same 30px tile as the other icons. */
+.gnav-panel-products .office-stack {
+  gap: 2px;
+  padding: 0;
+}
+
+.gnav-panel-products .office-stack img {
+  width: 14px;
+  height: 14px;
+}
+
+.gnav-panel nav:focus {
+  outline: none;
+}
+
 .gnav-panel-products span {
   flex: 1;
   min-width: 0;
