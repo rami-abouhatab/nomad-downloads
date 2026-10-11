@@ -14,9 +14,10 @@
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { useEffect, useState, type ReactElement } from 'react';
+import { useEffect, useState } from 'react';
 import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
-import { ACCOUNT, SIGN_IN, SIGN_UP } from '../data';
+import { ACCOUNT, SIGN_IN } from '../data';
+import { Sym } from './kit';
 
 type Who = { n: string; e: string };
 
@@ -70,8 +71,9 @@ export function AccountMenu() {
 
   if (!who) {
     return (
-      <a className="gnav-signin" href={SIGN_IN} onClick={(e) => (e.currentTarget.href = withNext(SIGN_IN))}>
-        Sign in
+      <a className="gnav-signin" href={SIGN_IN} aria-label="Sign in" onClick={(e) => (e.currentTarget.href = withNext(SIGN_IN))}>
+        <span className="gnav-signin-word">Sign in</span>
+        <Sym name="account" size={16} className="gnav-signin-face" />
       </a>
     );
   }
@@ -82,29 +84,6 @@ export function AccountMenu() {
         {initial(who)}
       </button>
       <MenuHost />
-    </>
-  );
-}
-
-/** The small-screen panel's two verbs, signed in or out. */
-export function AccountPanelVerbs({ Link }: { Link: (p: { href: string; primary?: boolean; children: string }) => ReactElement }) {
-  const who = useWho();
-  if (!who) {
-    return (
-      <>
-        <Link href={SIGN_IN} primary>
-          Sign in
-        </Link>
-        <Link href={SIGN_UP}>Create an account</Link>
-      </>
-    );
-  }
-  return (
-    <>
-      <Link href={`${ACCOUNT}/`} primary>
-        Your Nomad account
-      </Link>
-      <Link href={`${ACCOUNT}/signout`}>Sign out</Link>
     </>
   );
 }

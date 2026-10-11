@@ -11,11 +11,11 @@
  */
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Button } from '@nd/controls/Button';
-import { CamelMark, LinkButton, ProductMark, Sym, type ProductKey } from './kit';
+import { CamelMark, LinkButton, Sym } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
 import { PeriodProvider } from './period';
 import { footnotesFor } from '../footnotes';
-import { AccountMenu, AccountPanelVerbs } from './AccountMenu';
+import { AccountMenu } from './AccountMenu';
 import type { PageId } from '../pages';
 
 const PRODUCTS: { id: PageId; label: string; href: string }[] = [
@@ -41,9 +41,10 @@ function Brand() {
 
 /**
  * The phone menu (Rami, 2026-10-11: "a more premium burger and burger page animation, and when I
- * scroll on it the website scrolls"). The burger's two lines turn into a cross; the menu is a white
- * page under the bar, its rows arriving one after another; the page behind it holds still while it
- * is open. Only opacity and transform move, on layers that exist before the tap (the first law), and
+ * scroll on it the website scrolls"; then "very animated, advanced, the content inside minimal").
+ * The burger's two lines turn into a cross; a white curtain drops from the bar and the product names
+ * rise into place one after another, Pricing and Download quietly after them; the page behind holds
+ * still while it is open. The account lives in the bar's right corner, so the menu carries none. Only opacity and transform move, on layers that exist before the tap (the first law), and
  * reduced motion is instant. The panel stays mounted (inert and invisible when closed), so opening
  * mounts nothing.
  */
@@ -131,33 +132,24 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
         <nav className="wrap" aria-label="Main, small screens" tabIndex={-1}>
           <ul className="gnav-panel-products">
             {PRODUCTS.map((l, i) => (
-              <li key={l.id} style={{ '--i': i } as CSSProperties}>
+              <li key={l.id}>
                 <a href={l.href} aria-current={l.id === page ? 'page' : undefined} onClick={() => setOpen(false)}>
-                  <ProductMark product={l.id as ProductKey} size={30} />
-                  <span>{l.label}</span>
-                  <Sym name="caretRight" size={14} className="gnav-panel-go" />
+                  <span className="gnav-line" style={{ '--i': i } as CSSProperties}>
+                    {l.label}
+                  </span>
                 </a>
               </li>
             ))}
           </ul>
-          <ul className="gnav-panel-more">
-            {MORE.map((l, i) => (
-              <li key={l.id} style={{ '--i': PRODUCTS.length + i } as CSSProperties}>
+          <ul className="gnav-panel-more" style={{ '--i': PRODUCTS.length } as CSSProperties}>
+            {MORE.map((l) => (
+              <li key={l.id}>
                 <a href={l.href} aria-current={l.id === page ? 'page' : undefined} onClick={() => setOpen(false)}>
                   {l.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div className="gnav-panel-end" style={{ '--i': all.length } as CSSProperties}>
-            <AccountPanelVerbs
-              Link={({ href, primary, children }) => (
-                <LinkButton href={href} variant={primary ? 'primary' : undefined} hero>
-                  {children}
-                </LinkButton>
-              )}
-            />
-          </div>
         </nav>
       </div>
     </header>
