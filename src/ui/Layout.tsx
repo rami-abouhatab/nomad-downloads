@@ -15,6 +15,7 @@ import { CamelMark, LinkButton, Sym } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
 import { PeriodProvider } from './period';
 import { footnotesFor } from '../footnotes';
+import { AccountMenu, AccountPanelVerbs } from './AccountMenu';
 import type { PageId } from '../pages';
 
 const PRODUCTS: { id: PageId; label: string; href: string }[] = [
@@ -76,9 +77,7 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
           </ul>
         </nav>
         <div className="gnav-end">
-          <a className="gnav-signin" href={SIGN_IN}>
-            Sign in
-          </a>
+          <AccountMenu />
           <Button
             ref={toggle}
             className="gnav-menu"
@@ -105,12 +104,13 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
             ))}
           </ul>
           <div className="gnav-panel-end">
-            <LinkButton href={SIGN_IN} variant="primary" hero>
-              Sign in
-            </LinkButton>
-            <LinkButton href={SIGN_UP} hero>
-              Create an account
-            </LinkButton>
+            <AccountPanelVerbs
+              Link={({ href, primary, children }) => (
+                <LinkButton href={href} variant={primary ? 'primary' : undefined} hero>
+                  {children}
+                </LinkButton>
+              )}
+            />
           </div>
         </nav>
       </div>
