@@ -110,7 +110,7 @@ export function TryMeridian({ className }: { className?: string }) {
         <div className="tm-bar">
           <span className="tm-name">Meridian</span>
           <span className="tm-note">A demo desk. Nothing you do here is saved.</span>
-          <LinkButton href="/ax#plans" size="sm" variant="primary" className="tm-get">
+          <LinkButton href="/meridian#plans" size="sm" variant="primary" className="tm-get">
             Get Meridian
           </LinkButton>
           <button type="button" className="tm-close" aria-label="Close">

@@ -29,7 +29,7 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     what: 'The desktop that lives in your account.',
     need: (
       <>
-        Needs a MeridianOS plan. <a href="/ax#plans">Meridian Starter is free for 14 days.</a>
+        Needs a MeridianOS plan. <a href="/meridian#plans">Meridian Starter is free for 14 days.</a>
       </>
     ),
   },

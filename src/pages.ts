@@ -5,8 +5,9 @@
  * entry per page from this list.
  *
  * Files are `<route>.html`, not `<route>/index.html`: Cloudflare Pages serves
- * `ax.html` at `/ax` with no redirect, which keeps every URL the old site
- * printed (and every link already out there) exactly as it was.
+ * `meridian.html` at `/meridian` with no redirect. The MeridianOS page was `/ax` until
+ * 2026-10-11 (Rami: "why is it nomad.ax/ax and not /meridian?"); public/_redirects sends
+ * `/ax` there for good, so every link already out there still lands.
  */
 export type PageId =
   | 'home'
@@ -42,8 +43,8 @@ export const PAGES: PageMeta[] = [
   },
   {
     id: 'ax',
-    route: '/ax',
-    file: 'ax.html',
+    route: '/meridian',
+    file: 'meridian.html',
     title: 'MeridianOS · Nomad',
     ogTitle: 'MeridianOS — Access wherever you are',
     description:

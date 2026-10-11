@@ -72,12 +72,12 @@ export default function AxPage() {
       local={{
         name: 'Meridian',
         links: [
-          { label: 'Overview', href: '/ax', current: true },
-          { label: 'Plans', href: '/ax#plans' },
-          { label: 'Questions', href: '/ax#questions' },
+          { label: 'Overview', href: '/meridian', current: true },
+          { label: 'Plans', href: '/meridian#plans' },
+          { label: 'Questions', href: '/meridian#questions' },
           { label: 'Download', href: '/download#ax' },
         ],
-        cta: { label: 'Buy', href: '/ax#plans' },
+        cta: { label: 'Buy', href: '/meridian#plans' },
         tone: 'dark',
       }}
     >
@@ -108,7 +108,7 @@ export default function AxPage() {
             lede="What changes when your desk lives in your account, not on one machine."
             rows={[
               {
-                when: 'What do I see on another computer?',
+                when: 'What if I want to open my desktop on another laptop?',
                 usual: 'A different desktop. Your files, apps and windows stay on the machine you left.',
                 meridian: 'Open Meridian on any computer and sign in: your apps, files, windows, wallpaper and settings are all there, exactly the same.',
               },

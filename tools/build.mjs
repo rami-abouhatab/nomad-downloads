@@ -7,7 +7,7 @@
 //    manifest, so each page knows its own script, the chunks it imports and
 //    its CSS.
 // 2. Vite builds src/server.tsx for Node, and every page is rendered once
-//    with react-dom/server into dist/<file> (ax.html is served at /ax).
+//    with react-dom/server into dist/<file> (meridian.html is served at /meridian).
 // 3. /g comes through public/; /desk (the shell's web build, committed here)
 //    is copied in. The /dl functions stay in ./functions, where wrangler
 //    compiles them from at deploy time (see README).

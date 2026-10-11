@@ -498,7 +498,7 @@ export function InMeridian({ id, title, body }: { id: string; title: ReactNode; 
         </h2>
         <p className="sys-lede">{body}</p>
         <div className="sys-actions">
-          <More href="/ax">Learn more about MeridianOS</More>
+          <More href="/meridian">Learn more about MeridianOS</More>
         </div>
       </div>
     </section>

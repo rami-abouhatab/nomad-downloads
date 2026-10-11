@@ -449,7 +449,7 @@ export function InAx({ id, title, body }: { id: string; title: string; body: Rea
               {title}
             </h2>
             <p className="body">{body}</p>
-            <More href="/ax">Learn more about MeridianOS</More>
+            <More href="/meridian">Learn more about MeridianOS</More>
           </div>
           <img
             className="in-ax-shot"

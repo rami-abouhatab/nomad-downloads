@@ -50,7 +50,7 @@ export function MeridianHero() {
             <br />
             14 days free with Meridian Starter.
           </p>
-          <LinkButton href="/ax#plans" variant="primary" className="mxh-buy">
+          <LinkButton href="/meridian#plans" variant="primary" className="mxh-buy">
             Buy
           </LinkButton>
         </div>

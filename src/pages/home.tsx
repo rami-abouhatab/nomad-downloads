@@ -58,7 +58,7 @@ export default function HomePage() {
               Your whole computer lives in your Nomad account and opens on any computer, exactly as you left it.
             </p>
             <div className="stage-actions">
-              <LinkButton href="/ax" variant="primary" hero>
+              <LinkButton href="/meridian" variant="primary" hero>
                 Meet MeridianOS
               </LinkButton>
               <More href="/pricing">See pricing</More>

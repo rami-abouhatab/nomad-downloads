@@ -18,7 +18,7 @@ import { footnotesFor } from '../footnotes';
 import type { PageId } from '../pages';
 
 const PRODUCTS: { id: PageId; label: string; href: string }[] = [
-  { id: 'ax', label: 'MeridianOS', href: '/ax' },
+  { id: 'ax', label: 'MeridianOS', href: '/meridian' },
   { id: 'polaris', label: 'Polaris Browser', href: '/polaris' },
   { id: 'reach', label: 'Reach', href: '/reach' },
   { id: 'drift', label: 'Drift', href: '/drift' },
@@ -207,7 +207,7 @@ const FOOT: Col[] = [
   {
     title: 'Support',
     links: [
-      { label: 'Questions about MeridianOS', href: '/ax#questions' },
+      { label: 'Questions about MeridianOS', href: '/meridian#questions' },
       { label: 'Compare MeridianOS plans', href: '/pricing#compare' },
       { label: 'Which download is mine?', href: '/download#which' },
       { label: 'Your data', href: '/privacy#what-you-can-do' },

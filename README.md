@@ -16,7 +16,7 @@ any script runs, and a page never downloads another page's code.
 | Path | Source |
 | --- | --- |
 | `/` | `src/pages/home.tsx` |
-| `/ax` | `src/pages/ax.tsx` — AX, with its plans and questions |
+| `/meridian` | `src/pages/ax.tsx` — MeridianOS, with its plans and questions (`/ax` redirects here) |
 | `/polaris` `/reach` `/drift` `/office` | one page per app |
 | `/pricing` | AX plans, the comparison table, then "Apps on their own" |
 | `/download` | every product, per Windows architecture |
