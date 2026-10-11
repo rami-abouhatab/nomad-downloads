@@ -71,7 +71,7 @@ export default function DriftPage() {
             items={[
               {
                 title: 'A link, and a code for a phone.',
-                icon: 'link',
+                icon: 'driftLink',
                 body: 'Drift hands you the link to copy, and a QR code any phone camera can scan to download the file there.',
                 visual: <RealShot name="drift-link-ready-4x3" ratio="4 / 3" alt="Drift with the link ready: Copy link, and a QR code to scan with a phone camera." />,
               },

@@ -87,16 +87,19 @@ export default function OfficePage() {
             items={[
               {
                 title: 'The numbers, and the formulas behind them.',
+                icon: 'grid',
                 body: 'Grids works the way the spreadsheets you know do, with the formulas you already use, on your own computer.',
                 visual: <RealShot name="office-grids-4x3" ratio="4 / 3" alt="Grids with a budget by month, its totals worked out by SUM formulas, one shown in the formula bar." />,
               },
               {
                 title: 'Slides for the room.',
+                icon: 'display',
                 body: 'Expo builds the deck one slide at a time, and lays them all out side by side when you want to see the whole story.',
                 visual: <RealShot name="office-expo-overview-4x3" ratio="4 / 3" alt="The slide sorter in Expo: five slides of a design review, side by side." />,
               },
               {
                 title: 'Mark up any PDF.',
+                icon: 'edit',
                 body: 'Markup reads, highlights and comments on PDFs, right on your own computer.',
                 visual: <RealShot name="office-markup-4x3" ratio="4 / 3" alt="Markup with a PDF open, two lines highlighted, and the highlight colours beside it." />,
               },

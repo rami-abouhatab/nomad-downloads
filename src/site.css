@@ -5277,3 +5277,19 @@ a.nm-btn.plan-cta {
 .sys-tabs + * {
   margin-top: var(--rhythm);
 }
+
+/* A feature's icon sits beside its title, on the title's first line (Rami, 2026-10-11). */
+.sys-title-row {
+  display: flex;
+  /* on the title's first line however many it wraps to: the icon stands on its baseline */
+  align-items: baseline;
+  gap: clamp(12px, 1.1vw, 18px);
+}
+
+.sys-title-row > svg {
+  flex: none;
+  color: #1d1d1f;
+  /* the drawing's own foot sits a touch above its box: settle it onto the line */
+  position: relative;
+  top: 0.06em;
+}

@@ -262,8 +262,11 @@ export function Chapters({ product, items }: { product: ProductKey; items: (Item
       {items.map((it, i) => (
         <article className={i % 2 ? 'sys-chapter flip' : 'sys-chapter'} key={it.title} id={it.id}>
           <div className="sys-chapter-copy">
-            {it.icon && <Sym name={it.icon} size={32} />}
-            <h3>{it.title}</h3>
+            {/* The icon beside its title (Rami, 2026-10-11: "icon next to each title"). */}
+            <div className="sys-title-row">
+              {it.icon && <Sym name={it.icon} size={34} />}
+              <h3>{it.title}</h3>
+            </div>
             <p>{it.body}</p>
           </div>
           <div className="sys-chapter-visual">{it.visual ?? <div className="sys-shot" data-mockup={`${product}:${i + 1}`} aria-hidden="true"><ProductMark product={product} size={112} /></div>}</div>
@@ -318,7 +321,10 @@ export function Tabs({ product, items }: { product: ProductKey; items: (Item & {
           hidden={on !== i}
         >
           <div className="sys-panel-copy">
-            <h3>{it.title}</h3>
+            <div className="sys-title-row">
+              {it.icon && <Sym name={it.icon} size={34} />}
+              <h3>{it.title}</h3>
+            </div>
             <p>{it.body}</p>
           </div>
           <div className="sys-panel-visual">{it.visual ?? <div className="sys-shot" data-mockup={`${product}:${i + 1}`} aria-hidden="true"><ProductMark product={product} size={112} /></div>}</div>

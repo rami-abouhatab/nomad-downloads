@@ -14,7 +14,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const SITE_MARKS = ['caretDown', 'caretRight', 'download', 'globe', 'check', 'menu', 'close', 'display', 'lock', 'account', 'cloud', 'search', 'mail', 'send', 'clock', 'shield', 'eye', 'unlock', 'folder', 'document', 'devices', 'layers', 'share', 'storage', 'seekSnapshot', 'seekGuest', 'driftLink', 'driftDevice', 'driftPerson', 'camera', 'home', 'sliders', 'grid', 'image', 'play', 'pause', 'back', 'forward', 'refresh', 'plus', 'more', 'copy', 'convert', 'music', 'trash'];
+export const SITE_MARKS = ['caretDown', 'caretRight', 'download', 'globe', 'check', 'menu', 'close', 'display', 'lock', 'account', 'cloud', 'search', 'mail', 'send', 'clock', 'shield', 'eye', 'unlock', 'folder', 'document', 'devices', 'layers', 'share', 'storage', 'seekSnapshot', 'seekGuest', 'driftLink', 'driftDevice', 'driftPerson', 'camera', 'home', 'sliders', 'grid', 'image', 'play', 'pause', 'back', 'forward', 'refresh', 'plus', 'more', 'copy', 'convert', 'music', 'trash', 'settings', 'edit'];
 
 const ND = fileURLToPath(new URL('../../nomad-design/src/', import.meta.url));
 const ID = '\0nd-symbols';
