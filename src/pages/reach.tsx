@@ -22,6 +22,7 @@ export default function ReachPage() {
         links: [
           { label: 'Overview', href: '/reach', current: true },
           { label: 'Reach Premium', href: '/reach#premium' },
+          { label: 'On the web', href: 'https://reach.nomad.ax' },
           { label: 'Download', href: '/download#reach' },
         ],
         cta: { label: 'Download', href: '/download#reach' },
@@ -39,10 +40,10 @@ export default function ReachPage() {
               <LinkButton href="/download#reach" variant="primary" hero>
                 Download Reach
               </LinkButton>
-              <More href="#premium">Reach Premium</More>
+              <More href="https://reach.nomad.ax">Use Reach on the web</More>
             </>
           }
-          note="Free for everyone with a Nomad account."
+          note="Free for everyone with a Nomad account. On Windows, or in your browser at reach.nomad.ax."
           visual={<RealShot name="reach-conversation" ratio="16 / 10" eager alt="Reach with a chat open: two people agreeing to meet at three, the chats listed beside it." />}
         />
 

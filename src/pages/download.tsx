@@ -44,7 +44,7 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     what: 'Mail, chat and calls, together.',
     need: (
       <>
-        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more.
+        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more. Or use it in your browser: <a href="https://reach.nomad.ax">reach.nomad.ax</a>.
       </>
     ),
   },
