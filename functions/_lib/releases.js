@@ -31,7 +31,7 @@ export const ARCHES = ['arm64', 'x64'];
  * prefixes that belong to the product, the first being today's.
  */
 export const PRODUCTS = {
-  ax: { name: 'MeridianOS', prefixes: ['MeridianOS', 'AX', 'Nomad'] },
+  meridian: { name: 'MeridianOS', prefixes: ['MeridianOS', 'AX', 'Nomad'] },
   polaris: { name: 'Polaris Browser', prefixes: ['Polaris'] },
   reach: { name: 'Reach', prefixes: ['Reach'] },
   drift: { name: 'Drift', prefixes: ['Drift'] },
@@ -41,9 +41,11 @@ export const PRODUCTS = {
 
 /** Spellings people (and older links) use for a product, mapped to its slug. */
 const ALIASES = {
-  ax: 'ax',
-  nomad: 'ax',
-  desktop: 'ax',
+  meridian: 'meridian',
+  meridianos: 'meridian',
+  ax: 'meridian', // the old name; links from before 2026-10-11 still say it
+  nomad: 'meridian',
+  desktop: 'meridian',
   polaris: 'polaris',
   'polaris-browser': 'polaris',
   reach: 'reach',

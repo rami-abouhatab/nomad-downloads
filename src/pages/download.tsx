@@ -21,6 +21,9 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
   { id: 'arm64', label: 'for ARM', base: 'Snapdragon and other ARM64 PCs' },
 ];
 
+/** A product as the download URLs say it: MeridianOS is `meridian`, never `ax` (Rami, 2026-10-11). */
+const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
+
 const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode }[] = [
   {
     id: 'ax',
@@ -133,7 +136,7 @@ export default function DownloadPage() {
         </h2>
         <div className="dl-list">
           {PRODUCTS.map((p) => {
-            const info = manifest?.products?.[p.id];
+            const info = manifest?.products?.[dlSlug(p.id)];
             return (
               <article className="dl-product" id={p.id === 'ax' ? 'meridian' : p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
                 <ProductMark product={p.id} size={64} />
@@ -150,7 +153,7 @@ export default function DownloadPage() {
                     const build = info?.builds?.[a.id];
                     const pending = Boolean(info) && !build?.url;
                     const match = !pending && Boolean(build?.url) && arch === a.id;
-                    const href = build?.url ?? `/dl/${p.id}/${a.id}`;
+                    const href = build?.url ?? `/dl/${dlSlug(p.id)}/${a.id}`;
                     const meta = build?.size ? `${a.base} · ${mb(build.size)}` : a.base;
                     return (
                       <a

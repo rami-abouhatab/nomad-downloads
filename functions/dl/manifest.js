@@ -1,7 +1,7 @@
 /**
  * /dl/manifest — what is downloadable right now, as JSON.
  *
- *   /dl/manifest                 AX, in the original shape (urls /dl/<arch>)
+ *   /dl/manifest                 MeridianOS, in the original shape (urls /dl/<arch>)
  *   /dl/manifest?product=reach   one product
  *   /dl/manifest?product=all     every product, under `products`
  *
@@ -44,9 +44,9 @@ export async function handleManifest(url, fetchImpl = fetch) {
   }
 
   // No product: the original response, for the original page and anything
-  // that copied it. AX, with the short /dl/<arch> urls.
+  // that copied it. MeridianOS, with the short /dl/<arch> urls.
   const releases = await listReleases(fetchImpl);
-  return json(describeProduct(releases, 'ax', (_slug, arch) => `/dl/${arch}`));
+  return json(describeProduct(releases, 'meridian', (_slug, arch) => `/dl/${arch}`));
 }
 
 export function onRequestGet({ request }) {

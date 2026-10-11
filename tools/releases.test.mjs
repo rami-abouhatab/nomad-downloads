@@ -95,7 +95,7 @@ test('compareVersions orders numerically and puts pre-releases first', () => {
 });
 
 test('productSlug accepts the asset names and friendly spellings', () => {
-  assert.equal(productSlug('AX'), 'ax');
+  assert.equal(productSlug('AX'), 'meridian');
   assert.equal(productSlug('NomadOffice'), 'office');
   assert.equal(productSlug('nomad-office'), 'office');
   assert.equal(productSlug('Polaris'), 'polaris');
@@ -104,11 +104,11 @@ test('productSlug accepts the asset names and friendly spellings', () => {
 });
 
 test('findBuild picks the newest version of the product across releases', () => {
-  const ax = findBuild(published, 'ax', 'arm64');
+  const ax = findBuild(published, 'meridian', 'arm64');
   assert.equal(ax.asset.name, 'AX-0.2.0-arm64-setup.exe');
   assert.equal(ax.version, '0.2.0');
   // AX has no newer x64 build yet: the legacy Nomad- build still serves it.
-  assert.equal(findBuild(published, 'ax', 'x64').asset.name, 'Nomad-0.1.2-x64-setup.exe');
+  assert.equal(findBuild(published, 'meridian', 'x64').asset.name, 'Nomad-0.1.2-x64-setup.exe');
   assert.equal(findBuild(published, 'reach', 'x64').asset.name, 'Reach-0.5.0-x64-setup.exe');
   assert.equal(findBuild(published, 'office', 'x64').asset.name, 'NomadOffice-0.1.0-x64-setup.exe');
   assert.equal(findBuild(published, 'office', 'arm64'), null);
@@ -117,7 +117,7 @@ test('findBuild picks the newest version of the product across releases', () => 
 
 test('findBuild prefers the current name when a version exists under both', () => {
   const both = [{ assets: [asset('Nomad-2.0.0-x64-setup.exe'), asset('AX-2.0.0-x64-setup.exe')] }];
-  assert.equal(findBuild(both, 'ax', 'x64').asset.name, 'AX-2.0.0-x64-setup.exe');
+  assert.equal(findBuild(both, 'meridian', 'x64').asset.name, 'AX-2.0.0-x64-setup.exe');
 });
 
 test('describeProduct reports missing builds as null', () => {
@@ -140,9 +140,9 @@ test('manifest without a product keeps the original AX shape and urls', async ()
 test('manifest?product=all lists every product; drafts and pre-releases never show', async () => {
   const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=all'), fakeFetch());
   const { products } = await res.json();
-  assert.deepEqual(Object.keys(products).sort(), ['ax', 'citadel', 'drift', 'office', 'polaris', 'reach']);
+  assert.deepEqual(Object.keys(products).sort(), ['citadel', 'drift', 'meridian', 'office', 'polaris', 'reach']);
   assert.equal(products.drift.builds.x64, null);
-  assert.equal(products.ax.builds.arm64.file, 'AX-0.2.0-arm64-setup.exe');
+  assert.equal(products.meridian.builds.arm64.file, 'AX-0.2.0-arm64-setup.exe');
   assert.equal(products.reach.builds.arm64.url, '/dl/reach/arm64');
 });
 

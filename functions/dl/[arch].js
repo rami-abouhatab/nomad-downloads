@@ -12,5 +12,5 @@ import { normaliseArch, notFound, serveBuild } from '../_lib/releases.js';
 export async function onRequestGet({ params }) {
   const arch = normaliseArch(params.arch);
   if (!arch) return notFound('Unknown build.');
-  return serveBuild('ax', arch);
+  return serveBuild('meridian', arch);
 }
