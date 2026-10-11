@@ -452,41 +452,117 @@ img.icon {
   display: none;
 }
 
+/* The phone menu (Rami, 2026-10-11: "very much premium"). A white page under the bar that fades
+   in while its rows arrive one after another, 35ms apart, from just above where they rest. Mounted
+   always, so a tap mounts nothing; only opacity and transform move, on layers promoted before the
+   tap. Closing is quicker than opening and drops the rows with the page. */
 .gnav-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
+  top: var(--gnav-bottom, var(--site-bar));
   right: 0;
-  padding: var(--space-xs) 0 var(--space-xxl);
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-md) 0 calc(var(--space-xxl) + env(safe-area-inset-bottom, 0px));
   background: var(--site-foot);
-  border-bottom: var(--hairline) solid var(--site-foot-line);
-  animation: site-drop var(--t-slow) var(--e-entrance) both;
+  /* Painted and on its own layer before the first tap, only transparent and untouchable while
+     closed (inert keeps focus out): a hidden panel would be drawn, and its icons decoded, in the
+     very frame the tap asks it to appear (a 483ms frame, measured 2026-10-11). */
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  transition: opacity 180ms cubic-bezier(0.4, 0, 1, 1);
 }
 
-.gnav-panel[hidden] {
-  display: none;
+.gnav[data-open] .gnav-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Where the menu can never open, it is not drawn at all. */
+@media (min-width: 1041px) {
+  .gnav-panel {
+    display: none;
+  }
 }
 
 .gnav-panel ul {
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.gnav-panel li + li {
-  border-top: var(--hairline) solid var(--site-line);
+.gnav-panel li,
+.gnav-panel-end {
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+  will-change: opacity, transform;
+  transition:
+    opacity 140ms cubic-bezier(0.4, 0, 1, 1),
+    transform 140ms cubic-bezier(0.4, 0, 1, 1);
 }
 
-.gnav-panel ul a {
-  display: block;
-  padding: var(--space-md) 0;
+.gnav[data-open] .gnav-panel li,
+.gnav[data-open] .gnav-panel-end {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 380ms cubic-bezier(0.2, 0.8, 0.2, 1) calc(70ms + var(--i, 0) * 35ms),
+    transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1) calc(70ms + var(--i, 0) * 35ms);
+}
+
+.gnav-panel-products a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
   color: var(--text-primary);
-  font-size: var(--site-t-title);
+  font-size: 22px;
   font-weight: 650;
   letter-spacing: -0.02em;
   text-decoration: none;
 }
 
-.gnav-panel ul a[aria-current='page'] {
+.gnav-panel-products .icon,
+.gnav-panel-products .office-stack {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+
+.gnav-panel-products span {
+  flex: 1;
+  min-width: 0;
+}
+
+.gnav-panel-go {
+  flex: none;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.gnav-panel-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+  margin-top: var(--space-lg) !important;
+  padding-top: var(--space-lg) !important;
+  border-top: var(--hairline) solid var(--site-line);
+}
+
+.gnav-panel-more a {
+  display: block;
+  padding: 8px 0;
+  color: var(--text-secondary);
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.gnav-panel a[aria-current='page'] {
   color: var(--text-secondary);
 }
 
@@ -500,12 +576,48 @@ img.icon {
   width: 100%;
 }
 
-@keyframes site-drop {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
+/* While the menu is open the page behind it holds still; its scrollbar's room is kept, so nothing
+   shifts sideways. */
+:root[data-menu='open'] {
+  overflow: hidden;
+  scrollbar-gutter: stable;
 }
+
+/* The burger: two lines that turn into a cross. */
+.burger {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 14px;
+}
+
+.burger > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.6px;
+  border-radius: 1px;
+  background: currentColor;
+  will-change: transform;
+  transition: transform 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.burger > span:first-child {
+  top: 3px;
+}
+
+.burger > span:last-child {
+  bottom: 3px;
+}
+
+.gnav[data-open] .burger > span:first-child {
+  transform: translate3d(0, 3.2px, 0) rotate(45deg);
+}
+
+.gnav[data-open] .burger > span:last-child {
+  transform: translate3d(0, -3.2px, 0) rotate(-45deg);
+}
+
 
 @media (max-width: 1040px) {
   .gnav-links,
@@ -513,12 +625,15 @@ img.icon {
     display: none;
   }
 
-  /* Phones: the camel left, the menu right. */
+  /* Phones: the camel left; the account and the menu together on the right. */
   .gnav-row {
     justify-content: space-between;
   }
 
-  .gnav-end {
+  .gnav-row > .gnav-end {
+    display: flex;
+    gap: var(--space-md);
+    margin-left: 0;
     padding-left: 0;
     border-left: 0;
   }
@@ -1494,7 +1609,9 @@ a.nm-btn.plan-cta {
 .foot-inner {
   position: relative;
   z-index: 1;
-  max-width: none;
+  /* As the page column: no wider than on a 1920 screen. */
+  max-width: 1920px;
+  margin-inline: auto;
   padding-inline: clamp(var(--site-gutter), 6vw, 96px);
   padding-top: var(--space-xl);
   padding-bottom: var(--space-base);
@@ -1674,8 +1791,15 @@ a.nm-btn.plan-cta {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gnav-panel {
-    animation: none;
+  /* The menu and the burger are instant: never a slower version of the move. */
+  .gnav-panel,
+  .gnav[data-open] .gnav-panel,
+  .gnav-panel li,
+  .gnav-panel-end,
+  .gnav[data-open] .gnav-panel li,
+  .gnav[data-open] .gnav-panel-end,
+  .burger > span {
+    transition: none;
   }
 
   .more svg,
@@ -1994,7 +2118,9 @@ a.nm-btn.plan-cta {
     /* Ends just under the laptop's shadow (Rami, 2026-10-10), so the next
        section's title shows at the bottom of the first screen, the way
        apple.com and microsoft.com end their heroes early. */
-    min-height: min(41vw, 900px);
+    /* The picture's own proportion at every width: capped at 900px it ended before the picture's
+       fade on screens past ~2200px wide, cutting the light off flat (Rami, 2026-10-11, a 27" screen). */
+    min-height: 41vw;
     align-content: center;
     justify-items: start;
     padding-block: clamp(32px, 4vw, 64px) clamp(24px, 3vw, 48px);
@@ -2014,16 +2140,53 @@ a.nm-btn.plan-cta {
   }
 }
 
-@media (max-width: 1039px) {
+/* Past a 1920 screen the picture stops growing (Rami, 2026-10-11: a 27" screen): it stays at its
+   1920 size, centred, and its sky continues sideways in the same light, a vertical gradient taken
+   from the picture's own edges (left and right match), so a wide screen gets more sky, not a bigger
+   laptop beside the same-sized words. The words keep their place within the picture. */
+@media (min-width: 1921px) {
   .stage {
-    /* Phones: the laptop sits lower right; keep it in view under the copy. */
-    background-position: 78% bottom;
-    background-size: auto 100%;
+    --u: 19.2px;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0) calc(38.4 * var(--u)), #ffffff calc(41 * var(--u) - 1px)) no-repeat,
+      url('/assets/hero/meridian-hero.webp') no-repeat,
+      linear-gradient(180deg, #c9d5df 0%, #cdd9e2 10%, #d0d9df 20%, #d7dbdd 30%, #dddedb 40%, #e3dfd7 50%, #e9e2d6 60%, #f0e6d9 70%, #f6efe6 80%, #fdfbf9 90%, #fdfdfd 100%) no-repeat,
+      #ffffff;
+    background-size:
+      100% calc(41 * var(--u)),
+      calc(100 * var(--u)) auto,
+      100% calc(46.89 * var(--u));
+    background-position:
+      0 0,
+      center calc(-4.5 * var(--u)),
+      0 calc(-4.5 * var(--u));
   }
 
   .stage-card {
-    min-height: 92vw;
+    min-height: calc(41 * var(--u));
+    padding-inline: calc((100% - 100 * var(--u)) / 2 + 211px) 0;
+  }
+}
+
+@media (max-width: 1039px) {
+  /* Phones and tablets: the words first, on the picture's own sky (its top edge is one colour,
+     #c8d6e1, so the sky continues above it without a seam), then the laptop whole beneath them,
+     fading into the white page. The picture is drawn wide enough for the laptop (47% of its width)
+     to fill the screen, and the card leaves room under the words for it (Rami, 2026-10-11: the
+     picture was cut into a strip under the title). */
+  .stage {
+    --pic: min(190vw, 1300px);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0) calc(100% - 5vw), #ffffff 100%) no-repeat,
+      #c8d6e1 url('/assets/hero/meridian-hero.webp') no-repeat;
+    background-size: 100% 100%, var(--pic) auto;
+    background-position: 0 0, 94% 100%;
+  }
+
+  .stage-card {
+    min-height: 0;
     align-content: start;
+    padding-bottom: calc(var(--pic) * 0.39);
   }
 }
 
@@ -3293,6 +3456,11 @@ a.nm-btn.plan-cta {
 
 .sys-wrap {
   width: 100%;
+  /* The column stops growing past a 1920 screen (1728 of content): every page reads the same at
+     1920 as before, and a 27" or wider screen gets margins instead of a stretched page
+     (Rami, 2026-10-11). */
+  max-width: 1920px;
+  margin-inline: auto;
   padding-inline: clamp(var(--site-gutter), 6vw, 96px);
 }
 

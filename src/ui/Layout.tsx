@@ -9,9 +9,9 @@
  * global bar is the one that sticks. Both are `position: sticky`, so nothing
  * here listens to scroll.
  */
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Button } from '@nd/controls/Button';
-import { CamelMark, LinkButton, Sym } from './kit';
+import { CamelMark, LinkButton, ProductMark, Sym, type ProductKey } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
 import { PeriodProvider } from './period';
 import { footnotesFor } from '../footnotes';
@@ -39,30 +39,58 @@ function Brand() {
   );
 }
 
+/**
+ * The phone menu (Rami, 2026-10-11: "a more premium burger and burger page animation, and when I
+ * scroll on it the website scrolls"). The burger's two lines turn into a cross; the menu is a white
+ * page under the bar, its rows arriving one after another; the page behind it holds still while it
+ * is open. Only opacity and transform move, on layers that exist before the tap (the first law), and
+ * reduced motion is instant. The panel stays mounted (inert and invisible when closed), so opening
+ * mounts nothing.
+ */
 function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
+  const header = useRef<HTMLElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
-  /* Escape closes and hands focus back to the button; opening moves focus to
-     the first link so a keyboard lands inside what it opened. */
+  const show = (next: boolean) => {
+    /* Where the bar ends right now: the menu starts there, even if the bar has partly scrolled away.
+       Read once, at the tap, before anything moves. */
+    if (next && header.current) {
+      const bottom = Math.max(0, Math.round(header.current.getBoundingClientRect().bottom));
+      panel.current?.style.setProperty('--gnav-bottom', `${bottom}px`);
+    }
+    setOpen(next);
+  };
+
+  /* While it is open: the page holds still, Escape closes, and a window grown past the phone
+     layout closes it. Opening moves focus to the first row. */
   useEffect(() => {
     if (!open) return;
-    panel.current?.querySelector<HTMLElement>('a')?.focus();
+    const root = document.documentElement;
+    root.dataset.menu = 'open';
+    panel.current?.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setOpen(false);
         toggle.current?.focus();
       }
     };
+    const wide = window.matchMedia('(min-width: 1041px)');
+    const onWide = () => wide.matches && setOpen(false);
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    wide.addEventListener('change', onWide);
+    return () => {
+      delete root.dataset.menu;
+      document.removeEventListener('keydown', onKey);
+      wide.removeEventListener('change', onWide);
+    };
   }, [open]);
 
   const all = [...PRODUCTS, ...MORE];
   return (
-    <header className={sticky ? 'gnav is-sticky' : 'gnav'} data-open={open || undefined}>
+    <header ref={header} className={sticky ? 'gnav is-sticky' : 'gnav'} data-open={open || undefined}>
       <div className="wrap gnav-row">
         <Brand />
         <nav className="gnav-links" aria-label="Main">
@@ -87,23 +115,39 @@ function GlobalNav({ page, sticky }: { page: PageId; sticky: boolean }) {
             aria-label={open ? 'Close menu' : 'Menu'}
             aria-expanded={open}
             aria-controls={panelId}
-            icon={<Sym name={open ? 'close' : 'menu'} size={20} />}
-            onClick={() => setOpen((o) => !o)}
+            icon={
+              <span className="burger" aria-hidden="true">
+                <span />
+                <span />
+              </span>
+            }
+            onClick={() => show(!open)}
           />
         </div>
       </div>
-      <div className="gnav-panel" id={panelId} ref={panel} hidden={!open}>
+      <div className="gnav-panel" id={panelId} ref={panel} inert={!open} aria-hidden={!open}>
         <nav className="wrap" aria-label="Main, small screens">
-          <ul>
-            {all.map((l) => (
-              <li key={l.id}>
+          <ul className="gnav-panel-products">
+            {PRODUCTS.map((l, i) => (
+              <li key={l.id} style={{ '--i': i } as CSSProperties}>
+                <a href={l.href} aria-current={l.id === page ? 'page' : undefined} onClick={() => setOpen(false)}>
+                  <ProductMark product={l.id as ProductKey} size={30} />
+                  <span>{l.label}</span>
+                  <Sym name="caretRight" size={14} className="gnav-panel-go" />
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ul className="gnav-panel-more">
+            {MORE.map((l, i) => (
+              <li key={l.id} style={{ '--i': PRODUCTS.length + i } as CSSProperties}>
                 <a href={l.href} aria-current={l.id === page ? 'page' : undefined} onClick={() => setOpen(false)}>
                   {l.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div className="gnav-panel-end">
+          <div className="gnav-panel-end" style={{ '--i': all.length } as CSSProperties}>
             <AccountPanelVerbs
               Link={({ href, primary, children }) => (
                 <LinkButton href={href} variant={primary ? 'primary' : undefined} hero>
