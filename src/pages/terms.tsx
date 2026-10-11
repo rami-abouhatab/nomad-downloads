@@ -45,7 +45,8 @@ export default function TermsPage() {
         <p>
           Meridian Starter can begin with a 14-day free trial. Cancelling stops the next renewal; your plan runs to the end of the period you paid
           for. Changing plan is priced on the spot, with credit for what is left of the current one. If a payment fails we will tell you and
-          try again; a plan that stays unpaid falls back to its limits, and nothing is deleted without warning.
+          try again; a plan that stays unpaid falls back to its limits, and nothing is deleted without warning. When a subscription ends, what
+          it held is kept for one year, downloadable from your account, and then deleted; the Privacy policy says what that covers.
         </p>
 
         <h2 id="fair-use">Fair use</h2>

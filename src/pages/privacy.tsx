@@ -109,17 +109,21 @@ export default function PrivacyPage() {
 
         <h2 id="how-long">How long</h2>
         <p>
-          As long as you have a Nomad account. Earlier versions of files are kept for as long as your MeridianOS plan's history allows: 30 days, a
-          year, or for as long as you keep the plan. Drift files are deleted soon after their link expires. When you delete your account,
-          everything above is erased from our servers, except payments, receipts and the record of what you bought, which tax law requires us
-          to keep.
+          While your subscription lasts, and for one year after it ends. When a subscription ends, what it held (your MeridianOS desk and
+          files, or your Reach Premium recordings) is kept for a year, exactly as you left it, and you can download all of it from Your data
+          at account.nomad.ax. We email you through that year, each time with the way to download. After the year it is deleted. If you come
+          back before then, you choose to pick up where you left off or start fresh, and you can delete it sooner yourself at any time. Your
+          account itself, and what free products like Reach and Drift hold, stay as long as you have the account. Earlier versions of files
+          are kept for as long as your MeridianOS plan's history allows: 30 days, a year, or for as long as you keep the plan. Drift files are
+          deleted soon after their link expires. When you delete your account, everything above is erased from our servers, except payments,
+          receipts and the record of what you bought, which tax law requires us to keep.
         </p>
 
         <h2 id="what-you-can-do">What you can do</h2>
         <ul>
           <li>
             <strong>See and take your data:</strong> Settings › Accounts › Export my data copies every file, and your account data as a file,
-            to your computer.
+            to your computer. After a subscription ends, Your data at account.nomad.ax downloads everything it held as one ZIP, for a year.
           </li>
           <li>
             <strong>Correct it:</strong> change your name in Settings › Accounts, and anything else you made, in Nomad itself.
