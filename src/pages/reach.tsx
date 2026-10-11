@@ -1,6 +1,6 @@
 import { Layout } from '../ui/Layout';
 import { LinkButton, More } from '../ui/kit';
-import { Band, BandHead, Chapters, Columns, FAQ, InMeridian, PageHero, PlanPair, ProductName, RealShot, Tabs } from '../ui/system';
+import { Band, BandHead, Columns, FAQ, InMeridian, PageHero, PlanPair, ProductName, RealShot, Tabs } from '../ui/system';
 
 /* Reach, shaped like microsoft.com's Outlook (Rami, 2026-10-10): the name and the line centred and
    the real app large under them (2026-10-11), the app in tabs, each with its own real capture, the
@@ -53,6 +53,12 @@ export default function ReachPage() {
             product="reach"
             items={[
               {
+                title: 'Mail',
+                icon: 'mail',
+                body: 'Add as many Gmail and Outlook accounts as you have, and read them all in one inbox, or one at a time.',
+                visual: <RealShot name="reach-mail" ratio="16 / 10" alt="Mail in Reach: every inbox together, a thread open with its attachment, and the mailboxes beside it." />,
+              },
+              {
                 title: 'Chat',
                 icon: 'send',
                 body: 'Message anyone on Nomad by their handle. Unread, groups, pinned and muted chats each have their place, with your recent calls beside them.',
@@ -79,9 +85,8 @@ export default function ReachPage() {
             ]}
           />
           <Columns
-            cols={3}
+            cols={2}
             items={[
-              { title: 'Mail', icon: 'mail', body: 'Add as many Gmail and Outlook accounts as you have, and keep them all in one app.' },
               { title: 'Calls', icon: 'camera', body: 'Voice and video calls between two people, as long as you like.' },
               { title: 'People', icon: 'account', body: 'Everyone you write to, call or meet, in one list you never had to build.' },
             ]}
@@ -116,18 +121,10 @@ export default function ReachPage() {
         </Band>
 
         <Band label="domain-title">
-          <h2 id="domain-title" className="vh">
-            Mail at your own domain
-          </h2>
-          <Chapters
-            product="reach"
-            items={[
-              {
-                title: 'Mail at your own domain.',
-                icon: 'mail',
-                body: 'Bring a domain you own and Reach sets up a mailbox on it, like you@yourname.com, plus as many aliases as you want: hello@, invoices@, anything@. It lives in Reach beside your other accounts.',
-              },
-            ]}
+          <BandHead
+            id="domain-title"
+            title="Mail at your own domain."
+            lede="Bring a domain you own and Reach sets up a mailbox on it, like you@yourname.com, plus as many aliases as you want: hello@, invoices@, anything@. It lives in Reach beside your other accounts."
           />
         </Band>
 

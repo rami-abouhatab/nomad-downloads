@@ -5219,3 +5219,28 @@ a.nm-btn.plan-cta {
   max-width: 1300px;
   margin-top: clamp(8px, 2vw, 32px);
 }
+
+/* ══ Rami, 2026-10-11 ══
+   No colour washes on the app pages ("lose the apps gradients, they look like a cheap taint"):
+   every light hero is plain white; MeridianOS keeps its black. */
+.ph:not([data-light='ax']) {
+  background: #ffffff;
+}
+
+/* One picture size on a page: a feature row's picture is the width of a tab's picture, and the
+   rows no longer swap sides ("left then right, left then right"); the words always lead on the
+   left, the picture on the right, as in the tabs. */
+@media (min-width: 901px) {
+  .sys-chapter {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.sys-chapter.flip .sys-chapter-copy {
+  order: 0;
+}
+
+/* What follows the tabs starts a full rhythm below the picture, never on its edge. */
+.sys-tabs + * {
+  margin-top: var(--rhythm);
+}
