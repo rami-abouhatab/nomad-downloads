@@ -42,9 +42,11 @@ export function latestYml(r) {
 }
 
 export async function handleUpdate(params, request, fetchImpl = fetch, waitUntil = () => {}) {
-  const { product, channel, arch, file } = params;
-  if (!PRODUCTS.includes(product) || !CHANNELS.includes(channel) || !ARCHES.includes(arch)) return text('Unknown feed.', 404, 'text/plain; charset=utf-8');
-  if (file !== 'latest.yml' && file !== 'release.json') return text('Unknown file.', 404, 'text/plain; charset=utf-8');
+  const { product, arch, file } = params;
+  if (!PRODUCTS.includes(product) || !CHANNELS.includes(params.channel) || !ARCHES.includes(arch)) return text('Unknown feed.', 404, 'text/plain; charset=utf-8');
+  if (file !== 'latest.yml' && file !== 'beta.yml' && file !== 'release.json') return text('Unknown file.', 404, 'text/plain; charset=utf-8');
+  /* electron-updater's own channel names its file: an app switched to beta asks for beta.yml. */
+  const channel = file === 'beta.yml' ? 'beta' : params.channel;
 
   const url = new URL(request.url);
   const running = request.headers.get('X-Nomad-Version') || url.searchParams.get('v');
