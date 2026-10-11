@@ -13,7 +13,7 @@
  * can draw a disabled "Soon" button instead of silently dropping a platform
  * someone is waiting for.
  */
-import { PRODUCTS, describeProduct, listReleases, productSlug, productUrl } from '../_lib/releases.js';
+import { PRODUCTS, describeManaged, describeProduct, listReleases, managedReleases, productSlug, productUrl } from '../_lib/releases.js';
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -30,25 +30,27 @@ const json = (body, status = 200) =>
 
 export async function handleManifest(url, fetchImpl = fetch) {
   const asked = url.searchParams.get('product');
+  /* The back office's published releases first; an app it does not manage yet is read from the
+     downloads repository as before. */
+  const [managed, releases] = await Promise.all([managedReleases(fetchImpl), listReleases(fetchImpl)]);
+  const describe = (slug, urlFor) =>
+    Object.prototype.hasOwnProperty.call(managed, slug) ? describeManaged(slug, managed[slug], urlFor) : describeProduct(releases, slug, urlFor);
 
   if (asked && asked.toLowerCase() === 'all') {
-    const releases = await listReleases(fetchImpl);
     const products = {};
-    for (const slug of Object.keys(PRODUCTS)) products[slug] = describeProduct(releases, slug, productUrl);
+    for (const slug of Object.keys(PRODUCTS)) products[slug] = describe(slug, productUrl);
     return json({ products });
   }
 
   if (asked) {
     const slug = productSlug(asked);
     if (!slug) return json({ error: `Unknown product "${asked}".`, products: Object.keys(PRODUCTS) }, 404);
-    const releases = await listReleases(fetchImpl);
-    return json(describeProduct(releases, slug, productUrl));
+    return json(describe(slug, productUrl));
   }
 
   // No product: the original response, for the original page and anything
   // that copied it. MeridianOS, with the short /dl/<arch> urls.
-  const releases = await listReleases(fetchImpl);
-  return json(describeProduct(releases, 'meridian', (_slug, arch) => `/dl/${arch}`));
+  return json(describe('meridian', (_slug, arch) => `/dl/${arch}`));
 }
 
 export function onRequestGet({ request }) {

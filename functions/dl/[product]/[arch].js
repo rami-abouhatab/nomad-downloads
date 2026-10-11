@@ -9,9 +9,12 @@
  */
 import { normaliseArch, notFound, productSlug, serveBuild } from '../../_lib/releases.js';
 
-export async function onRequestGet({ params }) {
+export async function onRequestGet({ params, request }) {
   const slug = productSlug(params.product);
   const arch = normaliseArch(params.arch);
   if (!slug || !arch) return notFound('Unknown build.');
-  return serveBuild(slug, arch);
+  /* ?v=1.2.0 asks for one exact build (the back office measuring a draft before it publishes). */
+  const v = new URL(request.url).searchParams.get('v');
+  const version = v && /^\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$/.test(v) ? v : null;
+  return serveBuild(slug, arch, fetch, { version, origin: request.headers.get('Origin') });
 }

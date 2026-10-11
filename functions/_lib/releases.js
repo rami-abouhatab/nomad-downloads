@@ -22,6 +22,8 @@
 export const REPO = 'rami-abouhatab/nomad-downloads';
 
 /** GitHub refuses requests without one, with a 403 that explains nothing. */
+import { rpc } from './platform.js';
+
 export const UA = { 'User-Agent': 'nomad-downloads (nomad.ax)' };
 
 export const ARCHES = ['arm64', 'x64'];
@@ -169,22 +171,79 @@ export function describeProduct(releases, slug, urlFor) {
 
 export const productUrl = (slug, arch) => `/dl/${slug}/${arch}`;
 
-/** Streams one build to the person who asked for it. */
-export async function serveBuild(slug, arch, fetchImpl = fetch) {
+/** One exact version of `slug` for `arch` in the downloads repository, or null. */
+export function findVersion(releases, slug, arch, version) {
   const product = PRODUCTS[slug];
-  const releases = await listReleases(fetchImpl);
-  const found = findBuild(releases, slug, arch);
-  if (!found) {
+  if (!product || !ARCHES.includes(arch)) return null;
+  const prefixes = product.prefixes.map((p) => p.toLowerCase());
+  for (const release of releases ?? []) {
+    for (const asset of release.assets ?? []) {
+      const parsed = parseAsset(asset.name);
+      if (parsed && parsed.arch === arch && parsed.version === version && prefixes.includes(parsed.prefix.toLowerCase())) {
+        return { asset, release, version };
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * The back office's releases (nomad-cms/docs/back-office-plan.md §1): for every app it manages,
+ * its live stable release, or null while none is live. An app absent from this map is not managed
+ * yet and is read from the downloads repository as before.
+ */
+export async function managedReleases(fetchImpl = fetch) {
+  const map = await rpc('release_downloads', {}, fetchImpl);
+  return map && typeof map === 'object' ? map : {};
+}
+
+/** A managed app's live release as the manifest describes a product. */
+export function describeManaged(slug, live, urlFor) {
+  const builds = {};
+  for (const arch of ARCHES) {
+    const a = live?.assets?.find((x) => x.arch === arch);
+    builds[arch] = a ? { file: a.file, size: a.size, version: live.version, url: urlFor(slug, arch) } : null;
+  }
+  return { product: slug, name: PRODUCTS[slug].name, version: live?.version ?? null, published: live?.publishedAt ?? null, builds };
+}
+
+/** The back office measures installers in the browser (SHA-512), so it may read them from here. */
+const MEASURERS = ['https://cms.nomad.ax', 'http://127.0.0.1:5310', 'http://localhost:5310'];
+
+/**
+ * Streams one build to the person who asked for it: the published release when the back office
+ * manages the app, else the newest in the downloads repository. `version` asks for one exact
+ * build (the back office measuring a draft).
+ */
+export async function serveBuild(slug, arch, fetchImpl = fetch, { version = null, origin = null } = {}) {
+  const product = PRODUCTS[slug];
+  let file = null;
+  let url = null;
+  let size = null;
+  if (version) {
+    const found = findVersion(await listReleases(fetchImpl), slug, arch, version);
+    if (found) ({ name: file, browser_download_url: url, size } = found.asset);
+  } else {
+    const managed = await managedReleases(fetchImpl);
+    if (Object.prototype.hasOwnProperty.call(managed, slug)) {
+      const a = managed[slug]?.assets?.find((x) => x.arch === arch);
+      if (a) ({ file, url, size } = a);
+    } else {
+      const found = findBuild(await listReleases(fetchImpl), slug, arch);
+      if (found) ({ name: file, browser_download_url: url, size } = found.asset);
+    }
+  }
+  if (!url) {
     // Said plainly rather than as a bare 404: at this stage the usual reason
     // is that the build genuinely is not out yet, and a person who clicked a
     // download button deserves to be told which of those it is.
     return new Response(
-      `No ${arch} build of ${product.name} has been published yet. See https://nomad.ax/download`,
+      `No ${arch} build of ${product.name}${version ? ` ${version}` : ''} has been published yet. See https://nomad.ax/download`,
       { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
     );
   }
 
-  const upstream = await fetchImpl(found.asset.browser_download_url, { headers: UA });
+  const upstream = await fetchImpl(url, { headers: UA });
   if (!upstream.ok || !upstream.body) {
     return new Response('The download is temporarily unavailable. Try again in a minute.', {
       status: 502,
@@ -196,10 +255,15 @@ export async function serveBuild(slug, arch, fetchImpl = fetch) {
   // is a Worker that will eventually be killed for holding 100 MB in memory.
   const headers = {
     'Content-Type': 'application/octet-stream',
-    'Content-Disposition': `attachment; filename="${found.asset.name}"`,
+    'Content-Disposition': `attachment; filename="${file}"`,
     'Cache-Control': 'public, max-age=3600',
   };
-  if (found.asset.size) headers['Content-Length'] = String(found.asset.size);
+  if (size) headers['Content-Length'] = String(size);
+  if (origin && MEASURERS.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+    headers['Access-Control-Expose-Headers'] = 'Content-Length, Content-Disposition';
+    headers.Vary = 'Origin';
+  }
   return new Response(upstream.body, { headers });
 }
 
