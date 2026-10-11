@@ -11,7 +11,7 @@ const QA = [
   { q: 'Is Reach free?', a: 'Yes, for everyone with a Nomad account: as many mail accounts as you have, chat, one-to-one calls, meetings up to 40 minutes and 10 people, events and people. Reach Premium adds more.' },
   { q: 'Which mail accounts can I add?', a: 'Gmail and Outlook accounts, as many as you have, all in one app. With Reach Premium you can also have a mailbox at your own domain.' },
   { q: 'How long can meetings be?', a: 'Up to 40 minutes and 10 people on Reach, 4 hours and 50 people on Reach Premium, and 24 hours and 100 people on Meridian Ultra.' },
-  { q: 'How does mail at my own domain work?', a: 'Bring a domain you own and Reach sets up a mailbox on it, plus as many aliases as you want. The mailbox is hosted by Zoho Mail and lives in Reach beside your other accounts. A second mailbox on the same domain is $1.99 a month.' },
+  { q: 'How does mail at my own domain work?', a: 'Bring a domain you own and Reach sets up a mailbox on it, plus as many aliases as you want. The mailbox lives in Reach beside your other accounts, and works in your phone's mail app too. A second mailbox on the same domain is $1.99 a month.' },
 ];
 
 export default function ReachPage() {
