@@ -31,7 +31,8 @@ const EXTERNAL_OK = [
 ];
 
 /** Platform contract C3: what billing sells. */
-const PRODUCTS = new Set(['ax:starter', 'ax:pro', 'ax:ultra', 'office', 'reach:premium', 'drift:premium', 'citadel:premium']);
+/* A link says meridian, never ax (Rami, 2026-10-11): ax: is billing's key and stays out of every address. */
+const PRODUCTS = new Set(['meridian:starter', 'meridian:pro', 'meridian:ultra', 'office', 'reach:premium', 'drift:premium', 'citadel:premium']);
 /** THE LAW's prices (monthly, yearly, the yearly-per-month line), plus the extra mailbox. */
 const LAW_PRICES = new Set([
   '$9.99', '$99', '$8.25', '$16.99', '$169', '$14.08', '$29.99', '$299', '$24.92',
