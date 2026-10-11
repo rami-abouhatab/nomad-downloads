@@ -4,19 +4,19 @@
  * rest").
  *
  * Signed out it is "Sign in", which goes to account.nomad.ax with this page as `next`, so the
- * person lands back here. Signed in it is the person's squircle; it opens a Popover (nomad-design,
- * grown from the squircle) with who they are and the places of their account, and Sign out, which
- * passes through account.nomad.ax/signout and comes back here signed out.
+ * person lands back here. Signed in it is the person's squircle; it drops the house menu
+ * (nomad-design showMenu, as MeridianOS's bar and account.nomad.ax's header do; Rami, 2026-10-11:
+ * "a bit more minimal"): who is signed in as its quiet heading, the account's places as bare rows,
+ * then Sign out, which passes through account.nomad.ax/signout and comes back here signed out.
  *
  * Who is signed in comes from `nomad_who`, a cookie account.nomad.ax writes on the registrable
  * domain with only a name and an email (nomad-account session.ts `tellTheSite`). Nothing here can
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { useEffect, useRef, useState, type ReactElement } from 'react';
-import { Popover } from '@nd/controls/Popover';
+import { useEffect, useState, type ReactElement } from 'react';
+import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
 import { ACCOUNT, SIGN_IN, SIGN_UP } from '../data';
-import { Sym } from './kit';
 
 type Who = { n: string; e: string };
 
@@ -47,17 +47,26 @@ export function useWho(): Who | null {
   return who;
 }
 
-const PLACES: { label: string; path: string; glyph: Parameters<typeof Sym>[0]['name'] }[] = [
-  { label: 'Your Nomad account', path: '/', glyph: 'account' },
-  { label: 'Subscriptions', path: '/subscriptions', glyph: 'layers' },
-  { label: 'Security', path: '/security', glyph: 'shield' },
-  { label: 'Apps & downloads', path: '/apps', glyph: 'download' },
+const PLACES: { label: string; path: string }[] = [
+  { label: 'Your Nomad account', path: '/' },
+  { label: 'Subscriptions', path: '/subscriptions' },
+  { label: 'Security', path: '/security' },
+  { label: 'Apps & downloads', path: '/apps' },
 ];
+
+function openMenu(button: HTMLElement, who: Who) {
+  const box = button.getBoundingClientRect();
+  const items: MenuEntry[] = [
+    { label: who.e, heading: true },
+    ...PLACES.map((p) => ({ label: p.label, onSelect: () => location.assign(`${ACCOUNT}${p.path}`) })),
+    { label: 'Sign out', separatorBefore: true, onSelect: () => location.assign(withNext(`${ACCOUNT}/signout`)) },
+    { label: 'Use another account', onSelect: () => location.assign(`${ACCOUNT}/signout?next=${encodeURIComponent(withNext(SIGN_IN))}`) },
+  ];
+  showMenu(0, box.bottom + 6, items, { alignEnd: box.right, label: 'Your Nomad account' });
+}
 
 export function AccountMenu() {
   const who = useWho();
-  const [open, setOpen] = useState(false);
-  const button = useRef<HTMLButtonElement>(null);
 
   if (!who) {
     return (
@@ -69,45 +78,10 @@ export function AccountMenu() {
 
   return (
     <>
-      <button
-        ref={button}
-        type="button"
-        className="acm-face"
-        aria-label={`Your Nomad account, ${who.e}`}
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-      >
+      <button type="button" className="acm-face" aria-label={`Your Nomad account, ${who.e}`} aria-haspopup="menu" onClick={(e) => openMenu(e.currentTarget, who)}>
         {initial(who)}
       </button>
-      <Popover open={open} onClose={() => setOpen(false)} anchor={button} side="bottom" align="end" gap={10} width={300} className="acm" role="dialog">
-        {/* Focus lands on who you are (no ring), not on the first place (Popover data-autofocus). */}
-        <div className="acm-who" tabIndex={-1} data-autofocus>
-          <span className="acm-face acm-face-lg" aria-hidden="true">
-            {initial(who)}
-          </span>
-          <span className="acm-id">
-            {who.n ? <span className="acm-name">{who.n}</span> : null}
-            <span className="acm-mail">{who.e}</span>
-          </span>
-        </div>
-        <nav className="acm-places" aria-label="Your account">
-          {PLACES.map((p) => (
-            <a key={p.path} href={`${ACCOUNT}${p.path}`}>
-              <Sym name={p.glyph} size={18} />
-              <span>{p.label}</span>
-            </a>
-          ))}
-        </nav>
-        <div className="acm-foot">
-          <a href={`${ACCOUNT}/signout`} onClick={(e) => (e.currentTarget.href = withNext(`${ACCOUNT}/signout`))}>
-            Sign out
-          </a>
-          <a href={SIGN_IN} onClick={(e) => (e.currentTarget.href = `${ACCOUNT}/signout?next=${encodeURIComponent(withNext(SIGN_IN))}`)}>
-            Use another account
-          </a>
-        </div>
-      </Popover>
+      <MenuHost />
     </>
   );
 }

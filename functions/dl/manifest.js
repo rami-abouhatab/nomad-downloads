@@ -23,6 +23,8 @@ const json = (body, status = 200) =>
       // Short enough that a fresh release shows up while you are still
       // looking at the page, long enough to not re-ask on every reload.
       'Cache-Control': 'public, max-age=120',
+      // Public facts about public downloads; account.nomad.ax reads them for its Apps page.
+      'Access-Control-Allow-Origin': '*',
     },
   });
 
