@@ -9,9 +9,8 @@ import { Band, BandHead, Columns, FAQ, InMeridian, PageHero, PlanPair, ProductNa
 
 const QA = [
   { q: 'Is Reach free?', a: 'Yes, for everyone with a Nomad account: as many mail accounts as you have, chat, one-to-one calls, meetings up to 40 minutes and 10 people, events and people. Reach Premium adds more.' },
-  { q: 'Which mail accounts can I add?', a: 'Gmail and Outlook accounts, as many as you have, all in one app. With Reach Premium you can also have a mailbox at your own domain.' },
+  { q: 'Which mail accounts can I add?', a: 'As many as you have: Gmail, Outlook and Microsoft 365, iCloud, Yahoo, and your work email at any provider that offers IMAP. All in one app.' },
   { q: 'How long can meetings be?', a: 'Up to 40 minutes and 10 people on Reach, 4 hours and 50 people on Reach Premium, and 24 hours and 100 people on Meridian Ultra.' },
-  { q: 'How does mail at my own domain work?', a: 'Bring a domain you own and Reach sets up a mailbox on it, plus as many aliases as you want. The mailbox lives in Reach beside your other accounts, and works in your phone's mail app too. A second mailbox on the same domain is $1.99 a month.' },
 ];
 
 export default function ReachPage() {
@@ -55,7 +54,7 @@ export default function ReachPage() {
               {
                 title: 'Mail',
                 icon: 'mail',
-                body: 'Add as many Gmail and Outlook accounts as you have, and read them all in one inbox, or one at a time.',
+                body: 'Add every mail account you have, personal and work, and read them all in one inbox, or one at a time.',
                 visual: <RealShot name="reach-mail-4x3" ratio="4 / 3" alt="Mail in Reach: every inbox together, a thread open with its attachment, and the mailboxes beside it." />,
               },
               {
@@ -94,37 +93,27 @@ export default function ReachPage() {
         </Band>
 
         <Band id="premium" tone="mist" label="premium-title">
-          <BandHead id="premium-title" title="Choose your Reach." lede="Reach is free for everyone. Reach Premium is for people who meet a lot, and want mail at their own domain." />
+          <BandHead id="premium-title" title="Choose your Reach." lede="Reach is free for everyone. Reach Premium is for people who meet a lot." />
           <PlanPair
             free={{
               name: 'Reach',
               price: 'free',
               pitch: 'Everything you need to keep in touch.',
-              lines: ['As many **Gmail and Outlook** accounts as you have', 'Chat with anyone on Nomad', 'One-to-one voice and video calls', 'Meetings up to **40 minutes** and **10 people**', 'Events and people'],
+              lines: ['**Every mail account** you have, personal and work', 'Chat with anyone on Nomad', 'One-to-one voice and video calls', 'Meetings up to **40 minutes** and **10 people**', 'Events and people'],
               action: { label: 'Download Reach', href: '/download#reach' },
             }}
             paid={{
               name: 'Reach Premium',
               price: 'reach:premium',
-              pitch: 'Longer meetings. Your own address.',
+              pitch: 'Longer, bigger meetings.',
               lead: 'Everything in Reach, plus',
               lines: [
                 'Meetings up to **4 hours** and **50 people**',
                 'Meeting recordings',
                 'Scheduled send and snooze',
-                'Your own domain, with one mailbox and unlimited aliases',
-                'More mailboxes for $1.99 a month each',
               ],
               action: { label: 'Buy Reach Premium', buy: 'reach:premium' },
             }}
-          />
-        </Band>
-
-        <Band label="domain-title">
-          <BandHead
-            id="domain-title"
-            title="Mail at your own domain."
-            lede="Bring a domain you own and Reach sets up a mailbox on it, like you@yourname.com, plus as many aliases as you want: hello@, invoices@, anything@. It lives in Reach beside your other accounts."
           />
         </Band>
 

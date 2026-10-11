@@ -77,7 +77,7 @@ export const AX_PLANS: Plan[] = [
     lines: [
       '**512 GB** of storage',
       '**3 desks**',
-      'Reach Premium: meetings up to 4 hours and 50 people, recordings, your own mail domain',
+      'Reach Premium: meetings up to 4 hours and 50 people, and recordings',
       'Drift Premium: 10 GB for 7 days and device pairing',
       'Lock, Convert and Fonts',
       'Guest links',

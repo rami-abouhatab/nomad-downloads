@@ -19,7 +19,7 @@ const pro = <ProBadge plan="Pro" size="sm" />;
 const MORE: Item[] = [
   { title: 'Nomad Office', icon: 'document', body: 'Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs. Nothing extra to buy.' },
   { title: 'Polaris Browser', icon: 'globe', body: 'The browser is built in, and each desk keeps its own sign-ins, so work and home never mix.' },
-  { title: 'Reach', icon: 'mail', body: 'All your mail, chats and calls. Pro and Ultra add Reach Premium: longer meetings, recordings and your own mail domain.' },
+  { title: 'Reach', icon: 'mail', body: 'All your mail, chats and calls. Pro and Ultra add Reach Premium: longer, bigger meetings and recordings.' },
   { title: 'Drift', icon: 'send', body: 'Send any file with a link. Pro and Ultra add Drift Premium: bigger files, and sending straight to your phone.' },
   { title: 'Snapshots', icon: 'seekSnapshot', body: 'A saved photo of your desktop: layout, open apps and tabs. Jump back to it any time. Your files keep their own history.' },
   { title: 'File history', icon: 'clock', body: 'Go back to an earlier version of any file: 30 days on Starter, a year on Pro, forever on Ultra.' },

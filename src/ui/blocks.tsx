@@ -322,7 +322,6 @@ const ROWS: (
   { label: 'Reach', cells: ['Reach', 'Reach Premium', 'Reach Premium'] },
   { label: 'Meetings', cells: ['40 minutes, 10 people', '4 hours, 50 people', '24 hours, 100 people'] },
   { label: 'Meeting recordings', cells: [false, true, true] },
-  { label: 'Your own mail domain', cells: [false, '1 domain, 1 mailbox', '1 domain, 1 mailbox'] },
   { label: 'Drift', cells: ['Drift', 'Drift Premium', 'Drift Premium'] },
   { label: 'Largest file you can send', cells: ['2 GB, for 1 day', '10 GB, for 7 days', '50 GB, for 7 days'] },
   { label: 'Drift app and device pairing', cells: [false, true, true] },

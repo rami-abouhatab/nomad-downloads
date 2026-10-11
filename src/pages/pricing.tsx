@@ -52,7 +52,7 @@ const APPS: App[] = [
       {
         name: 'Reach Premium',
         price: 'reach:premium',
-        what: 'Meetings up to 4 hours and 50 people, recordings, scheduled send and snooze, and your own domain with one mailbox and unlimited aliases. Extra mailboxes are $1.99 a month each.',
+        what: 'Meetings up to 4 hours and 50 people, recordings, and scheduled send and snooze.',
         buy: { label: 'Buy Reach Premium', product: 'reach:premium' },
         more: '/reach',
       },

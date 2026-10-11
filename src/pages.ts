@@ -64,7 +64,7 @@ export const PAGES: PageMeta[] = [
     file: 'reach.html',
     title: 'Reach · Nomad',
     description:
-      'Reach puts your mail, chats and calls in one calm window. Free. Reach Premium adds longer meetings, recordings and mail at your own domain, from $4.99 a month.',
+      'Reach puts your mail, chats and calls in one calm window. Free. Reach Premium adds longer, bigger meetings and recordings, from $4.99 a month.',
   },
   {
     id: 'drift',

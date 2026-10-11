@@ -35,8 +35,8 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Reach:</strong> your messages, contacts and meetings, and recordings if you make them. If you connect Gmail or Outlook,
-            we keep the access Google or Microsoft gives us so Reach can read and send mail for you. If you set up mail at your own domain,
-            that mailbox is hosted for you by our email hosting partner.
+            we keep the access Google or Microsoft gives us so Reach can read and send mail for you. If you add a mail account
+            with its password (an app password for Gmail, or your work mail's), it is kept encrypted and used only to fetch and send that mail.
           </li>
           <li>
             <strong>Drift:</strong> the files you send, until shortly after their link expires.
@@ -92,9 +92,6 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Resend</strong> sends our emails.
-          </li>
-          <li>
-            <strong>Our email hosting partner</strong>, only if you set up mail at your own domain with Reach Premium. Ask us and we’ll name every provider we use.
           </li>
           <li>
             <strong>Google and Microsoft</strong>, only if you connect their mail, Google Drive or OneDrive.
