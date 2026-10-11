@@ -73,13 +73,13 @@ export default function DriftPage() {
                 title: 'A link, and a code for a phone.',
                 icon: 'link',
                 body: 'Drift hands you the link to copy, and a QR code any phone camera can scan to download the file there.',
-                visual: <RealShot name="drift-link-ready" ratio="16 / 10" alt="Drift with the link ready: Copy link, and a QR code to scan with a phone camera." />,
+                visual: <RealShot name="drift-link-ready-4x3" ratio="4 / 3" alt="Drift with the link ready: Copy link, and a QR code to scan with a phone camera." />,
               },
               {
                 title: 'The other end is just a page.',
                 icon: 'download',
                 body: 'Whoever you send it to opens the link in any browser and downloads the file, with nothing to install and no account.',
-                visual: <RealShot name="drift-web" ratio="16 / 10" alt="A Drift link opened in a browser: the file name and size, when the link expires, and Download." />,
+                visual: <RealShot name="drift-web-4x3" ratio="4 / 3" alt="A Drift link opened in a browser: the file name and size, when the link expires, and Download." />,
               },
             ]}
           />
@@ -114,7 +114,7 @@ export default function DriftPage() {
                 title: 'Straight to your phone. Or your other PC.',
                 icon: 'driftDevice',
                 body: 'The Drift app pairs your devices once, then sends to them directly. What is sent to you arrives as a notice, to take or to turn down. On your phone there is nothing to install: scan a QR code and it opens in the browser.',
-                visual: <RealShot name="drift-receive" ratio="16 / 10" alt="A Drift notice at the top of the screen: someone wants to send you a document, with Decline and Accept." />,
+                visual: <RealShot name="drift-receive-4x3" ratio="4 / 3" alt="A Drift notice at the top of the screen: someone wants to send you a document, with Decline and Accept." />,
               },
             ]}
           />

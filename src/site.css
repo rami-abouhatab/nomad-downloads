@@ -5227,17 +5227,50 @@ a.nm-btn.plan-cta {
   background: #ffffff;
 }
 
-/* One picture size on a page: a feature row's picture is the width of a tab's picture, and the
-   rows no longer swap sides ("left then right, left then right"); the words always lead on the
-   left, the picture on the right, as in the tabs. */
+/* The feature rows, in tasmimgroup.com/services' geometry (Rami, 2026-10-11: "the left right images
+   with content same as in this website but in our corners, just sizes and positioning like them"):
+   a 1536px column on twelve tracks with a 96px gap at full size; the words take five tracks and
+   the picture seven, at 4:3 (856 x 642 on a 1900px window); the two centred on each other; sides
+   alternating; 160px between rows. A tab's panel is a row too, so every picture on a page is one
+   size. Phones keep the one column above. */
 @media (min-width: 901px) {
-  .sys-chapter {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  .sys-chapters,
+  .sys-tabs {
+    max-width: 1536px;
+    margin-inline: auto;
   }
-}
 
-.sys-chapter.flip .sys-chapter-copy {
-  order: 0;
+  .sys-chapters {
+    gap: clamp(96px, 8.4vw, 160px);
+  }
+
+  .sys-chapter,
+  .sys-panel {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(40px, 5vw, 96px);
+    align-items: center;
+  }
+
+  .sys-chapter-copy,
+  .sys-panel-copy {
+    grid-column: span 5;
+    max-width: none;
+  }
+
+  .sys-chapter-visual,
+  .sys-panel-visual {
+    grid-column: span 7;
+  }
+
+  .sys-chapter.flip .sys-chapter-copy {
+    order: 2;
+  }
+
+  .sys-chapter-copy p,
+  .sys-panel-copy p {
+    font-size: clamp(16px, 1.05vw, 18px);
+    line-height: 1.62;
+  }
 }
 
 /* What follows the tabs starts a full rhythm below the picture, never on its edge. */

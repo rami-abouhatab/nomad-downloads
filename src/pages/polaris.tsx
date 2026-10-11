@@ -57,25 +57,25 @@ export default function PolarisPage() {
                 title: 'A new tab with nothing in the way.',
                 icon: 'globe',
                 body: 'A new tab opens on one search field and the sites you go to most, over a quiet page. Nothing to scroll past, nothing trying to sell you something.',
-                visual: <RealShot name="polaris-newtab" ratio="16 / 10" alt="A new tab in Polaris: one search field and five site shortcuts over the Polaris wordmark." />,
+                visual: <RealShot name="polaris-newtab-4x3" ratio="4 / 3" alt="A new tab in Polaris: one search field and five site shortcuts over the Polaris wordmark." />,
               },
               {
                 title: 'Find what you meant.',
                 icon: 'search',
                 body: 'Start typing and Polaris offers what you are after: a search, a tab you already have open, or a page from your history.',
-                visual: <RealShot name="polaris-suggest" ratio="16 / 10" alt="The Polaris address field open, suggesting a search, two open tabs and pages from history." />,
+                visual: <RealShot name="polaris-suggest-4x3" ratio="4 / 3" alt="The Polaris address field open, suggesting a search, two open tabs and pages from history." />,
               },
               {
                 title: 'Tabs on top, or down the side.',
                 icon: 'layers',
                 body: 'Keep your tabs along the top, or move them into a sidebar when there are a lot of them.',
-                visual: <RealShot name="polaris-sidebar" ratio="16 / 10" alt="Polaris with its tabs in a sidebar on the left of the page." />,
+                visual: <RealShot name="polaris-sidebar-4x3" ratio="4 / 3" alt="Polaris with its tabs in a sidebar on the left of the page." />,
               },
               {
                 title: 'Set up the way you browse.',
                 icon: 'settings',
                 body: 'Choose where the tabs go, whether the page sits flush to the window, and what stays in the toolbar.',
-                visual: <RealShot name="polaris-settings" ratio="16 / 10" alt="Polaris Settings, Appearance: where the tabs go, page edges set to Flush, and the toolbar buttons." />,
+                visual: <RealShot name="polaris-settings-4x3" ratio="4 / 3" alt="Polaris Settings, Appearance: where the tabs go, page edges set to Flush, and the toolbar buttons." />,
               },
             ]}
           />

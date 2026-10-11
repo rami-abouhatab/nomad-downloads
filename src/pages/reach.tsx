@@ -56,31 +56,31 @@ export default function ReachPage() {
                 title: 'Mail',
                 icon: 'mail',
                 body: 'Add as many Gmail and Outlook accounts as you have, and read them all in one inbox, or one at a time.',
-                visual: <RealShot name="reach-mail" ratio="16 / 10" alt="Mail in Reach: every inbox together, a thread open with its attachment, and the mailboxes beside it." />,
+                visual: <RealShot name="reach-mail-4x3" ratio="4 / 3" alt="Mail in Reach: every inbox together, a thread open with its attachment, and the mailboxes beside it." />,
               },
               {
                 title: 'Chat',
                 icon: 'send',
                 body: 'Message anyone on Nomad by their handle. Unread, groups, pinned and muted chats each have their place, with your recent calls beside them.',
-                visual: <RealShot name="reach-chatlist" ratio="16 / 10" alt="The chats in Reach: all chats, unread, groups, pinned and muted, and recent calls." />,
+                visual: <RealShot name="reach-chatlist-4x3" ratio="4 / 3" alt="The chats in Reach: all chats, unread, groups, pinned and muted, and recent calls." />,
               },
               {
                 title: 'Meetings',
                 icon: 'devices',
                 body: 'Meet with up to 10 people for up to 40 minutes, with a link anyone can open.',
-                visual: <RealShot name="reach-meetings" ratio="16 / 10" alt="Meetings in Reach, with New meeting and nothing scheduled yet." />,
+                visual: <RealShot name="reach-meetings-4x3" ratio="4 / 3" alt="Meetings in Reach, with New meeting and nothing scheduled yet." />,
               },
               {
                 title: 'Events',
                 icon: 'clock',
                 body: 'Your calendar beside your conversations, so the plan and the thread stay together.',
-                visual: <RealShot name="reach-calendar" ratio="16 / 10" alt="The calendar in Reach: a week of October with the month beside it." />,
+                visual: <RealShot name="reach-calendar-4x3" ratio="4 / 3" alt="The calendar in Reach: a week of October with the month beside it." />,
               },
               {
                 title: 'Your way',
                 icon: 'layers',
                 body: 'Choose which parts of Reach run along the top, in the order you use them, and how it looks.',
-                visual: <RealShot name="reach-settings" ratio="16 / 10" alt="Reach Settings: the theme, and the tabs along the top, each one switched on." />,
+                visual: <RealShot name="reach-settings-4x3" ratio="4 / 3" alt="Reach Settings: the theme, and the tabs along the top, each one switched on." />,
               },
             ]}
           />
