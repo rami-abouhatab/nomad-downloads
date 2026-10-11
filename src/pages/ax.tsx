@@ -75,7 +75,7 @@ export default function AxPage() {
           { label: 'Overview', href: '/meridian', current: true },
           { label: 'Plans', href: '/meridian#plans' },
           { label: 'Questions', href: '/meridian#questions' },
-          { label: 'Download', href: '/download#ax' },
+          { label: 'Download', href: '/download#meridian' },
         ],
         cta: { label: 'Buy', href: '/meridian#plans' },
         tone: 'dark',
@@ -170,7 +170,7 @@ export default function AxPage() {
 
         <Band label="where-title">
           <BandHead id="where-title" title="Runs on the computer you have." lede="Install it once, sign in, and your desk is there." />
-          <Platforms anchor="ax" />
+          <Platforms anchor="meridian" />
         </Band>
 
         <FAQ items={QA} />

@@ -103,7 +103,7 @@ export default function CitadelPage() {
         </Band>
 
         <InMeridian
-          id="ax-title"
+          id="meridian-title"
           title="Built into your desk."
           body="Every MeridianOS desk can lock folders and files with Citadel, and Meridian Pro and Ultra include Citadel Premium on the desk. The Citadel app on its own, for a computer outside MeridianOS, has its own subscription."
         />

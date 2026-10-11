@@ -16,9 +16,12 @@ export const SIGN_UP = `${ACCOUNT}/signup`;
 export const MANAGE_PLAN = 'https://billing.nomad.ax/';
 export const DRIFT_WEB = 'https://drift.nomad.ax';
 
-/** Where a buy button goes: the account portal's checkout. */
+/**
+ * Where a buy button goes: the account portal's checkout. Meridian is Meridian in every address
+ * (Rami, 2026-10-11): `ax:` is billing's key, a link says `meridian:starter`.
+ */
 export const checkout = (product: ProductId, period: Period) =>
-  `${ACCOUNT}/checkout?product=${product}&period=${period}`;
+  `${ACCOUNT}/checkout?product=${product.replace(/^ax:/, 'meridian:')}&period=${period}`;
 
 export type Price = { monthly: string; yearly: string; perMonthYearly: string };
 

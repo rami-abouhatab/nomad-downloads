@@ -168,8 +168,8 @@ export default function PricingPage() {
           actions={<PeriodSwitch />}
         />
 
-        <Band id="ax" label="ax-title">
-          <BandHead id="ax-title" title="MeridianOS plans." lede="Every plan is the full MeridianOS desktop with Nomad Office, Polaris Browser, Reach, Drift and Citadel inside. Start with 14 days of Meridian Starter, free." />
+        <Band id="meridian" label="meridian-title">
+          <BandHead id="meridian-title" title="MeridianOS plans." lede="Every plan is the full MeridianOS desktop with Nomad Office, Polaris Browser, Reach, Drift and Citadel inside. Start with 14 days of Meridian Starter, free." />
           <div className="plans">
             {AX_PLANS.map((p) => (
               <PlanCard key={p.id} plan={p} />

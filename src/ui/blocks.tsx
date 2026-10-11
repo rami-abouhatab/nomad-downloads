@@ -200,7 +200,7 @@ export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
     <article className={plan.lit ? 'plan lit' : 'plan'} aria-labelledby={`plan-${plan.id.replace(':', '-')}`}>
       <div className="plan-head">
         <p className="plan-note">{plan.note}</p>
-        <h3 className="plan-name" id={`plan-${plan.id.replace(':', '-')}`}>
+        <h3 className="plan-name" id={`plan-${plan.id.replace(/^ax:/, 'meridian:').replace(':', '-')}`}>
           {plan.name}
         </h3>
         <p className="plan-pitch">{plan.pitch}</p>

@@ -116,7 +116,7 @@ export default function PolarisPage() {
         </Band>
 
         <InMeridian
-          id="ax-title"
+          id="meridian-title"
           title="Already on your desk."
           body="Polaris is the browser inside every MeridianOS desk. Each desk keeps its own sign-ins, so your work accounts stay on your work desk."
         />

@@ -135,7 +135,7 @@ export default function DownloadPage() {
           {PRODUCTS.map((p) => {
             const info = manifest?.products?.[p.id];
             return (
-              <article className="dl-product" id={p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
+              <article className="dl-product" id={p.id === 'ax' ? 'meridian' : p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
                 <ProductMark product={p.id} size={64} />
                 <div className="dl-copy">
                   <h2 id={`dl-${p.id}`} className="title">

@@ -124,7 +124,7 @@ export default function DriftPage() {
         </Band>
 
         <InMeridian
-          id="ax-title"
+          id="meridian-title"
           title="Built into your desk."
           body="Every MeridianOS desk can send with Drift. Meridian Pro and Ultra include Drift Premium on the desk, and Meridian Ultra is the only way to send files up to 50 GB."
         />

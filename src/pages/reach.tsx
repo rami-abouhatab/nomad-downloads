@@ -129,7 +129,7 @@ export default function ReachPage() {
         </Band>
 
         <InMeridian
-          id="ax-title"
+          id="meridian-title"
           title="Reach in MeridianOS."
           body="Reach is on every MeridianOS desk. Meridian Pro and Ultra include Reach Premium, and Ultra stretches meetings to 24 hours and 100 people."
         />

@@ -120,7 +120,7 @@ export default function OfficePage() {
         </Band>
 
         <InMeridian
-          id="ax-title"
+          id="meridian-title"
           title="Already in every MeridianOS plan."
           body="Every MeridianOS desk comes with Nomad Office installed. Buy it on its own only if you want it outside MeridianOS."
         />
