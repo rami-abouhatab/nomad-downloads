@@ -154,7 +154,7 @@ export default function AxPage() {
           </p>
         </Band>
 
-        <Band id="plans" tone="mist" label="plans-title">
+        <Band id="plans" tone="mist" label="plans-title" className="plans-band">
           <BandHead id="plans-title" title="Pick the size of your desk." lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desks, and the extras.">
             <PeriodSwitch />
           </BandHead>
