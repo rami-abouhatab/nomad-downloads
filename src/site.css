@@ -381,7 +381,9 @@ img.icon {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--site-nav-gap);
-  max-width: 1600px;
+  /* To the window's edges (Rami, 2026-10-12: "logo and sign in far edge"), a small gutter only. */
+  max-width: none;
+  padding-inline: clamp(16px, 1.6vw, 28px);
   height: var(--site-bar);
 }
 
