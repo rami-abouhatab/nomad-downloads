@@ -344,6 +344,39 @@ function Footer({ page }: { page: PageId }) {
   );
 }
 
+/**
+ * Back to the top (Rami, 2026-10-12): a squircle in the bottom-right corner, there once the first
+ * screen has scrolled away. Nothing listens to scroll: an IntersectionObserver watches a marker a
+ * screen tall at the top of the page, and the button comes and goes on opacity and transform.
+ */
+function ToTop() {
+  const mark = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = mark.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setShown(!e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const up = () => {
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' });
+    document.getElementById('main')?.focus({ preventScroll: true });
+  };
+  return (
+    <>
+      <div ref={mark} className="totop-mark" aria-hidden="true" />
+      <button type="button" className="totop" data-shown={shown || undefined} aria-label="Back to top" tabIndex={shown ? 0 : -1} onClick={up}>
+        {/* Drawn here, not through Sym: the site's symbol route drew nothing for this one. */}
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.5 14.4L10.71 9.18A2 2 0 0 1 13.29 9.18L19.5 14.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+    </>
+  );
+}
+
 export function Layout({ page, local, children }: { page: PageId; local?: LocalNavProps; children: ReactNode }) {
   return (
     <PeriodProvider>
@@ -354,6 +387,7 @@ export function Layout({ page, local, children }: { page: PageId; local?: LocalN
       {local && <LocalNav {...local} />}
       <main id="main">{children}</main>
       <Footer page={page} />
+      <ToTop />
     </PeriodProvider>
   );
 }
