@@ -2,6 +2,10 @@ import { LinkButton, MeridianLockup } from './kit';
 import { TryMeridian } from './TryMeridian';
 import { PRICES } from '../data';
 
+/** Parked (Rami, 2026-10-12: "remove the Try it right here, or park it so I can get it back"). The
+ *  button and the whole Try flow (TryMeridian.tsx) are kept; true brings it back. */
+const SHOW_TRY = false;
+
 /**
  * MeridianOS's opening (Rami, 2026-10-10): an arc of sunlight along a planet's edge, and over it
  * the words set the way apple.com sets a product's first screen: the mark and the product's name, small; the
@@ -38,9 +42,11 @@ export function MeridianHero() {
           <p className="mxh-sub mxh-in" style={{ ['--d' as string]: '1850ms' }}>
             Your whole desk, on any computer you sign in to.
           </p>
-          <div className="mxh-try mxh-in" style={{ ['--d' as string]: '2050ms' }}>
-            <TryMeridian />
-          </div>
+          {SHOW_TRY ? (
+            <div className="mxh-try mxh-in" style={{ ['--d' as string]: '2050ms' }}>
+              <TryMeridian />
+            </div>
+          ) : null}
         </div>
 
         {/* The price stands on the planet, under the arc (Rami, 2026-10-10: "switch places"). */}
