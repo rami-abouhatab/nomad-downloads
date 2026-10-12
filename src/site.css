@@ -55,7 +55,7 @@
   --site-narrow: 760px;
   --site-gutter: var(--space-base);
   --site-section: calc(var(--space-xxl) * 2);
-  --site-bar: 44px;
+  --site-bar: 40px; /* thinner (Rami, 2026-10-12) */
   --site-nav-gap: clamp(20px, 2.6vw, 36px);
 
 }
@@ -374,13 +374,26 @@ img.icon {
 }
 
 .gnav-row {
-  /* One centred row, equal gaps between every item: the camel, the links,
-     Sign in and the menu (Rami, 2026-10-08). */
-  display: flex;
+  /* The camel at the far left, the person at the far right, the links centred between them
+     (Rami, 2026-10-12, after microsoft.com). Three columns, the outer two equal, so the links sit
+     on the bar's true centre. Wider than the page's column, as theirs is. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
   gap: var(--site-nav-gap);
+  max-width: 1600px;
   height: var(--site-bar);
+}
+
+.gnav-row > .brand {
+  justify-self: start;
+}
+
+.gnav-row .acm-face,
+.gnav-row .gnav-signin {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
 }
 
 .gnav-row > .gnav-end {
@@ -415,8 +428,10 @@ img.icon {
   display: inline-block;
   padding: var(--space-xs) 0;
   color: var(--text-secondary);
-  font-size: var(--site-t-small);
-  font-weight: 500;
+  /* Apple's and Microsoft's scale (Rami, 2026-10-12: "the texts in the header smaller, their same
+     scale"): 12px, regular. */
+  font-size: 12px;
+  font-weight: 400;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -430,19 +445,25 @@ img.icon {
 
 .gnav-links a[aria-current='page'] {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .gnav-end {
   display: flex;
   align-items: center;
   gap: var(--space-base);
-  margin-left: var(--space-sm);
-  padding-left: var(--space-xl);
-  border-left: var(--hairline) solid var(--site-line);
 }
 
+/* Signed out, the person's place is the same circle with a person in it, at every width (Rami,
+   2026-10-12: "don't put a Sign in text, the same circle with a person inside"). */
 .gnav-signin {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #1d1d1f;
   color: var(--text-primary);
 }
 
@@ -627,9 +648,12 @@ img.icon {
 }
 
 
+.gnav-signin-word {
+  display: none;
+}
+
 @media (max-width: 1040px) {
-  .gnav-links,
-  .gnav-signin-word {
+  .gnav-links {
     display: none;
   }
 
@@ -659,31 +683,6 @@ img.icon {
     grid-row: 1;
   }
 
-  .gnav-row .acm-face,
-  .gnav-row .gnav-signin {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: end;
-  }
-
-  /* Signed out, the person's place is an empty circle that goes to sign in. */
-  .gnav-signin {
-    display: inline-grid;
-    place-items: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.14);
-    color: var(--text-primary);
-  }
-}
-
-/* The circle is for phones only; a wide bar says "Sign in" in words. */
-@media (min-width: 1041px) {
-  .gnav-signin-face {
-    display: none;
-  }
 }
 
 /* ── Product bar (sticks on product pages) ────────────────────────────── */
@@ -1965,11 +1964,13 @@ a.nm-btn.plan-cta {
      laptop's shadow, where the picture is already 99% white (it ends at 42.39vw:
      46.89vw tall, lifted 4.5vw), and the page's white continues with no
      edge (Rami, 2026-10-10: "I see a faint border"). */
+  /* Shorter (Rami, 2026-10-12: "make the hero smaller vertically"): 2.5vw more of the empty sky is
+     lifted away above the laptop, and the stage ends at 38vw, still under its shadow. */
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0) calc(41vw - 2.6vw), #ffffff calc(41vw - 1px)) no-repeat,
+    linear-gradient(180deg, rgb(255 255 255 / 0) calc(38vw - 2.6vw), #ffffff calc(38vw - 1px)) no-repeat,
     #ffffff url('/assets/hero/meridian-hero.webp') no-repeat;
-  background-size: 100% 41vw, 100% auto;
-  background-position: 0 0, center calc(-4.5vw);
+  background-size: 100% 38vw, 100% auto;
+  background-position: 0 0, center calc(-7vw);
 }
 
 .stage-card {
@@ -2162,7 +2163,7 @@ a.nm-btn.plan-cta {
        apple.com and microsoft.com end their heroes early. */
     /* The picture's own proportion at every width: capped at 900px it ended before the picture's
        fade on screens past ~2200px wide, cutting the light off flat (Rami, 2026-10-11, a 27" screen). */
-    min-height: 41vw;
+    min-height: 38vw;
     align-content: center;
     justify-items: start;
     padding-block: clamp(32px, 4vw, 64px) clamp(24px, 3vw, 48px);
@@ -5542,9 +5543,10 @@ a.nm-btn.plan-cta {
   border: 0;
   border-radius: 14px;
   corner-shape: squircle;
-  background: #ffffff;
-  color: #1d1d1f;
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12), 0 4px 14px rgb(0 0 0 / 0.08);
+  /* Black, white arrow (Rami, 2026-10-12). */
+  background: #1d1d1f;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.16);
   cursor: pointer;
   opacity: 0;
   transform: translateY(8px);
@@ -5557,6 +5559,14 @@ a.nm-btn.plan-cta {
   pointer-events: auto;
 }
 .totop:hover {
+  background: #000000;
+}
+/* Over a black section it turns white (Layout.tsx ToTop): one colour switch, not an animation. */
+.totop[data-on-dark] {
+  background: #ffffff;
+  color: #1d1d1f;
+}
+.totop[data-on-dark]:hover {
   background: #f5f5f7;
 }
 .totop:active {

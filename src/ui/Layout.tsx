@@ -352,6 +352,61 @@ function Footer({ page }: { page: PageId }) {
 function ToTop() {
   const mark = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
+  const [onDark, setOnDark] = useState(false);
+  /* Black on the white pages, white over a black section (Rami, 2026-10-12: "make it adaptive; on
+     the Meridian page it's black, so it must be white"). Which sections are dark is read once, after
+     the page has painted; then an IntersectionObserver watches only the band the button sits in, so
+     nothing is read while the page scrolls. */
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    let io: IntersectionObserver | null = null;
+    const start = window.setTimeout(() => {
+      /* Every painted surface tall enough to sit under the button, with how deep it is: the
+         deepest one under the button is the colour it stands on. Transparent ones are skipped,
+         so a section with no colour of its own reads as its parent's (the Meridian page is black
+         on a wrapper, its sections are clear). */
+      const tone = (el: Element): 'dark' | 'light' | null => {
+        const m = getComputedStyle(el).backgroundColor.match(/[\d.]+/g);
+        if (!m || (m[3] !== undefined && Number(m[3]) < 0.5)) return null;
+        const [r, g, b] = m.slice(0, 3).map(Number);
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b < 90 ? 'dark' : 'light';
+      };
+      const depth = (el: Element) => {
+        let d = 0;
+        for (let p = el.parentElement; p; p = p.parentElement) d++;
+        return d;
+      };
+      const base = tone(document.body) ?? 'light';
+      const surfaces = new Map<Element, { dark: boolean; depth: number }>();
+      for (const el of document.querySelectorAll('body > *, main, main *, footer')) {
+        if ((el as HTMLElement).offsetHeight < 120) continue;
+        const t = tone(el);
+        if (t) surfaces.set(el, { dark: t === 'dark', depth: depth(el) });
+      }
+      const under = new Set<Element>();
+      const settle = () => {
+        let top: { dark: boolean; depth: number } | null = null;
+        for (const el of under) {
+          const s = surfaces.get(el)!;
+          if (!top || s.depth > top.depth) top = s;
+        }
+        setOnDark(top ? top.dark : base === 'dark');
+      };
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) e.isIntersecting ? under.add(e.target) : under.delete(e.target);
+          settle();
+        },
+        { rootMargin: `-${Math.max(0, window.innerHeight - 70)}px 0px -46px 0px` },
+      );
+      surfaces.forEach((_, el) => io!.observe(el));
+      settle();
+    }, 600);
+    return () => {
+      window.clearTimeout(start);
+      io?.disconnect();
+    };
+  }, []);
   useEffect(() => {
     const el = mark.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
@@ -367,7 +422,7 @@ function ToTop() {
   return (
     <>
       <div ref={mark} className="totop-mark" aria-hidden="true" />
-      <button type="button" className="totop" data-shown={shown || undefined} aria-label="Back to top" tabIndex={shown ? 0 : -1} onClick={up}>
+      <button type="button" className="totop" data-shown={shown || undefined} data-on-dark={onDark || undefined} aria-label="Back to top" tabIndex={shown ? 0 : -1} onClick={up}>
         {/* Drawn here, not through Sym: the site's symbol route drew nothing for this one. */}
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4.5 14.4L10.71 9.18A2 2 0 0 1 13.29 9.18L19.5 14.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
