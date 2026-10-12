@@ -24,7 +24,9 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 /** A product as the download URLs say it: MeridianOS is `meridian`, never `ax` (Rami, 2026-10-11). */
 const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
 
-const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode }[] = [
+/* `web`: the app installs from its own site, no .exe (Rami, 2026-10-12, Reach and Drift). Its button
+   opens the site with ?install=1, which offers the browser's Install. */
+const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode; web?: string }[] = [
   {
     id: 'ax',
     name: 'MeridianOS',
@@ -42,9 +44,11 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     name: 'Reach',
     short: 'Reach',
     what: 'Mail, chat and calls, together.',
+    web: 'https://reach.nomad.ax/?install=1',
     need: (
       <>
-        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more. Or use it in your browser: <a href="https://reach.nomad.ax">reach.nomad.ax</a>.
+        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more. It installs from your browser, with its own window and
+        taskbar icon, and is always the newest version.
       </>
     ),
   },
@@ -53,6 +57,7 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     name: 'Drift',
     short: 'Drift',
     what: 'The Drift app, for sending straight to your devices.',
+    web: `${DRIFT_WEB}/?install=1`,
     need: (
       <>
         Needs <a href="/drift#premium">Drift Premium</a>. To send a link, no download: <a href={DRIFT_WEB}>drift.nomad.ax</a>.
@@ -146,10 +151,18 @@ export default function DownloadPage() {
                   </h2>
                   <p className="body">{p.what}</p>
                   <p className="small">{p.need}</p>
-                  {info && <p className="dl-version small">{info.version ? `Version ${info.version}` : 'Not released yet'}</p>}
+                  {info && !p.web && <p className="dl-version small">{info.version ? `Version ${info.version}` : 'Not released yet'}</p>}
                 </div>
                 <div className="dl-builds">
-                  {ARCH.map((a) => {
+                  {p.web ? (
+                    <a className="dl match" href={p.web}>
+                      <Sym name="download" size={20} className="dl-glyph" />
+                      <span className="dl-body">
+                        <span className="dl-name">Install {p.short}</span>
+                        <span className="dl-meta">From your browser · any computer</span>
+                      </span>
+                    </a>
+                  ) : ARCH.map((a) => {
                     const build = info?.builds?.[a.id];
                     const pending = Boolean(info) && !build?.url;
                     const match = !pending && Boolean(build?.url) && arch === a.id;

@@ -43,7 +43,7 @@ export default function ReachPage() {
               <More href="https://reach.nomad.ax">Use Reach on the web</More>
             </>
           }
-          note="Free for everyone with a Nomad account. On Windows, or in your browser at reach.nomad.ax."
+          note="Free for everyone with a Nomad account. Install it from your browser, or use it at reach.nomad.ax."
           visual={<RealShot name="reach-conversation" ratio="16 / 10" eager alt="Reach with a chat open: two people agreeing to meet at three, the chats listed beside it." />}
         />
 
