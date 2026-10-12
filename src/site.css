@@ -5080,28 +5080,25 @@ a.nm-btn.plan-cta {
   top: clamp(10px, 2vh, 22px);
   bottom: clamp(10px, 2vh, 22px);
   overflow: hidden;
+  /* Round, not squircle (Rami, 2026-10-12: "corners????"): the desk inside is its own GPU layer,
+     and Chrome clips a composited child to a ROUND radius whatever corner-shape says, so a
+     squircle frame left slivers of the desk outside its corners. */
   border-radius: clamp(14px, 1.4vw, 22px);
-  corner-shape: squircle;
   background: #000000;
   box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 40px 120px rgb(0 0 0 / 0.6);
-  opacity: 0;
-  transform: translate(var(--tx, 0), var(--ty, 40vh)) scale(var(--s, 0.1));
-  transition:
-    transform 560ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 200ms ease 300ms;
-  will-change: transform, opacity;
+  /* The motion is Grow's (TryMeridian.tsx): WAAPI on transform and opacity, nothing here. */
+}
+
+/* What Grow fades in once the window has grown enough not to show it stretched. */
+.tm-inner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .tm-layer.is-open .tm-scrim {
   opacity: 1;
-}
-
-.tm-layer.is-open .tm-window {
-  opacity: 1;
-  transform: none;
-  transition:
-    transform 620ms cubic-bezier(0.2, 0.9, 0.25, 1),
-    opacity 140ms ease;
 }
 
 .tm-bar {
@@ -5176,9 +5173,7 @@ a.nm-btn.plan-cta {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tm-scrim,
-  .tm-window,
-  .tm-layer.is-open .tm-window {
+  .tm-scrim {
     transition: none;
   }
 }

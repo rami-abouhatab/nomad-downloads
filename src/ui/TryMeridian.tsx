@@ -15,6 +15,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useGrowFrom } from '@nd/controls/Grow';
 import { LinkButton } from './kit';
 
 const DESK = import.meta.env.DEV ? 'http://127.0.0.1:5173/#demo' : 'https://desk.nomad.ax/#demo';
@@ -23,6 +24,12 @@ export function TryMeridian({ className }: { className?: string }) {
   const button = useRef<HTMLButtonElement>(null);
   const layer = useRef<HTMLDivElement>(null);
   const frameBox = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLDivElement>(null);
+  /* Meridian's own window motion (Rami, 2026-10-12: "open the try window like Meridian windows
+     open"): nomad-design's Grow, the engine the desk's windows and sheets use. It pours out of the
+     button on the house overshoot, the content fades in from 40% of the clock, and on close the
+     window stays solid while it is drawn back into the button. */
+  const grower = useGrowFrom(frameBox, { content: inner, fadeAt: 0.92 });
   const [host, setHost] = useState<HTMLElement | null>(null);
   useEffect(() => setHost(document.body), []);
 
@@ -33,7 +40,6 @@ export function TryMeridian({ className }: { className?: string }) {
     if (!b || !l || !box) return;
     let frame: HTMLIFrameElement | null = null;
     let warmed = false;
-    let closing = 0;
 
     const warm = () => {
       if (warmed) return;
@@ -44,18 +50,7 @@ export function TryMeridian({ className }: { className?: string }) {
       document.head.append(link);
     };
 
-    /* The window grows from the button. Its resting box comes from layout (offsets ignore its
-       transform; the layer is fixed at the viewport's corner, so they are viewport coordinates). */
-    const aim = () => {
-      const r = b.getBoundingClientRect();
-      const w = { left: box.offsetLeft, top: box.offsetTop, width: box.offsetWidth, height: box.offsetHeight };
-      box.style.setProperty('--tx', `${r.left + r.width / 2 - (w.left + w.width / 2)}px`);
-      box.style.setProperty('--ty', `${r.top + r.height / 2 - (w.top + w.height / 2)}px`);
-      box.style.setProperty('--s', String(Math.max(r.width / w.width, 0.04)));
-    };
-
     const open = () => {
-      clearTimeout(closing);
       if (!frame) {
         frame = document.createElement('iframe');
         frame.title = 'Meridian, the real desk';
@@ -67,17 +62,15 @@ export function TryMeridian({ className }: { className?: string }) {
       const bar = document.querySelector('.gnav')?.getBoundingClientRect().bottom ?? 0;
       l.style.setProperty('--tm-top', `${Math.max(0, Math.round(bar))}px`);
       l.hidden = false;
-      aim();
-      void box.offsetWidth; // the start state is committed before the class moves it
       l.classList.add('is-open');
-      window.setTimeout(() => frame?.focus(), 620);
+      void grower.grow(b.getBoundingClientRect());
+      window.setTimeout(() => frame?.focus(), 260);
     };
 
     const close = () => {
       if (!l.classList.contains('is-open')) return;
-      aim();
       l.classList.remove('is-open');
-      closing = window.setTimeout(() => (l.hidden = true), 560);
+      void grower.absorb(b.getBoundingClientRect()).then((landed) => landed && (l.hidden = true));
       b.focus({ preventScroll: true });
     };
 
@@ -101,12 +94,13 @@ export function TryMeridian({ className }: { className?: string }) {
       l.removeEventListener('wheel', onWheel);
       document.removeEventListener('keydown', onKey);
     };
-  }, [host]);
+  }, [host, grower]);
 
   const windowLayer = (
     <div className="tm-layer" ref={layer} hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label="Meridian, the real desk">
       <div className="tm-scrim" />
       <div className="tm-window" ref={frameBox}>
+        <div className="tm-inner" ref={inner}>
         <div className="tm-bar">
           <span className="tm-name">Meridian</span>
           <span className="tm-note">A demo desk. Nothing you do here is saved.</span>
@@ -120,6 +114,7 @@ export function TryMeridian({ className }: { className?: string }) {
           </button>
         </div>
         <div className="tm-screen" />
+        </div>
       </div>
     </div>
   );
