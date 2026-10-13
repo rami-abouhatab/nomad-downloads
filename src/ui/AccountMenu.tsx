@@ -109,7 +109,7 @@ function Ink({ letter, className }: { letter: string; className: string }) {
       el.style.transform = `translateX(${((m.width - (m.actualBoundingBoxRight - m.actualBoundingBoxLeft)) / 2 - m.actualBoundingBoxLeft).toFixed(2)}px)`;
     };
     place();
-    void document.fonts.ready.then(place);
+    void document.fonts?.ready.then(place);
     return () => void (live = false);
   }, [letter]);
   return (
