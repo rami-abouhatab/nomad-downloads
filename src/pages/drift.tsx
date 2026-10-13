@@ -42,7 +42,7 @@ export default function DriftPage() {
           layout="center"
           eyebrow={<ProductName product="drift" name="Drift" />}
           title="Send it with a link."
-          lede="Drop a file, get a link, send it to anyone. Drift works right in your browser with your free Nomad account, with nothing to install. Files up to 2 GB, links that last a day. Free."
+          lede="Drop a file, get a link, send it to anyone. Drift works right in your browser with your free Nomad account, with nothing to install. Up to 2 GB per link, kept for a day. Free."
           actions={
             <>
               <LinkButton href={DRIFT_WEB} variant="primary" hero>
@@ -61,7 +61,7 @@ export default function DriftPage() {
             numbered
             align="center"
             items={[
-              { title: 'Drop the file', body: 'Open drift.nomad.ax and drop in anything up to 2 GB.' },
+              { title: 'Drop the file', body: 'Open drift.nomad.ax and drop in up to 2 GB per link.' },
               { title: 'Copy the link', body: 'Drift uploads it and hands you a link. Send it however you like.' },
               { title: 'They download it', body: 'Whoever has the link can download the file for a day. Then it is gone.' },
             ]}
@@ -93,7 +93,7 @@ export default function DriftPage() {
             heads={['Drift', 'Drift Premium']}
             rows={[
               { label: 'Price', cells: ['Free', <PriceText key="p" product="drift:premium" />] },
-              { label: 'Largest file', cells: ['2 GB', '10 GB'] },
+              { label: 'Per link', cells: ['2 GB', '10 GB'] },
               { label: 'Links last', cells: ['1 day', '7 days'] },
               { label: 'Send from your browser', cells: [<Sym key="a" name="check" size={18} />, <Sym key="b" name="check" size={18} />] },
               { label: 'The Drift app for your PC', cells: ['—', <Sym key="c" name="check" size={18} />] },
@@ -126,7 +126,7 @@ export default function DriftPage() {
         <InMeridian
           id="meridian-title"
           title="Built into your desk."
-          body="Every MeridianOS desk can send with Drift. Meridian Pro and Ultra include Drift Premium on the desk, and Meridian Ultra is the only way to send files up to 50 GB."
+          body="Every MeridianOS desk can send with Drift. Meridian Pro and Ultra include Drift Premium on the desk, and Meridian Ultra is the only way to send up to 50 GB per link."
         />
       </div>
     </Layout>

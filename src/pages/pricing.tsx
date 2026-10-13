@@ -67,18 +67,18 @@ const APPS: App[] = [
       {
         name: 'Drift',
         price: 'free',
-        what: 'Send from your browser: files up to 2 GB, links that last a day.',
+        what: 'Send from your browser: up to 2 GB per link, kept for a day.',
         get: { label: 'Send a file', href: DRIFT_WEB },
       },
       {
         name: 'Drift Premium',
         price: 'drift:premium',
-        what: 'The Drift app and device pairing, to send straight to your phone or another PC. Files up to 10 GB, links that last 7 days.',
+        what: 'The Drift app and device pairing, to send straight to your phone or another PC. Up to 10 GB per link, kept for 7 days.',
         buy: { label: 'Buy Drift Premium', product: 'drift:premium' },
         more: '/drift',
       },
     ],
-    inAx: 'Drift is on every MeridianOS desk. Meridian Pro and Ultra include Drift Premium on the desk, and Ultra sends up to 50 GB.',
+    inAx: 'Drift is on every MeridianOS desk. Meridian Pro and Ultra include Drift Premium on the desk, and Ultra sends up to 50 GB per link.',
   },
   {
     id: 'citadel',
