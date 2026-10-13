@@ -5520,6 +5520,12 @@ a.nm-btn.plan-cta {
   font-family: inherit;
   cursor: pointer;
 }
+/* The letter (AccountMenu.tsx Ink): trimmed to cap height and baseline, ink centred across by measurement. */
+.acm-face-ink {
+  display: block;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+}
 
 
 /* Back to the top (Layout.tsx ToTop): a white squircle in the bottom-right corner, there once the
