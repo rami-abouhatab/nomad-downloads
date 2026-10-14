@@ -96,9 +96,9 @@ Served by **Cloudflare Pages**, project `nomad-downloads`, by direct upload:
 nothing deploys on push. The domains (`nomad.ax`, `www`, `get`, `guest`, and
 the older `bynomad.co` hosts) are attached to that project in Cloudflare.
 
-1. Rebuild `/desk` if the shell changed, from nomad-shell:
-
-       npx vite build --mode web --outDir ../nomad-site/desk
+1. `/desk` is not part of this site any more: it redirects to the guest desk at
+   desk.nomad.ax (`public/_redirects`), which deploys from nomad-shell
+   (`cloudflare/desk/stage-desk.mjs`, project `nomad-desk`).
 
 2. Build and check. The build stages `public/` (assets, `/g`, `_headers`) and
    copies `desk/` into `dist/`:

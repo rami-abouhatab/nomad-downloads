@@ -1,5 +1,5 @@
 // Builds nomad.ax into dist/: every page prerendered to static HTML, each
-// hydrated by its own small entry, plus /g and /desk staged in.
+// hydrated by its own small entry, plus /g staged in.
 //
 //   npm run build          (typecheck, then this)
 //
@@ -8,12 +8,12 @@
 //    its CSS.
 // 2. Vite builds src/server.tsx for Node, and every page is rendered once
 //    with react-dom/server into dist/<file> (meridian.html is served at /meridian).
-// 3. /g comes through public/; /desk (the shell's web build, committed here)
-//    is copied in. The /dl functions stay in ./functions, where wrangler
-//    compiles them from at deploy time (see README).
+// 3. /g comes through public/. /desk is not built here any more: it sends to the guest desk at
+//    desk.nomad.ax (public/_redirects, 2026-10-14), so the shell is never copied in twice. The /dl
+//    functions stay in ./functions, where wrangler compiles them from at deploy time (see README).
 // 4. It prints each page's JS and CSS, raw and gzipped.
 import { build } from 'vite';
-import { cpSync, existsSync, readFileSync, readdirSync, rmSync, writeFileSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, rmSync, writeFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
@@ -108,11 +108,6 @@ for (const meta of PAGES) {
 
 rmSync(join(DIST, '.vite'), { recursive: true, force: true });
 
-if (existsSync(join(ROOT, 'desk', 'index.html'))) {
-  cpSync(join(ROOT, 'desk'), join(DIST, 'desk'), { recursive: true });
-} else {
-  console.warn('warning: desk/ has no index.html — rebuild it in nomad-shell before deploying (see README).');
-}
 
 console.log(`Prerendered ${PAGES.length} pages into dist/.`);
 console.table(rows);

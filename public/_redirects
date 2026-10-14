@@ -2,3 +2,9 @@
 /ax /meridian 301
 /ax.html /meridian 301
 /ax/ /meridian 301
+
+# The desk lives at desk.nomad.ax, the guest desk, with every fix the shell gets (2026-10-14): the
+# copy that sat here went stale, and a fresh one is over Pages' 20,000-file limit.
+/desk https://desk.nomad.ax/ 301
+/desk/ https://desk.nomad.ax/ 301
+/desk/* https://desk.nomad.ax/:splat 301
