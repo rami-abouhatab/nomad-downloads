@@ -26,7 +26,7 @@ const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input'
 const RAW = new Set(['script', 'style']);
 const EXTERNAL_OK = [
   /^nomad\.ax$/,
-  /^(account|billing|drift|desk|cms)\.nomad\.ax$/,
+  /^(account|billing|drift|reach|desk|cms|admin)\.nomad\.ax$/,
   /^developers\.google\.com$/,
 ];
 

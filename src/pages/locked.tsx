@@ -96,7 +96,7 @@ export default function LockedPage() {
   if (phase.at === 'open') return <Viewer file={{ name: phase.header.name, type: phase.header.type, blob: phase.blob, folder: phase.header.folder }} download={phase.download} />;
 
   return (
-    <main className="lk">
+    <main className="lk" id="main">
       <section className="lk-card">
         <img className="lk-icon" src="/assets/icons/citadel-512.webp" width={64} height={64} alt="" />
         {phase.at === 'wait' ? (
