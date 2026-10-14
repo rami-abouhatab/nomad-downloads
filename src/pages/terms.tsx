@@ -39,8 +39,8 @@ export default function TermsPage() {
         <p>
           What you buy is recorded on your Nomad account as an entitlement: which product you have, and until when. Each app checks your
           entitlements to decide what it unlocks. Every MeridianOS plan includes Nomad Office; Meridian Pro and Meridian Ultra also include Reach Premium and
-          Drift Premium. These are the apps inside MeridianOS. An app you buy on its own, to use outside MeridianOS, is a separate subscription:
-          buying, changing or cancelling one never ends, refunds or credits the other.
+          Drift Premium. These are the apps inside MeridianOS. An app you buy on its own is a separate subscription, and unlocks that app wherever you
+          use it, your MeridianOS desk included: buying, changing or cancelling one never ends, refunds or credits the other.
         </p>
         <p>
           Meridian Starter can begin with a 14-day free trial. Cancelling stops the next renewal; your plan runs to the end of the period you paid

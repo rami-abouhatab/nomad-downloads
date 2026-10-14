@@ -15,7 +15,7 @@ const QA = [
   { q: 'Is locking an app the same as encrypting it?', a: "No. Locking an app keeps the people around you from opening it when you step away. Folders and files are different: what you lock is encrypted, so it stays unreadable even if someone copies it off the computer." },
   {
     q: 'Do I need Citadel if I have MeridianOS?',
-    a: 'Not on your desk: every MeridianOS desk can lock folders and files, and Meridian Pro and Ultra include Citadel Premium there. The Citadel app on its own is for a computer outside MeridianOS, with its own subscription.',
+    a: 'Not on your desk: every MeridianOS desk can lock folders and files, and Meridian Pro and Ultra include Citadel Premium there. Citadel Premium on its own has its own subscription and works everywhere, your desk included, so on Meridian Starter it is the way to add just Citadel.',
   },
 ];
 
@@ -105,7 +105,7 @@ export default function CitadelPage() {
         <InMeridian
           id="meridian-title"
           title="Built into your desk."
-          body="Every MeridianOS desk can lock folders and files with Citadel, and Meridian Pro and Ultra include Citadel Premium on the desk. The Citadel app on its own, for a computer outside MeridianOS, has its own subscription."
+          body="Every MeridianOS desk can lock folders and files with Citadel, and Meridian Pro and Ultra include Citadel Premium on the desk. Citadel Premium on its own has its own subscription, and works on your desk too."
         />
 
         <FAQ items={QA} />
