@@ -30,6 +30,22 @@ type Phase =
   | { at: 'open'; header: Header; blob: Blob; download: boolean };
 type Way = 'menu' | 'pin' | 'ask' | 'asked' | 'in' | 'code';
 
+/**
+ * This browser's id for Citadel (made once, kept here): the person let in is tied to the first browser
+ * they open with, and the owner is told when a code is used anywhere else. Without storage, a new one
+ * each time, which simply reads as a new device.
+ */
+function browserId() {
+  const make = () => [...crypto.getRandomValues(new Uint8Array(24))].map((b) => b.toString(16).padStart(2, '0')).join('');
+  try {
+    let id = localStorage.getItem('citadel:device');
+    if (!id || !/^[0-9a-f]{48}$/.test(id)) localStorage.setItem('citadel:device', (id = make()));
+    return id;
+  } catch {
+    return make();
+  }
+}
+
 export default function LockedPage() {
   const [phase, setPhase] = useState<Phase>({ at: 'wait' });
   const file = useRef<Locked | null>(null);
@@ -191,7 +207,7 @@ function Ways({ id, onKey }: { id: string; onKey: (key: string, download: boolea
   }
   async function enter(v: string) {
     setBusy(true);
-    const r = await ask<{ key?: string; download?: boolean }>('enter', { id, email: email.trim(), code: v });
+    const r = await ask<{ key?: string; download?: boolean }>('enter', { id, email: email.trim(), code: v, device: browserId() });
     setBusy(false);
     if (r.key) return onKey(r.key, !!r.download);
     setCode('');
