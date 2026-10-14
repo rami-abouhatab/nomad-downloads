@@ -14,7 +14,7 @@
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { faceTint, initialsOf, Monogram } from 'nomad-design';
+import { initialsOf, Monogram } from 'nomad-design';
 import { useEffect, useState } from 'react';
 import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
 import { ACCOUNT, SIGN_IN } from '../data';
@@ -83,7 +83,6 @@ export function AccountMenu() {
       <button
         type="button"
         className="acm-face"
-        style={{ background: faceTint(who.e).bg, color: faceTint(who.e).fg }}
         aria-label={`Your Nomad account, ${who.e}`}
         aria-haspopup="menu"
         onClick={(e) => openMenu(e.currentTarget, who)}
