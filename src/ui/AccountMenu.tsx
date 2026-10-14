@@ -14,7 +14,7 @@
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { Monogram } from 'nomad-design';
+import { faceTint, initialsOf, Monogram } from 'nomad-design';
 import { useEffect, useState } from 'react';
 import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
 import { ACCOUNT, SIGN_IN } from '../data';
@@ -35,7 +35,6 @@ function readWho(): Who | null {
 
 const here = () => (typeof location === 'undefined' ? 'https://nomad.ax/' : location.href);
 const withNext = (url: string) => `${url}?next=${encodeURIComponent(here())}`;
-const initial = (w: Who) => (w.n || w.e).trim().charAt(0).toUpperCase();
 
 export function useWho(): Who | null {
   const [who, setWho] = useState<Who | null>(null);
@@ -81,8 +80,15 @@ export function AccountMenu() {
 
   return (
     <>
-      <button type="button" className="acm-face" aria-label={`Your Nomad account, ${who.e}`} aria-haspopup="menu" onClick={(e) => openMenu(e.currentTarget, who)}>
-        <Monogram letter={initial(who)} />
+      <button
+        type="button"
+        className="acm-face"
+        style={{ background: faceTint(who.e).bg, color: faceTint(who.e).fg }}
+        aria-label={`Your Nomad account, ${who.e}`}
+        aria-haspopup="menu"
+        onClick={(e) => openMenu(e.currentTarget, who)}
+      >
+        <Monogram letter={initialsOf(who.n, who.e)} weight={450} />
       </button>
       <MenuHost />
     </>

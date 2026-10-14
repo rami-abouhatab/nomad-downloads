@@ -5511,11 +5511,12 @@ a.nm-btn.plan-cta {
   height: 30px;
   padding: 0;
   border: 0;
-  /* On the white page, a solid ink disc with a white letter, as account.nomad.ax draws the person:
-     a disc on its ground, never an outline (Rami, 2026-10-14; the letter is nomad-design Monogram). */
-  border-radius: 50%;
-  background: #1d1d1f;
-  color: #ffffff;
+  /* Microsoft's account circle (Rami, 2026-10-14: "the same style as Microsoft's, not pure black"):
+     the person's two initials in a dark tone of their own colour, on a pale tint of it (nomad-design
+     faceTint, set inline from their email; Monogram draws the letters, light). Nomad's squircle, not
+     a circle (Rami, 2026-10-14: "thinner, not so bold, and make it our squircle"). */
+  border-radius: 32%;
+  corner-shape: squircle;
   font: 600 13px/1 inherit;
   font-family: inherit;
   cursor: pointer;
