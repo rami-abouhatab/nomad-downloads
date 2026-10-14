@@ -218,7 +218,7 @@ export function describeManaged(slug, live, urlFor) {
 }
 
 /** The back office measures installers in the browser (SHA-512), so it may read them from here. */
-const MEASURERS = ['https://cms.nomad.ax', 'http://127.0.0.1:5310', 'http://localhost:5310'];
+const MEASURERS = ['https://admin.nomad.ax', 'https://cms.nomad.ax', 'http://127.0.0.1:5310', 'http://localhost:5310'];
 
 /**
  * Streams one build to the person who asked for it: the published release when the back office
