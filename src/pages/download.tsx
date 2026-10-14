@@ -29,9 +29,8 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
 
 /* Nomad Office is the bundle people buy; Folio, Grids, Expo and Markup are each an app of their own
-   (Rami, 2026-10-14: "nomad office is just the bundle, but the apps are separate"). Folio, Grids and
-   Expo are for Windows only; Markup is on the web too, where reading a PDF is free. */
-const MARKUP_WEB = 'https://markup.nomad.ax';
+   (Rami, 2026-10-14: "nomad office is just the bundle, but the apps are separate"). All four are for
+   Windows only: Reach and Drift are the only apps on the web (Rami, 2026-10-14). */
 const OFFICE_NEED = (files: string) => (
   <>
     Opens and saves {files}. Comes with <a href="/office#buy">Nomad Office</a>, already on every MeridianOS desk.
@@ -116,13 +115,7 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     name: 'Markup',
     short: 'Markup',
     what: 'PDFs, read, marked up and signed.',
-    web: MARKUP_WEB,
-    need: (
-      <>
-        Reads any PDF for free with a Nomad account; signing, filling and editing come with <a href="/office#buy">Nomad Office</a>. On the web
-        too, at <a href={MARKUP_WEB}>markup.nomad.ax</a>.
-      </>
-    ),
+    need: OFFICE_NEED('PDFs'),
   },
 ];
 
