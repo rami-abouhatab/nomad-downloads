@@ -28,8 +28,8 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 /** A product as the download URLs say it: MeridianOS is `meridian`, never `ax` (Rami, 2026-10-11). */
 const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
 
-/* `web`: the app installs from its own site, no .exe (Rami, 2026-10-12, Reach and Drift). Its button
-   opens the site with ?install=1, which offers the browser's Install. */
+/* `web`: the app is also on the web (Reach and Drift: desktop apps since 2026-10-14, web apps since
+   10-12). Its web address sits beside the download, and leads until a desktop build is published. */
 const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode; web?: string }[] = [
   {
     id: 'ax',
@@ -51,8 +51,8 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     web: 'https://reach.nomad.ax/?install=1',
     need: (
       <>
-        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more. It installs from your browser, with its own window and
-        taskbar icon, and is always the newest version.
+        Free with a Nomad account. <a href="/reach#premium">Reach Premium</a> adds more. A desktop app for Windows, and the same Reach on the
+        web at <a href="https://reach.nomad.ax">reach.nomad.ax</a>.
       </>
     ),
   },
@@ -64,7 +64,8 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     web: `${DRIFT_WEB}/?install=1`,
     need: (
       <>
-        Needs <a href="/drift#premium">Drift Premium</a>. To send a link, no download: <a href={DRIFT_WEB}>drift.nomad.ax</a>.
+        Free with a Nomad account; <a href="/drift#premium">Drift Premium</a> adds sending straight to your devices. A desktop app for Windows,
+        and the same Drift on the web at <a href={DRIFT_WEB}>drift.nomad.ax</a>.
       </>
     ),
   },
@@ -151,8 +152,12 @@ export default function DownloadPage() {
             const href = (a: Arch) => build(a)?.url ?? `/dl/${dlSlug(p.id)}/${a}`;
             const other: Arch | null = arch ? (arch === 'x64' ? 'arm64' : 'x64') : null;
             const size = arch ? build(arch)?.size : undefined;
-            const meta = p.web
-              ? 'Installs from your browser, on any computer'
+            /* Reach and Drift are desktop apps that are also on the web (2026-10-14): the download once
+               one is published, the web beside it; before that, the web leads. */
+            const webLeads = Boolean(p.web) && Boolean(info) && !info?.version;
+            const webUrl = p.web?.replace('/?install=1', '').replace('?install=1', '');
+            const meta = webLeads
+              ? 'The desktop app is coming soon · on the web now'
               : info
                 ? info.version
                   ? `Version ${info.version}${size ? ` · ${mb(size)}` : ''}`
@@ -168,9 +173,9 @@ export default function DownloadPage() {
                 <p className="dl-tile-need">{p.need}</p>
                 <p className="dl-tile-meta">{meta}</p>
                 <div className="dl-tile-verbs">
-                  {p.web ? (
-                    <LinkButton href={p.web} variant="primary" size="md" icon={<Sym name="download" size={16} />}>
-                      Install {p.short}
+                  {webLeads ? (
+                    <LinkButton href={webUrl!} variant="primary" size="md" icon={<Sym name="globe" size={16} />}>
+                      Open {p.short} on the web
                     </LinkButton>
                   ) : info && !info.version ? (
                     <span className="dl-soon">Coming soon</span>
@@ -185,8 +190,13 @@ export default function DownloadPage() {
                       </LinkButton>
                     ))
                   )}
+                  {p.web && !webLeads ? (
+                    <LinkButton href={webUrl!} size="md" icon={<Sym name="globe" size={16} />}>
+                      Use it on the web
+                    </LinkButton>
+                  ) : null}
                 </div>
-                {!p.web && arch && other && out(other) && (!info || info.version) ? (
+                {!webLeads && arch && other && out(other) && (!info || info.version) ? (
                   <a className="dl-tile-other" href={href(other)} download>
                     Also for {other === 'x64' ? 'Intel and AMD' : 'ARM'} computers
                   </a>
