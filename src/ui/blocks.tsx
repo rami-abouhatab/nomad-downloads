@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import { buyFor, useHeld } from './held';
 import { ProBadge } from '@nd/controls/ProBadge';
 import { AX_PLANS, PRICE_FOOT, type Plan, type ProductId } from '../data';
-import { Checks, LinkButton, More, Sym } from './kit';
+import { Checks, LinkButton, More, ProductMark, Sym } from './kit';
 import { PeriodSwitch, PriceBlock, PriceText, usePeriod } from './period';
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
@@ -202,6 +202,7 @@ export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
   return (
     <article className={[plan.lit ? 'plan lit' : 'plan', buy.yours ? 'yours' : ''].filter(Boolean).join(' ')} aria-labelledby={`plan-${plan.id.replace(':', '-')}`}>
       <div className="plan-head">
+        {plan.mark ? <ProductMark product={plan.mark} size={44} /> : null}
         <p className="plan-note">{buy.yours ? <span className="plan-yours">Your plan</span> : plan.note}</p>
         <h3 className="plan-name" id={`plan-${plan.id.replace(/^ax:/, 'meridian:').replace(':', '-')}`}>
           {plan.name}
@@ -213,6 +214,11 @@ export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
         {buy.label}
       </LinkButton>
       <Checks lead={plan.lead} lines={plan.lines} />
+      {plan.free ? (
+        <p className="plan-free">
+          Free: <b>{plan.free.name}</b>, {plan.free.what}. <a href={plan.free.href}>{plan.free.verb}</a>
+        </p>
+      ) : null}
     </article>
   );
 }

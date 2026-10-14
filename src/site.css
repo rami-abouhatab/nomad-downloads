@@ -5824,3 +5824,100 @@ a.nm-btn.plan-cta {
   font-size: var(--site-t-meta);
   font-weight: 600;
 }
+
+/* ── Pricing's two shelves (2026-10-14: Microsoft 365's compare-plans grammar) ── */
+
+.shelf-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-md) var(--space-xl);
+}
+
+.plans-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.plans-cell {
+  display: flex;
+  min-width: 0;
+  scroll-margin-top: 96px;
+}
+
+.plans-cell > .plan {
+  flex: 1;
+}
+
+.plans-4 .plan {
+  padding: var(--space-xl);
+}
+
+.plans-4 .plan-name {
+  margin-top: var(--space-xs);
+  font-size: 24px;
+}
+
+.plans-4 .price-big {
+  font-size: 38px;
+}
+
+.plan-head > img.icon,
+.plan-head > .office-stack {
+  margin-bottom: var(--space-md);
+}
+
+.plan-free {
+  margin-top: auto;
+  padding-top: var(--space-lg);
+  border-top: var(--hairline) solid var(--site-line);
+  color: var(--text-secondary);
+  font-size: var(--site-t-meta);
+  line-height: 1.5;
+}
+
+.plan-free b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.plan-free a {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.shelf-notes {
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 820px;
+  margin: var(--space-xxl) auto 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--site-t-small);
+  line-height: 1.6;
+}
+
+.shelf-notes b {
+  color: var(--text-primary);
+}
+
+.shelf-notes a {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  .plans-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 760px;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .plans-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

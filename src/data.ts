@@ -45,6 +45,10 @@ export type Plan = {
   /** Lines; `**x**` is set in bold. */
   lines: string[];
   lit?: boolean;
+  /** An app's plan wears the app's mark above its name (the Apps side of pricing). */
+  mark?: 'reach' | 'drift' | 'citadel' | 'office';
+  /** The free version beside it, in one quiet line under the card. */
+  free?: { name: string; what: string; href: string; verb: string };
 };
 
 export const AX_PLANS: Plan[] = [
@@ -103,6 +107,57 @@ export const AX_PLANS: Plan[] = [
       'File history forever',
       'Priority support',
     ],
+  },
+];
+
+/**
+ * The apps on their own, as plans (Rami, 2026-10-14: "Apple and Microsoft don't do these
+ * structures and free-for-all cards"): one column each, the same anatomy as the Meridian plans.
+ * Each one's free version is a line under its card, not a card of its own.
+ */
+export const APP_PLANS: Plan[] = [
+  {
+    id: 'office',
+    mark: 'office',
+    name: 'Nomad Office',
+    note: 'On your own computer',
+    pitch: 'Folio, Grids, Expo and Markup, installed on your PC.',
+    cta: 'Buy Nomad Office',
+    lead: 'Everything for documents',
+    lines: ['Documents in **Folio**', 'Spreadsheets in **Grids**', 'Presentations in **Expo**', 'PDFs in **Markup**', 'Works offline, saves to your Nomad account'],
+  },
+  {
+    id: 'reach:premium',
+    mark: 'reach',
+    name: 'Reach Premium',
+    note: 'Mail, chat and calls',
+    pitch: 'Longer, bigger meetings, and recordings.',
+    cta: 'Buy Reach Premium',
+    lead: 'Everything in Reach, plus',
+    lines: ['Meetings up to **4 hours**', 'Up to **50 people**', 'Meeting recordings', 'Scheduled send and snooze'],
+    free: { name: 'Reach', what: 'every mail account, chat, calls and meetings up to 40 minutes', href: 'https://reach.nomad.ax/?install=1', verb: 'Install' },
+  },
+  {
+    id: 'drift:premium',
+    mark: 'drift',
+    name: 'Drift Premium',
+    note: 'Send files',
+    pitch: 'The Drift app, and sending straight to your devices.',
+    cta: 'Buy Drift Premium',
+    lead: 'Everything in Drift, plus',
+    lines: ['The Drift app and device pairing', 'Up to **10 GB** per link', 'Links kept for **7 days**'],
+    free: { name: 'Drift', what: 'send up to 2 GB from your browser, kept for a day', href: 'https://drift.nomad.ax', verb: 'Send a file' },
+  },
+  {
+    id: 'citadel:premium',
+    mark: 'citadel',
+    name: 'Citadel Premium',
+    note: 'Lock what is yours',
+    pitch: 'Lock apps and drives too, behind the same PIN.',
+    cta: 'Buy Citadel Premium',
+    lead: 'Everything in Citadel, plus',
+    lines: ['Lock **apps**', 'Unlock with Windows Hello or Touch ID', 'Auto-lock', 'Lock USB sticks and external drives', 'Cloud locks and the Vault, **50 GB**'],
+    free: { name: 'Citadel', what: 'lock any folder or file behind one PIN', href: '/download#citadel', verb: 'Download' },
   },
 ];
 
