@@ -1,4 +1,7 @@
 import { defineConfig } from 'vite';
+import { fileURLToPath as sqPath } from 'node:url';
+/* Squircle corners in every browser: a scaled fallback where corner-shape is unknown (nomad-design build/squircle.mjs). */
+import { squircle } from '../nomad-design/build/squircle.mjs';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 import { ndSymbols } from './tools/nd-symbols.mjs';
@@ -33,6 +36,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   /* Its own dependency cache: never share node_modules/.vite with another
      server (see nomad-account/vite.config.ts). */
   cacheDir: 'node_modules/.vite-site',
+  css: { postcss: { plugins: [squircle({ roots: [sqPath(new URL('src', import.meta.url)), sqPath(new URL('../nomad-design/src', import.meta.url))] })] } },
   plugins: [react(), ndSymbols()],
   resolve: {
     alias: [{ find: /^@nd\/(.*)$/, replacement: `${ND}$1` }],
