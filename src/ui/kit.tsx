@@ -16,7 +16,8 @@ import '@nd/controls/button.css';
 import { Sym } from '@nd/symbols';
 import type { ButtonSize, ButtonVariant } from '@nd/controls/Button';
 
-export type ProductKey = 'ax' | 'polaris' | 'reach' | 'drift' | 'citadel' | 'office';
+/* Nomad Office is the bundle (its mark: the four apps); Folio, Grids, Expo and Markup are apps of their own. */
+export type ProductKey = 'ax' | 'polaris' | 'reach' | 'drift' | 'citadel' | 'office' | 'folio' | 'grids' | 'expo' | 'markup';
 
 export function LinkButton({
   href,
@@ -184,6 +185,10 @@ const ICON: Record<Exclude<ProductKey, 'office'>, string> = {
   reach: '/assets/icons/reach.webp',
   drift: '/assets/icons/drift.webp?v=20261010a',
   citadel: '/assets/icons/citadel.webp?v=20261010a',
+  folio: '/assets/icons/folio.webp',
+  grids: '/assets/icons/grids.webp',
+  expo: '/assets/icons/expo.webp',
+  markup: '/assets/icons/markup.webp',
 };
 
 const OFFICE = ['folio', 'grids', 'expo', 'markup'];

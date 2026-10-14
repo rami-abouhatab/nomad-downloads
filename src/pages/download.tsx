@@ -28,6 +28,16 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 /** A product as the download URLs say it: MeridianOS is `meridian`, never `ax` (Rami, 2026-10-11). */
 const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
 
+/* Nomad Office is the bundle people buy; Folio, Grids, Expo and Markup are each an app of their own,
+   on Windows and on the web (Rami, 2026-10-14: "nomad office is just the bundle, but the apps are separate"). */
+const OFFICE_WEB = { folio: 'https://folio.nomad.ax', grids: 'https://grids.nomad.ax', expo: 'https://expo.nomad.ax', markup: 'https://markup.nomad.ax' };
+const OFFICE_NEED = (name: string, files: string, web: string) => (
+  <>
+    Opens and saves {files}. Comes with <a href="/office#buy">Nomad Office</a>, already on every MeridianOS desk. {name} on the web:{' '}
+    <a href={web}>{web.replace('https://', '')}</a>.
+  </>
+);
+
 /* `web`: the app is also on the web (Reach and Drift: desktop apps since 2026-10-14, web apps since
    10-12). Its web address sits beside the download, and leads until a desktop build is published. */
 const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode; web?: string }[] = [
@@ -81,15 +91,36 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     ),
   },
   {
-    id: 'office',
-    name: 'Nomad Office',
-    short: 'Nomad Office',
-    what: 'Folio, Grids, Expo and Markup.',
-    need: (
-      <>
-        Needs <a href="/office#buy">Nomad Office</a>. Already on every MeridianOS desk.
-      </>
-    ),
+    id: 'folio',
+    name: 'Folio',
+    short: 'Folio',
+    what: 'Documents, written and reviewed.',
+    web: OFFICE_WEB.folio,
+    need: OFFICE_NEED('Folio', 'Word documents', OFFICE_WEB.folio),
+  },
+  {
+    id: 'grids',
+    name: 'Grids',
+    short: 'Grids',
+    what: 'Numbers, worked out.',
+    web: OFFICE_WEB.grids,
+    need: OFFICE_NEED('Grids', 'Excel workbooks', OFFICE_WEB.grids),
+  },
+  {
+    id: 'expo',
+    name: 'Expo',
+    short: 'Expo',
+    what: 'Slides that make the point.',
+    web: OFFICE_WEB.expo,
+    need: OFFICE_NEED('Expo', 'PowerPoint decks', OFFICE_WEB.expo),
+  },
+  {
+    id: 'markup',
+    name: 'Markup',
+    short: 'Markup',
+    what: 'PDFs, read, marked up and signed.',
+    web: OFFICE_WEB.markup,
+    need: OFFICE_NEED('Markup', 'PDFs', OFFICE_WEB.markup),
   },
 ];
 

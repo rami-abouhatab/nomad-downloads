@@ -2,7 +2,7 @@
  * /dl/<product>/<arch> — streams the newest published installer of one
  * product for one architecture (arm64 or x64).
  *
- * Products: ax, polaris, reach, drift, office (nomadoffice also works).
+ * Products: meridian (ax works too), polaris, reach, drift, citadel, folio, grids, expo, markup.
  * The release is looked up, never hardcoded: publishing a version is
  * uploading `<Product>-<version>-<arch>-setup.exe` to a release in
  * rami-abouhatab/nomad-downloads, and nothing here or in the pages changes.

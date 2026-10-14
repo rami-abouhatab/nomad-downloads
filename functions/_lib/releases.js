@@ -38,7 +38,11 @@ export const PRODUCTS = {
   reach: { name: 'Reach', prefixes: ['Reach'] },
   drift: { name: 'Drift', prefixes: ['Drift'] },
   citadel: { name: 'Citadel', prefixes: ['Citadel'] },
-  office: { name: 'Nomad Office', prefixes: ['NomadOffice'] },
+  /* Nomad Office is the bundle people buy; its four apps download one by one (2026-10-14). */
+  folio: { name: 'Folio', prefixes: ['Folio'] },
+  grids: { name: 'Grids', prefixes: ['Grids'] },
+  expo: { name: 'Expo', prefixes: ['Expo'] },
+  markup: { name: 'Markup', prefixes: ['Markup'] },
 };
 
 /** Spellings people (and older links) use for a product, mapped to its slug. */
@@ -53,9 +57,10 @@ const ALIASES = {
   reach: 'reach',
   drift: 'drift',
   citadel: 'citadel',
-  office: 'office',
-  nomadoffice: 'office',
-  'nomad-office': 'office',
+  folio: 'folio',
+  grids: 'grids',
+  expo: 'expo',
+  markup: 'markup',
 };
 
 export function productSlug(value) {
