@@ -1,14 +1,18 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Layout } from '../ui/Layout';
 import { Band, BandHead, PageHero } from '../ui/system';
-import { ProductMark, Sym, type ProductKey } from '../ui/kit';
+import { LinkButton, ProductMark, Sym, type ProductKey } from '../ui/kit';
 import { DRIFT_WEB } from '../data';
 
 /**
+ * Every app as a tile (Rami, 2026-10-14: restyled with the shop, as account.nomad.ax's Apps &
+ * downloads): its mark, what it is and what it needs, its version and size, and one Download.
+ *
  * Every link works before (and without) the script: /dl/<product>/<arch>
- * streams the newest build, or says plainly that it is not out yet. After
- * hydration the page asks /dl/manifest?product=all for versions and sizes,
- * and the browser for its architecture, and marks the build for this PC.
+ * streams the newest build, or says plainly that it is not out yet. Before the
+ * page knows this computer it offers both builds; after hydration it asks
+ * /dl/manifest?product=all for versions and sizes, and the browser for its
+ * architecture, and the tile offers the build for this PC with the other beside it.
  */
 
 type Arch = 'x64' | 'arm64';
@@ -139,55 +143,54 @@ export default function DownloadPage() {
         <h2 id="dl-title" className="vh">
           Downloads
         </h2>
-        <div className="dl-list">
+        <div className="dl-grid">
           {PRODUCTS.map((p) => {
             const info = manifest?.products?.[dlSlug(p.id)];
+            const build = (a: Arch) => info?.builds?.[a];
+            const out = (a: Arch) => !info || Boolean(build(a)?.url);
+            const href = (a: Arch) => build(a)?.url ?? `/dl/${dlSlug(p.id)}/${a}`;
+            const other: Arch | null = arch ? (arch === 'x64' ? 'arm64' : 'x64') : null;
+            const size = arch ? build(arch)?.size : undefined;
+            const meta = p.web
+              ? 'Installs from your browser, on any computer'
+              : info
+                ? info.version
+                  ? `Version ${info.version}${size ? ` · ${mb(size)}` : ''}`
+                  : 'Not released yet'
+                : 'For Windows 10 and 11';
             return (
-              <article className="dl-product" id={p.id === 'ax' ? 'meridian' : p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
-                <ProductMark product={p.id} size={64} />
-                <div className="dl-copy">
-                  <h2 id={`dl-${p.id}`} className="title">
-                    {p.name}
-                  </h2>
-                  <p className="body">{p.what}</p>
-                  <p className="small">{p.need}</p>
-                  {info && !p.web && <p className="dl-version small">{info.version ? `Version ${info.version}` : 'Not released yet'}</p>}
-                </div>
-                <div className="dl-builds">
+              <article className="dl-tile" id={p.id === 'ax' ? 'meridian' : p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
+                <ProductMark product={p.id} size={56} />
+                <h2 id={`dl-${p.id}`} className="dl-tile-name">
+                  {p.name}
+                </h2>
+                <p className="dl-tile-what">{p.what}</p>
+                <p className="dl-tile-need">{p.need}</p>
+                <p className="dl-tile-meta">{meta}</p>
+                <div className="dl-tile-verbs">
                   {p.web ? (
-                    <a className="dl match" href={p.web}>
-                      <Sym name="download" size={20} className="dl-glyph" />
-                      <span className="dl-body">
-                        <span className="dl-name">Install {p.short}</span>
-                        <span className="dl-meta">From your browser · any computer</span>
-                      </span>
-                    </a>
-                  ) : ARCH.map((a) => {
-                    const build = info?.builds?.[a.id];
-                    const pending = Boolean(info) && !build?.url;
-                    const match = !pending && Boolean(build?.url) && arch === a.id;
-                    const href = build?.url ?? `/dl/${dlSlug(p.id)}/${a.id}`;
-                    const meta = build?.size ? `${a.base} · ${mb(build.size)}` : a.base;
-                    return (
-                      <a
-                        key={a.id}
-                        className={['dl', match ? 'match' : '', pending ? 'pending' : ''].filter(Boolean).join(' ')}
-                        href={pending ? undefined : href}
-                        aria-disabled={pending || undefined}
-                        download={pending ? undefined : true}
-                      >
-                        <Sym name="download" size={20} className="dl-glyph" />
-                        <span className="dl-body">
-                          <span className="dl-name">
-                            {p.short} {a.label}
-                          </span>
-                          <span className="dl-meta">{meta}</span>
-                        </span>
-                        {(match || pending) && <span className="dl-tag">{match ? 'For this PC' : 'Soon'}</span>}
-                      </a>
-                    );
-                  })}
+                    <LinkButton href={p.web} variant="primary" size="md" icon={<Sym name="download" size={16} />}>
+                      Install {p.short}
+                    </LinkButton>
+                  ) : info && !info.version ? (
+                    <span className="dl-soon">Coming soon</span>
+                  ) : arch && out(arch) ? (
+                    <LinkButton href={href(arch)} variant="primary" size="md" download icon={<Sym name="download" size={16} />}>
+                      Download
+                    </LinkButton>
+                  ) : (
+                    ARCH.filter((a) => out(a.id)).map((a, i) => (
+                      <LinkButton key={a.id} href={href(a.id)} variant={i === 0 ? 'primary' : 'secondary'} size="md" download icon={<Sym name="download" size={16} />}>
+                        {a.id === 'x64' ? 'Intel or AMD' : 'ARM'}
+                      </LinkButton>
+                    ))
+                  )}
                 </div>
+                {!p.web && arch && other && out(other) && (!info || info.version) ? (
+                  <a className="dl-tile-other" href={href(other)} download>
+                    Also for {other === 'x64' ? 'Intel and AMD' : 'ARM'} computers
+                  </a>
+                ) : null}
               </article>
             );
           })}

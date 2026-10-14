@@ -5730,3 +5730,97 @@ a.nm-btn.plan-cta {
     zoom: 0.72;
   }
 }
+
+/* ── the visitor's own plan (ui/held.ts, 2026-10-14) ──────────────────── */
+
+.plan-yours {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  vertical-align: middle;
+}
+
+.tier-name .plan-yours {
+  margin-left: var(--space-sm);
+}
+
+.plan.yours {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+/* ── Downloads as tiles (2026-10-14, the shop's grammar) ──────────────── */
+
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-lg);
+}
+
+.dl-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: var(--space-xxl);
+  border-radius: var(--r-float);
+  background: var(--site-page);
+  box-shadow: var(--site-edge);
+}
+
+.dl-tile-name {
+  margin-top: var(--space-lg);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.dl-tile-what {
+  margin-top: var(--space-xs);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.dl-tile-need {
+  margin-top: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: var(--site-t-small);
+  line-height: 1.5;
+}
+
+.dl-tile-meta {
+  margin-top: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: var(--site-t-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.dl-tile-verbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: auto;
+  padding-top: var(--space-xl);
+}
+
+.dl-tile-other {
+  margin-top: var(--space-md);
+  color: var(--text-secondary);
+  font-size: var(--site-t-meta);
+  text-decoration: underline;
+  text-decoration-color: var(--site-line);
+  text-underline-offset: 3px;
+}
+
+.dl-soon {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--wash-strong);
+  font-size: var(--site-t-meta);
+  font-weight: 600;
+}

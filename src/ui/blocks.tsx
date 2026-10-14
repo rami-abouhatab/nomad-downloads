@@ -4,8 +4,9 @@
  * questions. One implementation each, so /ax and /pricing cannot drift apart.
  */
 import type { ReactNode } from 'react';
+import { buyFor, useHeld } from './held';
 import { ProBadge } from '@nd/controls/ProBadge';
-import { AX_PLANS, PRICE_FOOT, checkout, type Plan, type ProductId } from '../data';
+import { AX_PLANS, PRICE_FOOT, type Plan, type ProductId } from '../data';
 import { Checks, LinkButton, More, Sym } from './kit';
 import { PeriodSwitch, PriceBlock, PriceText, usePeriod } from './period';
 
@@ -196,18 +197,20 @@ export function Features({ items, cols = 3 }: { items: Feature[]; cols?: 2 | 3 }
 
 export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
   const period = usePeriod();
+  /* The visitor's own plan says so, and its button changes it instead of selling it again (2026-10-14). */
+  const buy = buyFor(plan.id, plan.name, period, useHeld(), cta ?? plan.cta);
   return (
-    <article className={plan.lit ? 'plan lit' : 'plan'} aria-labelledby={`plan-${plan.id.replace(':', '-')}`}>
+    <article className={[plan.lit ? 'plan lit' : 'plan', buy.yours ? 'yours' : ''].filter(Boolean).join(' ')} aria-labelledby={`plan-${plan.id.replace(':', '-')}`}>
       <div className="plan-head">
-        <p className="plan-note">{plan.note}</p>
+        <p className="plan-note">{buy.yours ? <span className="plan-yours">Your plan</span> : plan.note}</p>
         <h3 className="plan-name" id={`plan-${plan.id.replace(/^ax:/, 'meridian:').replace(':', '-')}`}>
           {plan.name}
         </h3>
         <p className="plan-pitch">{plan.pitch}</p>
       </div>
       <PriceBlock product={plan.id} />
-      <LinkButton href={checkout(plan.id, period)} variant={plan.lit ? 'primary' : 'secondary'} hero className="plan-cta">
-        {cta ?? plan.cta}
+      <LinkButton href={buy.href} variant={plan.lit && !buy.yours ? 'primary' : 'secondary'} hero className="plan-cta">
+        {buy.label}
       </LinkButton>
       <Checks lead={plan.lead} lines={plan.lines} />
     </article>
@@ -271,6 +274,7 @@ export function SinglePlan({
   after?: ReactNode;
 }) {
   const period = usePeriod();
+  const buy = buyFor(product, name, period, useHeld(), cta);
   return (
     <section className="section" id={id} aria-labelledby={`${id}-title`}>
       <div className="wrap split">
@@ -284,11 +288,16 @@ export function SinglePlan({
         </div>
         <article className="plan lit reveal" aria-label={name}>
           <div className="plan-head">
+            {buy.yours ? (
+              <p className="plan-note">
+                <span className="plan-yours">Your plan</span>
+              </p>
+            ) : null}
             <h3 className="plan-name">{name}</h3>
           </div>
           <PriceBlock product={product} />
-          <LinkButton href={checkout(product, period)} variant="primary" hero className="plan-cta">
-            {cta}
+          <LinkButton href={buy.href} variant={buy.yours ? 'secondary' : 'primary'} hero className="plan-cta">
+            {buy.label}
           </LinkButton>
           <Checks lead={lead} lines={lines} />
           {after}
@@ -349,6 +358,7 @@ function CellView({ v }: { v: Cell }) {
 
 export function Compare() {
   const period = usePeriod();
+  const held = useHeld();
   const ids: ProductId[] = ['ax:starter', 'ax:pro', 'ax:ultra'];
   return (
     <div className="compare-wrap" tabIndex={0} role="region" aria-labelledby="compare-title">
@@ -396,13 +406,16 @@ export function Compare() {
             <th scope="row">
               <span className="vh">Buy</span>
             </th>
-            {AX_PLANS.map((p) => (
-              <td key={p.id}>
-                <LinkButton href={checkout(p.id, period)} variant={p.lit ? 'primary' : 'secondary'} size="md">
-                  {p.cta}
-                </LinkButton>
-              </td>
-            ))}
+            {AX_PLANS.map((p) => {
+              const buy = buyFor(p.id, p.name, period, held, p.cta);
+              return (
+                <td key={p.id}>
+                  <LinkButton href={buy.href} variant={p.lit && !buy.yours ? 'primary' : 'secondary'} size="md">
+                    {buy.label}
+                  </LinkButton>
+                </td>
+              );
+            })}
           </tr>
         </tbody>
       </table>

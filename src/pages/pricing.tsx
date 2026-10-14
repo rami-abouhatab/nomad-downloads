@@ -3,8 +3,9 @@ import { Layout } from '../ui/Layout';
 import { Compare, PlanCard } from '../ui/blocks';
 import { LinkButton, More, ProductMark, type ProductKey } from '../ui/kit';
 import { PeriodSwitch, PriceText, usePeriod } from '../ui/period';
-import { AX_PLANS, DRIFT_WEB, PRICE_FOOT, checkout, type ProductId } from '../data';
+import { AX_PLANS, DRIFT_WEB, PRICE_FOOT, type ProductId } from '../data';
 import { Band, BandHead, FAQ, PageHero } from '../ui/system';
+import { buyFor, useHeld } from '../ui/held';
 
 /* Pricing, shaped like apple.com's Apple One and microsoft.com's plan
    comparison (Rami, 2026-10-10): the period switch in the opening, the
@@ -131,17 +132,22 @@ const QA = [
 
 function TierView({ t }: { t: Tier }) {
   const period = usePeriod();
+  const held = useHeld();
+  const buy = t.buy ? buyFor(t.buy.product, t.name, period, held, t.buy.label) : null;
   return (
     <div className="tier">
       <div className="tier-top">
-        <h4 className="tier-name">{t.name}</h4>
+        <h4 className="tier-name">
+          {t.name}
+          {buy?.yours ? <span className="plan-yours">Your plan</span> : null}
+        </h4>
         <p className="tier-price">{t.price === 'free' ? 'Free' : <PriceText product={t.price} />}</p>
       </div>
       <p className="tier-what">{t.what}</p>
       <div className="tier-cta">
-        {t.buy && (
-          <LinkButton href={checkout(t.buy.product, period)} variant="primary" size="md">
-            {t.buy.label}
+        {buy && (
+          <LinkButton href={buy.href} variant={buy.yours ? 'secondary' : 'primary'} size="md">
+            {buy.label}
           </LinkButton>
         )}
         {t.get && (
