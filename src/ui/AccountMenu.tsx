@@ -14,7 +14,8 @@
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Monogram } from 'nomad-design';
+import { useEffect, useState } from 'react';
 import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
 import { ACCOUNT, SIGN_IN } from '../data';
 import { Sym } from './kit';
@@ -81,40 +82,10 @@ export function AccountMenu() {
   return (
     <>
       <button type="button" className="acm-face" aria-label={`Your Nomad account, ${who.e}`} aria-haspopup="menu" onClick={(e) => openMenu(e.currentTarget, who)}>
-        <Ink letter={initial(who)} className="acm-face-ink" />
+        <Monogram letter={initial(who)} />
       </button>
       <MenuHost />
     </>
   );
 }
 
-/**
- * The initial, centred on its ink (Rami, 2026-10-13: "why it keeps not being centered"). Measured:
- * Inter's "R" at 11px sat 0.75px high under the old 1.5px lift and 0.4px right (its bowl). Height is
- * trimmed to the capital and the baseline (text-box, in site.css), so a capital is exactly in the
- * middle; across, the glyph's ink is measured and moved back by what it is off, for any letter.
- */
-function Ink({ letter, className }: { letter: string; className: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let live = true;
-    const place = () => {
-      const c = document.createElement('canvas').getContext('2d');
-      if (!c || !live) return;
-      const cs = getComputedStyle(el);
-      c.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-      const m = c.measureText(letter);
-      el.style.transform = `translateX(${((m.width - (m.actualBoundingBoxRight - m.actualBoundingBoxLeft)) / 2 - m.actualBoundingBoxLeft).toFixed(2)}px)`;
-    };
-    place();
-    void document.fonts?.ready.then(place);
-    return () => void (live = false);
-  }, [letter]);
-  return (
-    <span ref={ref} className={className} aria-hidden="true">
-      {letter}
-    </span>
-  );
-}
