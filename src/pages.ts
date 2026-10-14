@@ -20,7 +20,8 @@ export type PageId =
   | 'pricing'
   | 'download'
   | 'privacy'
-  | 'terms';
+  | 'terms'
+  | 'locked';
 
 export type PageMeta = {
   id: PageId;
@@ -118,6 +119,14 @@ export const PAGES: PageMeta[] = [
     file: 'terms.html',
     title: 'Terms · Nomad',
     description: "The terms for using Nomad's products: MeridianOS, Polaris Browser, Reach, Drift and Nomad Office.",
+  },
+  {
+    /* Citadel's lock page: a cloud-locked file opens here (src/pages/locked.tsx). */
+    id: 'locked',
+    route: '/locked',
+    file: 'locked.html',
+    title: 'Locked file · Citadel',
+    description: 'A file protected with Citadel. Only the people its owner lets in can open it.',
   },
 ];
 

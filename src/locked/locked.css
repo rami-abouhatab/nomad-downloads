@@ -1,0 +1,252 @@
+/* nomad.ax/locked: Citadel's lock page. White like Citadel's door, the icon, one card of choices;
+   bronze (#6e4814, the icon's body) for the one verb that matters. Opacity and transform only. */
+.lk {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: center;
+  padding: 32px 16px 20px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #1b1c20;
+  font-family: 'Inter Variable', system-ui, sans-serif;
+}
+.lk-card {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  width: min(380px, 100%);
+  text-align: center;
+  animation: lk-in 260ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.lk-icon {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+}
+.lk-card h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 680;
+  letter-spacing: -0.015em;
+}
+.lk-sub {
+  margin: 0 0 10px;
+  color: #5a5d64;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.lk-ways {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  justify-items: stretch;
+  text-align: start;
+}
+.lk-ways .nm-code {
+  justify-self: center;
+}
+.lk-error {
+  margin: 0;
+  color: #c4321c;
+  font-size: 13px;
+  text-align: center;
+}
+.nm-btn.lk-bronze {
+  background: #6e4814 !important;
+  background-image: none !important;
+  color: #fff !important;
+}
+.lk-drop {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 26px 16px;
+  border-radius: 16px;
+  corner-shape: squircle;
+  background: #f4f5f7;
+  box-shadow: inset 0 0 0 1px #e6e8eb;
+}
+.lk-drop small {
+  color: #6b6e75;
+}
+.lk-bar {
+  display: block;
+  width: 220px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: #eceef1;
+  overflow: hidden;
+}
+.lk-bar > span {
+  display: block;
+  height: 100%;
+  background: #6e4814;
+  transform-origin: left center;
+  transition: transform 160ms linear;
+}
+.lk-foot {
+  color: #6b6e75;
+  font-size: 12.5px;
+}
+.lk-foot a {
+  color: inherit;
+  font-weight: 600;
+}
+@keyframes lk-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* The opened file. */
+.lk-view {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: #f4f5f7;
+  color: #1b1c20;
+  font-family: 'Inter Variable', system-ui, sans-serif;
+  animation: lk-in 220ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.lk-view-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 1px 0 #e6e8eb;
+}
+.lk-view-bar b {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+.lk-only {
+  color: #6b6e75;
+  font-size: 12.5px;
+}
+.lk-back {
+  border: 0;
+  background: none;
+  color: #6e4814;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lk-stage {
+  display: grid;
+  place-items: start center;
+  padding: 16px;
+  overflow: auto;
+}
+.lk-stage[data-kind='image'],
+.lk-stage[data-kind='video'],
+.lk-stage[data-kind='audio'] {
+  place-items: center;
+}
+.lk-img,
+.lk-media {
+  max-width: 100%;
+  max-height: calc(100dvh - 90px);
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.lk-frame {
+  width: min(1000px, 100%);
+  height: calc(100dvh - 86px);
+  border: 0;
+  background: #fff;
+}
+.lk-pages {
+  display: grid;
+  gap: 12px;
+  width: min(900px, 100%);
+  justify-items: center;
+}
+.lk-page {
+  max-width: 100%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}
+.lk-text {
+  width: min(900px, 100%);
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #fff;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 13px/1.6 ui-monospace, 'Cascadia Mono', monospace;
+}
+.lk-none {
+  margin: 40px 0;
+  color: #5a5d64;
+  text-align: center;
+}
+.lk-files {
+  width: min(720px, 100%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border-radius: 14px;
+  corner-shape: squircle;
+  box-shadow: inset 0 0 0 1px #e6e8eb;
+  overflow: hidden;
+}
+.lk-files button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid #eceef1;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 13.5px;
+  text-align: start;
+  cursor: pointer;
+}
+.lk-files button:disabled {
+  color: #9a9da3;
+  cursor: default;
+}
+.lk-files small {
+  color: #6b6e75;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .lk-files button:not(:disabled):hover {
+    background: #f6f7f8;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lk-card,
+  .lk-view {
+    animation: none;
+  }
+  .lk-bar > span {
+    transition: none;
+  }
+}
+@media print {
+  .lk-view {
+    display: none;
+  }
+}

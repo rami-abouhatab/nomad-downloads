@@ -13,10 +13,11 @@ import pricing from './pages/pricing';
 import download from './pages/download';
 import privacy from './pages/privacy';
 import terms from './pages/terms';
+import locked from './pages/locked';
 
 export { PAGES } from './pages';
 
-const COMPONENTS: Record<PageId, ComponentType> = { home, ax, polaris, reach, drift, citadel, office, pricing, download, privacy, terms };
+const COMPONENTS: Record<PageId, ComponentType> = { home, ax, polaris, reach, drift, citadel, office, pricing, download, privacy, terms, locked };
 
 export function render(id: PageId): string {
   const Page = COMPONENTS[id];
