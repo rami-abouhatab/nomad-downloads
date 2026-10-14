@@ -156,7 +156,7 @@ export const APP_PLANS: Plan[] = [
     pitch: 'Lock apps and drives too, behind the same PIN.',
     cta: 'Buy Citadel Premium',
     lead: 'Everything in Citadel, plus',
-    lines: ['Lock **apps**', 'Unlock with Windows Hello or Touch ID', 'Auto-lock', 'Lock USB sticks and external drives', 'Cloud locks and the Vault, **50 GB**'],
+    lines: ['Lock **apps**', 'Unlock with Windows Hello or Touch ID', 'Auto-lock', 'Cloud locks and the Vault, **50 GB**'],
     free: { name: 'Citadel', what: 'lock any folder or file behind one PIN', href: '/download#citadel', verb: 'Download' },
   },
 ];

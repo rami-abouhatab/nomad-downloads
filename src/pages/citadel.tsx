@@ -63,7 +63,7 @@ export default function CitadelPage() {
             items={[
               { title: 'Any folder or file', icon: 'folder', body: 'Pick as many as you like. They are encrypted on the spot, and open again with your PIN.' },
               { title: 'Any app', icon: 'lock', tag: <span className="sys-tag">Premium</span>, body: 'Put an app behind your PIN, so the people around you cannot open your mail or your browser when you step away.' },
-              { title: 'Drives you plug in', icon: 'storage', tag: <span className="sys-tag">Premium</span>, body: 'Lock USB sticks and external drives too, with the same PIN.' },
+              { title: 'Drives you plug in', icon: 'storage', body: 'Folders and files on a USB stick or an external drive lock the same way, with the same PIN.' },
             ]}
           />
         </Band>
@@ -96,7 +96,7 @@ export default function CitadelPage() {
               price: 'citadel:premium',
               pitch: 'Lock your apps too. And unlock with a glance.',
               lead: 'Everything in Citadel, plus',
-              lines: ['Lock any **app** behind your PIN', 'Unlock with **Windows Hello** or **Touch ID**', 'Auto-lock when you step away or your computer sleeps', 'Lock **USB and external drives**'],
+              lines: ['Lock any **app** behind your PIN', 'Unlock with **Windows Hello** or **Touch ID**', 'Auto-lock when you step away or your computer sleeps', '**Cloud locks** and a **50 GB** Vault'],
               action: { label: 'Buy Citadel Premium', buy: 'citadel:premium' },
             }}
           />
