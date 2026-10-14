@@ -153,7 +153,7 @@ export const APP_PLANS: Plan[] = [
     mark: 'citadel',
     name: 'Citadel Premium',
     note: 'Lock what is yours',
-    pitch: 'Lock apps and drives too, behind the same PIN.',
+    pitch: 'Lock apps too, with cloud locks and a 50 GB Vault.',
     cta: 'Buy Citadel Premium',
     lead: 'Everything in Citadel, plus',
     lines: ['Lock **apps**', 'Unlock with Windows Hello or Touch ID', 'Auto-lock', 'Cloud locks and the Vault, **50 GB**'],
