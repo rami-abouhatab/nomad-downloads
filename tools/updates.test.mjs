@@ -97,7 +97,7 @@ test('/dl serves the published installer, and one exact version to the back offi
 
 test('an app switched to beta asks for beta.yml, and gets the beta channel', async () => {
   const f = platform();
-  const res = await handleUpdate({ product: 'office', channel: 'stable', arch: 'x64', file: 'beta.yml' }, new Request('https://nomad.ax/u'), f);
+  const res = await handleUpdate({ product: 'folio', channel: 'stable', arch: 'x64', file: 'beta.yml' }, new Request('https://nomad.ax/u'), f);
   assert.equal(res.status, 200);
   const asked = f.calls.find((c) => c.url.endsWith('/rpc/release_feed'));
   assert.equal(JSON.parse(asked.body).p_channel, 'beta');
