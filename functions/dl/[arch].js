@@ -8,9 +8,10 @@
  * could never have lived beside the page regardless. See ../_lib/releases.js.
  */
 import { normaliseArch, notFound, serveBuild } from '../_lib/releases.js';
+import { rpc } from '../_lib/platform.js';
 
-export async function onRequestGet({ params }) {
+export async function onRequestGet({ params, waitUntil }) {
   const arch = normaliseArch(params.arch);
   if (!arch) return notFound('Unknown build.');
-  return serveBuild('meridian', arch);
+  return serveBuild('meridian', arch, fetch, { onServe: (served) => waitUntil(rpc('note_download', { p_product: 'meridian', p_arch: arch, p_version: served })) });
 }

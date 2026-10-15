@@ -225,7 +225,11 @@ const MEASURERS = ['https://admin.nomad.ax', 'https://cms.nomad.ax', 'http://127
  * manages the app, else the newest in the downloads repository. `version` asks for one exact
  * build (the back office measuring a draft).
  */
-export async function serveBuild(slug, arch, fetchImpl = fetch, { version = null, origin = null } = {}) {
+/**
+ * `onServe(version)` is told the version actually handed out, once the installer starts streaming:
+ * the download counter (note_download) for the back office's Apps › Downloads.
+ */
+export async function serveBuild(slug, arch, fetchImpl = fetch, { version = null, origin = null, onServe = null } = {}) {
   const product = PRODUCTS[slug];
   let file = null;
   let url = null;
@@ -274,6 +278,8 @@ export async function serveBuild(slug, arch, fetchImpl = fetch, { version = null
     headers['Access-Control-Expose-Headers'] = 'Content-Length, Content-Disposition';
     headers.Vary = 'Origin';
   }
+  const served = parseAsset(file)?.version ?? version;
+  if (onServe && served) onServe(served);
   return new Response(upstream.body, { headers });
 }
 
