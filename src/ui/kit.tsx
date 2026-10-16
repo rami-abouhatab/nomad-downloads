@@ -188,7 +188,7 @@ const ICON: Record<ProductKey, string> = {
   /* Nomad Office's own icon, the four-colour cube on a white squircle (Rami, 2026-10-16), traced in
      nomad-office (tools/trace-office-mark.py, office-bundle-icon.cjs). Only Nomad Office wears it;
      each app keeps its own. */
-  office: '/assets/icons/office.webp?v=20261016',
+  office: '/assets/icons/office.webp?v=20261016b',
   folio: '/assets/icons/folio.webp',
   grids: '/assets/icons/grids.webp',
   expo: '/assets/icons/expo.webp',
