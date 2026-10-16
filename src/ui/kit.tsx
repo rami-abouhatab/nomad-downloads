@@ -179,35 +179,26 @@ export function Checks({ lead, lines }: { lead?: string; lines: string[] }) {
   );
 }
 
-const ICON: Record<Exclude<ProductKey, 'office'>, string> = {
+const ICON: Record<ProductKey, string> = {
   ax: '/assets/icons/meridian.webp?v=20261010d',
   polaris: '/assets/icons/polaris.webp?v=20261009p',
   reach: '/assets/icons/reach.webp',
   drift: '/assets/icons/drift.webp?v=20261010a',
   citadel: '/assets/icons/citadel.webp?v=20261010a',
+  /* Nomad Office's own icon, the four-colour cube on a white squircle (Rami, 2026-10-16), traced in
+     nomad-office (tools/trace-office-mark.py, office-bundle-icon.cjs). Only Nomad Office wears it;
+     each app keeps its own. */
+  office: '/assets/icons/office.webp?v=20261016',
   folio: '/assets/icons/folio.webp',
   grids: '/assets/icons/grids.webp',
   expo: '/assets/icons/expo.webp',
   markup: '/assets/icons/markup.webp',
 };
 
-const OFFICE = ['folio', 'grids', 'expo', 'markup'];
-
-/**
- * A product's mark at a size. Nomad Office is its four app icons; everything
- * else is its app icon (MeridianOS: design-assets/meridian-mark-2026-10-09).
- */
+/** A product's mark at a size: its app icon (MeridianOS: design-assets/meridian-mark-2026-10-09). */
 export function ProductMark({ product, size = 64, label }: { product: ProductKey; size?: number; label?: string }) {
   const style = { '--s': `${size}px` } as CSSProperties;
   const alt = label ?? '';
-  if (product === 'office')
-    return (
-      <span className="office-stack" style={style} role={alt ? 'img' : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : true}>
-        {OFFICE.map((n) => (
-          <img key={n} src={`/assets/icons/${n}.webp`} alt="" width={Math.round(size * 0.46)} height={Math.round(size * 0.46)} />
-        ))}
-      </span>
-    );
   return <img className="icon" src={ICON[product]} alt={alt} width={size} height={size} style={style} />;
 }
 
