@@ -38,11 +38,9 @@ export const PRODUCTS = {
   reach: { name: 'Reach', prefixes: ['Reach'] },
   drift: { name: 'Drift', prefixes: ['Drift'] },
   citadel: { name: 'Citadel', prefixes: ['Citadel'] },
-  /* Nomad Office is the bundle people buy; its four apps download one by one (2026-10-14). */
-  folio: { name: 'Folio', prefixes: ['Folio'] },
-  grids: { name: 'Grids', prefixes: ['Grids'] },
-  expo: { name: 'Expo', prefixes: ['Expo'] },
-  markup: { name: 'Markup', prefixes: ['Markup'] },
+  /* Nomad Office installs Folio, Grids, Expo and Markup together, one download (Rami, 2026-10-16:
+     "Office will install the 4 apps"); before, each downloaded apart. */
+  office: { name: 'Nomad Office', prefixes: ['Nomad-Office'] },
 };
 
 /** Spellings people (and older links) use for a product, mapped to its slug. */
@@ -57,10 +55,13 @@ const ALIASES = {
   reach: 'reach',
   drift: 'drift',
   citadel: 'citadel',
-  folio: 'folio',
-  grids: 'grids',
-  expo: 'expo',
-  markup: 'markup',
+  office: 'office',
+  'nomad-office': 'office',
+  /* The four apps' own links, from before 2026-10-16, bring the install that has them. */
+  folio: 'office',
+  grids: 'office',
+  expo: 'office',
+  markup: 'office',
 };
 
 export function productSlug(value) {

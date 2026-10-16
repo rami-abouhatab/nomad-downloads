@@ -11,7 +11,7 @@
  */
 import { rpc } from '../../../../_lib/platform.js';
 
-const PRODUCTS = ['meridian', 'polaris', 'reach', 'drift', 'citadel', 'folio', 'grids', 'expo', 'markup'];
+const PRODUCTS = ['meridian', 'polaris', 'reach', 'drift', 'citadel', 'office', 'folio', 'grids', 'expo', 'markup'];
 const CHANNELS = ['stable', 'beta'];
 const ARCHES = ['x64', 'arm64'];
 

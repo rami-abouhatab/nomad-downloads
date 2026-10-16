@@ -97,9 +97,11 @@ test('compareVersions orders numerically and puts pre-releases first', () => {
 test('productSlug accepts the asset names and friendly spellings', () => {
   assert.equal(productSlug('AX'), 'meridian');
   /* Nomad Office is a bundle you buy, not a download: its four apps download one by one (2026-10-14). */
-  assert.equal(productSlug('Folio'), 'folio');
-  assert.equal(productSlug('markup'), 'markup');
-  assert.equal(productSlug('office'), null);
+  /* The four Office apps' old links bring the one install that has them (2026-10-16). */
+  assert.equal(productSlug('Folio'), 'office');
+  assert.equal(productSlug('markup'), 'office');
+  assert.equal(productSlug('office'), 'office');
+  assert.equal(productSlug('Nomad-Office'), 'office');
   assert.equal(productSlug('Polaris'), 'polaris');
   assert.equal(productSlug('toString'), null);
   assert.equal(productSlug(''), null);
@@ -112,8 +114,7 @@ test('findBuild picks the newest version of the product across releases', () => 
   // AX has no newer x64 build yet: the legacy Nomad- build still serves it.
   assert.equal(findBuild(published, 'meridian', 'x64').asset.name, 'Nomad-0.1.2-x64-setup.exe');
   assert.equal(findBuild(published, 'reach', 'x64').asset.name, 'Reach-0.5.0-x64-setup.exe');
-  assert.equal(findBuild(published, 'folio', 'x64').asset.name, 'Folio-0.1.0-x64-setup.exe');
-  assert.equal(findBuild(published, 'folio', 'arm64'), null);
+  assert.equal(findBuild(published, 'folio', 'x64'), null);
   assert.equal(findBuild(published, 'drift', 'x64'), null);
 });
 
@@ -142,7 +143,7 @@ test('manifest without a product keeps the original AX shape and urls', async ()
 test('manifest?product=all lists every product; drafts and pre-releases never show', async () => {
   const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=all'), fakeFetch());
   const { products } = await res.json();
-  assert.deepEqual(Object.keys(products).sort(), ['citadel', 'drift', 'expo', 'folio', 'grids', 'markup', 'meridian', 'polaris', 'reach']);
+  assert.deepEqual(Object.keys(products).sort(), ['citadel', 'drift', 'meridian', 'office', 'polaris', 'reach']);
   assert.equal(products.drift.builds.x64, null);
   assert.equal(products.meridian.builds.arm64.file, 'AX-0.2.0-arm64-setup.exe');
   // Every app but MeridianOS is published through the back office only: an upload alone offers nothing.
@@ -152,7 +153,7 @@ test('manifest?product=all lists every product; drafts and pre-releases never sh
 test('manifest?product=unknown is a 404 with the list of products', async () => {
   const res = await handleManifest(new URL('https://nomad.ax/dl/manifest?product=word'), fakeFetch());
   assert.equal(res.status, 404);
-  assert.ok((await res.json()).products.includes('folio'));
+  assert.ok((await res.json()).products.includes('office'));
 });
 
 test('serveBuild streams the asset with a download filename (MeridianOS, still read from the repository)', async () => {

@@ -28,15 +28,6 @@ const ARCH: { id: Arch; label: string; base: string }[] = [
 /** A product as the download URLs say it: MeridianOS is `meridian`, never `ax` (Rami, 2026-10-11). */
 const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
 
-/* Nomad Office is the bundle people buy; Folio, Grids, Expo and Markup are each an app of their own
-   (Rami, 2026-10-14: "nomad office is just the bundle, but the apps are separate"). All four are for
-   Windows only: Reach and Drift are the only apps on the web (Rami, 2026-10-14). */
-const OFFICE_NEED = (files: string) => (
-  <>
-    Opens and saves {files}. Comes with <a href="/office#buy">Nomad Office</a>, already on every MeridianOS desk.
-  </>
-);
-
 /* `web`: the app is also on the web (Reach and Drift: desktop apps since 2026-10-14, web apps since
    10-12). Its web address sits beside the download, and leads until a desktop build is published. */
 const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; need: ReactNode; web?: string }[] = [
@@ -90,32 +81,19 @@ const PRODUCTS: { id: ProductKey; name: string; short: string; what: string; nee
     ),
   },
   {
-    id: 'folio',
-    name: 'Folio',
-    short: 'Folio',
-    what: 'Documents, written and reviewed.',
-    need: OFFICE_NEED('Word documents'),
-  },
-  {
-    id: 'grids',
-    name: 'Grids',
-    short: 'Grids',
-    what: 'Numbers, worked out.',
-    need: OFFICE_NEED('Excel workbooks'),
-  },
-  {
-    id: 'expo',
-    name: 'Expo',
-    short: 'Expo',
-    what: 'Slides that make the point.',
-    need: OFFICE_NEED('PowerPoint decks'),
-  },
-  {
-    id: 'markup',
-    name: 'Markup',
-    short: 'Markup',
-    what: 'PDFs, read, marked up and signed.',
-    need: OFFICE_NEED('PDFs'),
+    /* One download installs the four, as Microsoft Office installs Word, Excel and PowerPoint (Rami,
+       2026-10-16: "Office will install the 4 apps"). Windows only: Reach and Drift are the only apps on
+       the web (2026-10-14). */
+    id: 'office',
+    name: 'Nomad Office',
+    short: 'Nomad Office',
+    what: 'Folio, Grids, Expo and Markup, installed together.',
+    need: (
+      <>
+        Documents, workbooks, slides and PDFs in Word, Excel and PowerPoint's own files. Needs a <a href="/office#buy">Nomad Office</a> subscription,
+        already on every MeridianOS desk.
+      </>
+    ),
   },
 ];
 
