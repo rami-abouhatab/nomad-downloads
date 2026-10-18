@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Layout } from '../ui/Layout';
-import { Band, BandHead } from '../ui/system';
-import { CorpHeader } from '../ui/corp';
+import { Band } from '../ui/system';
+import { Cards, CorpHeader, Section } from '../ui/corp';
 import { LinkButton, ProductMark, Sym, type ProductKey } from '../ui/kit';
 import { DRIFT_WEB } from '../data';
 
@@ -181,12 +181,13 @@ export default function DownloadPage() {
                one is published, the web beside it; before that, the web leads. */
             const webLeads = Boolean(p.web) && Boolean(info) && !info?.version;
             const webUrl = p.web?.replace('/?install=1', '').replace('?install=1', '');
+            /* A launch site lists what can be had (Rami, 2026-10-18: "treat this website as the launch
+               one"): an app with no published build and no web version is left off, never "coming soon". */
+            if (info && !info.version && !p.web) return null;
             const meta = webLeads
-              ? 'The desktop app is coming soon · on the web now'
-              : info
-                ? info.version
-                  ? `Version ${info.version}${size ? ` · ${mb(size)}` : ''}`
-                  : 'Not released yet'
+              ? 'On the web, in any browser'
+              : info?.version
+                ? `Version ${info.version}${size ? ` · ${mb(size)}` : ''}`
                 : 'For Windows 10 and 11';
             return (
               <article className="dl-tile" id={p.id === 'ax' ? 'meridian' : p.id} key={p.id} aria-labelledby={`dl-${p.id}`}>
@@ -202,8 +203,6 @@ export default function DownloadPage() {
                     <LinkButton href={webUrl!} variant="primary" size="md" icon={<Sym name="globe" size={16} />}>
                       Open {p.short} on the web
                     </LinkButton>
-                  ) : info && !info.version ? (
-                    <span className="dl-soon">Coming soon</span>
                   ) : arch && out(arch) ? (
                     <LinkButton href={href(arch)} variant="primary" size="md" download icon={<Sym name="download" size={16} />}>
                       Download
@@ -232,14 +231,24 @@ export default function DownloadPage() {
         </div>
       </Band>
 
-      <Band id="which" tone="mist" label="which-title">
-        <BandHead id="which-title" title="Which download is mine?" />
-          <p className="sys-lede which-copy">
-            Not sure which PC you have? Intel and AMD is the usual answer; ARM means a Snapdragon or similar chip. The apps install for your
-            Windows user alone, so they need no administrator, and they uninstall from Windows' own list of apps. Until our builds are
-            code-signed, Windows may warn that the publisher is unknown.
-          </p>
-      </Band>
+      {/* The same edge and cards as every other section (Rami, 2026-10-18: "title left and content centred?") */}
+      <Section id="which-title" anchor="which" tone="mist" label="Help" title="Which download is mine?">
+        <Cards
+          cols={2}
+          items={[
+            {
+              title: 'Intel and AMD, or ARM',
+              icon: 'display',
+              body: 'Not sure which PC you have? Intel and AMD is the usual answer. ARM means a Snapdragon or a similar chip. The page points out the one that fits this computer.',
+            },
+            {
+              title: 'No administrator needed',
+              icon: 'account',
+              body: 'The apps install for your Windows user alone, and uninstall from Windows’ own list of apps.',
+            },
+          ]}
+        />
+      </Section>
       </div>
     </Layout>
   );

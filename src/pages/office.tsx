@@ -105,7 +105,7 @@ export default function OfficePage() {
           />
         </Section>
 
-        <Section id="buy-title" anchor="buy" tone="mist" label="Pricing" title="One price, all four apps." lede="Nomad Office is a paid suite with no free tier. Your files stay on your computer.">
+        <Section id="buy-title" anchor="buy" tone="mist" label="Pricing" title="One price, all four apps." lede="One subscription for Folio, Grids, Expo and Markup. Your files stay on your computer.">
           <PlanSolo
             product="office"
             name="Nomad Office"
