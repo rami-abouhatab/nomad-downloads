@@ -43,7 +43,7 @@ export default function OfficePage() {
         links: [
           { label: 'Overview', href: '/office', current: true },
           { label: 'Buy', href: '/office#buy' },
-          { label: 'Download', href: '/download#folio' },
+          { label: 'Download', href: '/download#office' },
         ],
         cta: { label: 'Buy', href: '/office#buy' },
       }}
@@ -57,7 +57,7 @@ export default function OfficePage() {
           actions={
             <>
               <Buy />
-              <More href="/download#folio">Download</More>
+              <More href="/download#office">Download</More>
             </>
           }
           note="Already in every MeridianOS plan."
@@ -112,7 +112,7 @@ export default function OfficePage() {
             pitch="Documents, spreadsheets, presentations and PDFs."
             cta="Buy Nomad Office"
             lines={['Folio, Grids, Expo and Markup', 'Installed on your own computer', 'Signs in with your Nomad account']}
-            after={<More href="/download#folio">Download Nomad Office</More>}
+            after={<More href="/download#office">Download Nomad Office</More>}
           />
         </Section>
 

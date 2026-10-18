@@ -182,21 +182,20 @@ export function Checks({ lead, lines }: { lead?: string; lines: string[] }) {
 const ICON: Record<ProductKey, string> = {
   ax: '/assets/icons/meridian.webp?v=20261010d',
   polaris: '/assets/icons/polaris.webp?v=20261018s',
-  /* the suite's own icon (nomad-office apps/shell/build/icon.png), not its four apps stacked */
-  office: '/assets/icons/office.webp?v=20261018',
   reach: '/assets/icons/reach.webp',
   drift: '/assets/icons/drift.webp?v=20261010a',
   citadel: '/assets/icons/citadel.webp?v=20261010a',
+  /* Nomad Office's own icon, the four-colour cube on a white squircle (Rami, 2026-10-16), traced in
+     nomad-office (tools/trace-office-mark.py, office-bundle-icon.cjs). Only Nomad Office wears it;
+     each app keeps its own. */
+  office: '/assets/icons/office.webp?v=20261016b',
   folio: '/assets/icons/folio.webp',
   grids: '/assets/icons/grids.webp',
   expo: '/assets/icons/expo.webp',
   markup: '/assets/icons/markup.webp',
 };
 
-/**
- * A product's mark at a size: its app icon. Nomad Office is its own suite icon since 2026-10-18;
- * everything else is its app icon (MeridianOS: design-assets/meridian-mark-2026-10-09).
- */
+/** A product's mark at a size: its app icon (MeridianOS: design-assets/meridian-mark-2026-10-09). */
 export function ProductMark({ product, size = 64, label }: { product: ProductKey; size?: number; label?: string }) {
   const style = { '--s': `${size}px` } as CSSProperties;
   const alt = label ?? '';
