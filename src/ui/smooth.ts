@@ -10,9 +10,9 @@ import 'lenis/dist/lenis.css';
  * script runs; loaded only after hydration, so it never sits on the opening's first frames.
  * Horizontal swipes in the screenshot rows stay native (Lenis smooths the vertical only).
  */
-export function useSmoothScroll() {
+export function useSmoothScroll(on = true) {
   useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!on || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let lenis: { destroy(): void } | null = null;
     let live = true;
     import('lenis').then(({ default: Lenis }) => {
@@ -23,5 +23,5 @@ export function useSmoothScroll() {
       live = false;
       lenis?.destroy();
     };
-  }, []);
+  }, [on]);
 }

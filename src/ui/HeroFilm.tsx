@@ -1,7 +1,7 @@
 /* The home hero (Rami, 2026-10-18): a contained block, as microsoft.com's, in the old hero's
    sky-to-sand gradient, with the words on the left and a laptop seen straight on at the right (the
    Meridian section's own), cut out of its picture so it sits on the block's own gradient; its screen is the
-   real Meridian desk (4K capture, corner-pinned). Its entrance is still to be designed. */
+   real Meridian desktop (4K capture, corner-pinned). Its entrance is still to be designed. */
 
 export function HeroFilm() {
   return (

@@ -70,15 +70,19 @@ export function PageHero({
 
 /**
  * A real capture of the product (Rami, 2026-10-11: "wire your screenshots"), never a mockup: the
- * shell's own windows, captured on the sunset desk (design-assets/meridian-shots-2026-10-10).
+ * shell's own windows, captured on the sunset desktop (design-assets/meridian-shots-2026-10-10).
  * `name` is a file family in /assets/shots/products: <name>-{1200,2000}.webp.
  */
+/* Bumped when the captures are re-shot (2026-10-18: each app alone, from its own dev build;
+   design-assets/app-shots-2026-10-18). */
+const SHOTS_V = '20261018';
+
 export function RealShot({ name, alt, ratio = '16 / 9', eager = false }: { name: string; alt: string; ratio?: string; eager?: boolean }) {
   return (
     <img
       className="sys-real-shot"
-      src={`/assets/shots/products/${name}-2000.webp`}
-      srcSet={`/assets/shots/products/${name}-1200.webp 1200w, /assets/shots/products/${name}-2000.webp 2000w`}
+      src={`/assets/shots/products/${name}-2000.webp?v=${SHOTS_V}`}
+      srcSet={`/assets/shots/products/${name}-1200.webp?v=${SHOTS_V} 1200w, /assets/shots/products/${name}-2000.webp?v=${SHOTS_V} 2000w`}
       sizes="(min-width: 1400px) 1300px, 94vw"
       alt={alt}
       style={{ aspectRatio: ratio }}
@@ -214,14 +218,14 @@ export type Item = { title: string; body: ReactNode; icon?: string; mark?: React
 /**
  * Columns of short ideas, each under a hairline (the home page's three
  * steps). `numbered` turns them into a real sequence; `icon` sets a symbol
- * over each; `align` centres them (steps) or sets them left (a grid of
- * features, apple.com's "And so much more").
+ * over each; `align` centres them (the default, Rami 2026-10-18: "also these
+ * centered") or sets them left.
  */
 export function Columns({
   items,
   cols = 3,
   numbered = false,
-  align = 'start',
+  align = 'center',
 }: {
   items: Item[];
   cols?: 2 | 3 | 4;
@@ -254,13 +258,24 @@ export function Columns({
 /**
  * Chapters: a feature per row, its words on one side and its picture on the
  * other, sides alternating (apple.com's Safari). The picture is a mockup
- * slot until the mockups are made.
+ * slot until the mockups are made. Two or more are set as a grid instead (Rami,
+ * 2026-10-18: "they're all over the place"): two by two, or three across for
+ * three or more (a short last row centred under the rest), each picture over its words, all on the page's one set of edges. A
+ * chapter on its own keeps the row.
  */
-export function Chapters({ product, items }: { product: ProductKey; items: (Item & { visual?: ReactNode })[] }) {
+export function Chapters({
+  product,
+  items,
+  grid = items.length > 1,
+}: {
+  product: ProductKey;
+  items: (Item & { visual?: ReactNode; action?: ReactNode })[];
+  grid?: boolean;
+}) {
   return (
-    <div className="sys-chapters">
+    <div className={grid ? `sys-chapters sys-chapters-grid${items.length === 3 || items.length > 4 ? ' sys-chapters-3' : ''}` : 'sys-chapters'}>
       {items.map((it, i) => (
-        <article className={i % 2 ? 'sys-chapter flip' : 'sys-chapter'} key={it.title} id={it.id}>
+        <article className={i % 2 && !grid ? 'sys-chapter flip' : 'sys-chapter'} key={it.title} id={it.id}>
           <div className="sys-chapter-copy">
             {/* The icon beside its title (Rami, 2026-10-11: "icon next to each title"). */}
             <div className="sys-title-row">
@@ -268,6 +283,7 @@ export function Chapters({ product, items }: { product: ProductKey; items: (Item
               <h3>{it.title}</h3>
             </div>
             <p>{it.body}</p>
+            {it.action && <div className="sys-chapter-action">{it.action}</div>}
           </div>
           <div className="sys-chapter-visual">{it.visual ?? <div className="sys-shot" data-mockup={`${product}:${i + 1}`} aria-hidden="true"><ProductMark product={product} size={112} /></div>}</div>
         </article>

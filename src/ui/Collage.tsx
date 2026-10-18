@@ -4,7 +4,7 @@
  * small spaced label, a large title and one quiet line; "add more screenshots").
  *
  * Every picture is a real capture of the shell (design-assets/meridian-shots-2026-10-10/cards.py):
- * squares cut from the desk, and portrait close-ups of a window on the sunset. Words are never on
+ * squares cut from the desktop, and portrait close-ups of a window on the sunset. Words are never on
  * the pictures.
  *
  * The first law: static images; each item rises in on its own view timeline (opacity and transform,

@@ -1,9 +1,9 @@
 /**
  * The header's account control (Rami, 2026-10-11: "like Microsoft: I sign in, I come back to the
  * page I was on with a profile squircle in the header; click it for the account, sign out and the
- * rest").
+ * rest"). Since 2026-10-18 it is words: "Log in", then the first name and a chevron.
  *
- * Signed out it is "Sign in", which goes to account.nomad.ax with this page as `next`, so the
+ * Signed out it is "Log in" (2026-10-18), which goes to account.nomad.ax with this page as `next`, so the
  * person lands back here. Signed in it is the person's squircle; it drops the house menu
  * (nomad-design showMenu, as MeridianOS's bar and account.nomad.ax's header do; Rami, 2026-10-11:
  * "a bit more minimal"): who is signed in as its quiet heading, the account's places as bare rows,
@@ -14,11 +14,9 @@
  * sign anyone in; the session stays on account.nomad.ax. Read after hydration, so the prerendered
  * page and the first client render agree ("Sign in"), and only then swapped.
  */
-import { initialsOf, Monogram } from 'nomad-design';
 import { useEffect, useState } from 'react';
 import { MenuHost, showMenu, type MenuEntry } from '@nd/Menu';
 import { ACCOUNT, SIGN_IN } from '../data';
-import { Sym } from './kit';
 
 type Who = { n: string; e: string };
 
@@ -66,14 +64,16 @@ function openMenu(button: HTMLElement, who: Who) {
   showMenu(0, box.bottom + 6, items, { alignEnd: box.right, label: 'Your Nomad account' });
 }
 
+/** The name the bar shows: the first word of the account's name, or the email's local part. */
+const firstName = (who: Who) => (who.n.trim().split(/\s+/)[0] || who.e.split('@')[0]);
+
 export function AccountMenu() {
   const who = useWho();
 
   if (!who) {
     return (
-      <a className="gnav-signin" href={SIGN_IN} aria-label="Sign in" onClick={(e) => (e.currentTarget.href = withNext(SIGN_IN))}>
-        <span className="gnav-signin-word">Sign in</span>
-        <Sym name="account" size={16} className="gnav-signin-face" />
+      <a className="gnav-signin" href={SIGN_IN} onClick={(e) => (e.currentTarget.href = withNext(SIGN_IN))}>
+        Log in
       </a>
     );
   }
@@ -82,12 +82,15 @@ export function AccountMenu() {
     <>
       <button
         type="button"
-        className="acm-face"
+        className="acm-name"
         aria-label={`Your Nomad account, ${who.e}`}
         aria-haspopup="menu"
         onClick={(e) => openMenu(e.currentTarget, who)}
       >
-        <Monogram letter={initialsOf(who.n, who.e)} weight={450} />
+        {firstName(who)}
+        <svg viewBox="0 0 10 10" aria-hidden="true">
+          <path d="M2 3.6 5 6.6 8 3.6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
       <MenuHost />
     </>

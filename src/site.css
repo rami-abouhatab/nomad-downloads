@@ -56,6 +56,9 @@
   --site-gutter: var(--space-base);
   --site-section: calc(var(--space-xxl) * 2);
   --site-bar: 40px; /* thinner (Rami, 2026-10-12) */
+  /* The page's edges (Rami, 2026-10-17): the bar's camel and profile, the hero's
+     note and the full-width sections all stand this far in from the window. */
+  --site-inset: clamp(var(--site-gutter), 6vw, 96px);
   --site-nav-gap: clamp(20px, 2.6vw, 36px);
 
 }
@@ -373,29 +376,27 @@ img.icon {
   top: 0;
 }
 
+
 .gnav-row {
-  /* The camel at the far left, the person at the far right, the links centred between them
-     (Rami, 2026-10-12, after microsoft.com). Three columns, the outer two equal, so the links sit
-     on the bar's true centre. Wider than the page's column, as theirs is. */
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* One row, the camel, the menus and the person spaced alike (Rami, 2026-10-18: "closer, like
+     they're with the menus, same gaps"), the whole group centred on the bar. */
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: var(--site-nav-gap);
-  /* To the window's edges (Rami, 2026-10-12: "logo and sign in far edge"), a small gutter only. */
   max-width: none;
-  padding-inline: clamp(16px, 1.6vw, 28px);
+  margin-inline: auto;
+  padding-inline: var(--site-gutter);
   height: var(--site-bar);
 }
 
 .gnav-row > .brand {
-  justify-self: start;
+  flex: none;
 }
 
-.gnav-row .acm-face,
+.gnav-row .acm-name,
 .gnav-row .gnav-signin {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
+  flex: none;
 }
 
 .gnav-row > .gnav-end {
@@ -456,17 +457,29 @@ img.icon {
   gap: var(--space-base);
 }
 
-/* Signed out, the person's place is the same circle with a person in it, at every width (Rami,
-   2026-10-12: "don't put a Sign in text, the same circle with a person inside"). */
-.gnav-signin {
-  display: inline-grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #1d1d1f;
+/* The person's place is words, in the menus' own type (Rami, 2026-10-18: "make it login text and
+   when signed in the first name with an arrow"): "Log in" signed out, the first name and a small
+   chevron signed in. It replaced the circle of 2026-10-12. */
+.gnav-signin,
+.acm-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-xs) 0;
+  border: 0;
+  background: none;
   color: var(--text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.acm-name svg {
+  width: 9px;
+  height: 9px;
+  opacity: 0.7;
 }
 
 /* The menu button exists only where the links don't fit (phones and small
@@ -662,6 +675,13 @@ img.icon {
   /* Phones (Rami, 2026-10-11): the menu on the left, the camel in the centre, the person on the
      right. Three columns, the outer two equal, so the camel sits on the bar's true centre whatever
      either side holds. */
+  .gnav-row .acm-name,
+  .gnav-row .gnav-signin {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+
   .gnav-row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -3040,7 +3060,8 @@ a.nm-btn.plan-cta {
 }
 
 .where .wrap {
-  max-width: calc(1560px + 2 * var(--site-gutter));
+  max-width: none;
+  padding-inline: var(--site-inset);
 }
 
 .where-inner {
@@ -3208,17 +3229,18 @@ a.nm-btn.plan-cta {
    every computer", and that to the privacy line. Last in the cascade, so
    these win over each section's own padding. */
 :root {
-  --rhythm: clamp(72px, 7vw, 112px);
+  /* Rami, 2026-10-18: a little more air, then a little less again */
+  --rhythm: clamp(48px, 4vw, 64px);
 }
 
 .how {
-  /* Close under the hero, so its title peeks above the fold. */
-  padding-block: clamp(20px, 2.4vw, 40px) var(--rhythm);
+  /* the hero is a block now: the same rhythm under it as between every other pair */
+  padding-block: var(--rhythm);
 }
 
 .tiles-section {
   /* the title's line box sits about half its size above its letters */
-  padding-block: calc(var(--rhythm) - 0.48 * clamp(40px, 5.2vw, 80px)) 0;
+  padding-block: var(--rhythm) 0;
 }
 
 .tiles-title {
@@ -3322,7 +3344,7 @@ a.nm-btn.plan-cta {
    the footer (Rami, 2026-10-10). */
 .home-qa .wrap {
   max-width: none;
-  padding-inline: clamp(var(--site-gutter), 6vw, 96px);
+  padding-inline: var(--site-inset);
 }
 
 .home-qa .qa {
@@ -5922,5 +5944,1285 @@ a.nm-btn.plan-cta {
 @media (max-width: 640px) {
   .plans-4 {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ══ The home hero (src/ui/HeroFilm.tsx; Rami, 2026-10-18) ══════════════
+   A contained block, as microsoft.com's: the old hero's sky-to-sand light
+   as its colour, the words on the left, and the real product floating on the
+   right as layers at different depths (the desk, Folio, Polaris). All static
+   paint; anything that moves later moves on transform and opacity only. */
+.film {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  min-height: clamp(400px, 32vw, 560px);
+  padding: clamp(28px, 3vw, 48px) var(--site-inset);
+  overflow: hidden;
+  background:
+    radial-gradient(55% 75% at 72% 58%, rgb(255 248 238 / 0.75) 0%, rgb(255 248 238 / 0) 70%),
+    linear-gradient(180deg, #c4d2e0 0%, #d6dce1 38%, #e7e2d9 72%, #eee2d0 100%);
+}
+
+.film-note-inner {
+  max-width: 34ch;
+}
+
+.film-device {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 760px);
+}
+.film-device-img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* A soft contact shadow some way below the base, as if the laptop hovers: one blurred ellipse,
+   painted once, never animated. */
+.film-device-shadow {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -7%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(54 50 44 / 0.26), rgb(54 50 44 / 0.12) 55%, rgb(54 50 44 / 0));
+  filter: blur(10px);
+}
+
+@media (max-width: 880px) {
+  .film {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+}
+
+.film-note-title {
+  margin: 0 0 6px;
+  color: #141518;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+.film-note-body {
+  margin: 0;
+  color: #6b6e75;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.film-note-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #141518;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ══ Home: the hero's small type everywhere (Rami, 2026-10-18: "the sizes of the content in the
+   rest of the sections need to match the minimal small style of the hero") ══════════════════
+   Section titles are 28px (750, ink), above the content; everything said under them takes its body
+   (13px, the soft grey, 1.5); buttons and links speak at 13px. Scoped to the home page's flow, so
+   the product pages keep their own scale. */
+.flow :is(.how-title, .tiles-title, .where-title, .home-qa-title) {
+  /* still a title: clearly above the 13px it introduces (Rami, 2026-10-18) */
+  margin-bottom: 10px;
+  color: #141518;
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.flow :is(.how-lede, .where-lede, .meridian-line, .suite-office) {
+  color: #6b6e75;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.flow .tiles-title {
+  margin-bottom: clamp(24px, 2.4vw, 36px);
+}
+/* the steps, the cards, the platforms and the questions */
+.flow :is(.how-steps h3, .app-tagline, .where-name h3) {
+  color: #141518;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.flow :is(.how-steps p, .app-body, .where-name p, .home-qa .qa p, .home-qa .qa [role='region'] p) {
+  color: #6b6e75;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.flow .home-qa :is(summary, button, .qa-q) {
+  font-size: 13px;
+  font-weight: 600;
+}
+.flow :is(.app-links a, .where-list a, .where-list .more, .suite-office a, .panel-actions a) {
+  font-size: 13px;
+}
+.flow .nm-btn-label {
+  font-size: 13px;
+}
+/* the Meridian section's lockup at the hero's scale too */
+.flow .meridian-head {
+  height: 40px;
+  font-size: 22px;
+}
+.flow .meridian-head .meridian-lockup {
+  --h: 24px;
+}
+/* the spaces inside a section, sized for the small type (Rami, 2026-10-18: "why this space between
+   the title, the subtitle and the contents"): title to subtitle 10px, subtitle to content 32px */
+.flow :is(.how-lede, .where-lede) {
+  margin-top: 0;
+}
+.flow .how-steps {
+  margin-top: 32px;
+}
+.flow .how-steps li {
+  gap: 6px;
+  padding-top: 20px;
+}
+.flow .how-steps li > svg {
+  margin-bottom: 6px;
+}
+.flow .where-title {
+  margin-bottom: 10px;
+}
+.flow :is(.tiles-title, .home-qa-title) {
+  margin-bottom: 32px;
+}
+.flow .home-qa .qa {
+  margin-top: 0;
+}
+.flow .where-copy {
+  gap: 0;
+}
+
+/* ══ Every page: the home page's small type (Rami, 2026-10-18: "do the same with all the other pages,
+   unless it's the MeridianOS page, where the hero needs to be big") ═══════════════════════════════
+   Three steps and nothing else: a title (28px, 750), a heading (16px, 650) and the text (13px, the
+   soft grey); eyebrows 12px. `:root main` lifts these over each component's own rule. The
+   MeridianOS hero (.mxh) keeps its big type. */
+.ph + .band-white {
+  padding-top: var(--rhythm);
+}
+:root main :is(.ph-title, .sys-title, .cg-title, .vs-usual-h, .price-big, .sys-plan-free, h1, h2):not(.mxh *, .vh, .sr-only) {
+  color: inherit;
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+:root main :is(h3, .plan-name, .dl-tile-name, .vs-when):not(.mxh *, .vh, .sr-only, .flow *) {
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+:root main :is(.ph-lede, .sys-lede, .sys-plan-pitch, .plan-pitch, .cg-body, .vs-meridian, .vs-usual, .dl-tile-what, .todo, p, li, td):not(.mxh *, .flow *) {
+  font-size: 13px;
+  line-height: 1.5;
+}
+:root main :is(.ph-lede, .sys-lede, .sys-plan-pitch, .plan-pitch, .cg-body, .dl-tile-what):not(.mxh *) {
+  color: #6b6e75;
+}
+:root main :is(th, .checks-lead, b, strong, small):not(.mxh *, .flow *) {
+  font-size: 13px;
+}
+:root main :is(.ph-eyebrow, .sys-eyebrow):not(.mxh *) {
+  font-size: 12px;
+  font-weight: 600;
+}
+:root main :is(.nm-btn-label, .more, a > span):not(.mxh *, .flow *) {
+  font-size: 13px;
+}
+/* the questions and the tab labels speak at the text's size too */
+:root main :is(summary, button, .sys-tab) span:not(.mxh *, .flow *) {
+  font-size: 13px;
+}
+
+/* Plan cards on the shared scale like every other section (Rami, 2026-10-18): the name is a heading
+   (16px) and everything else the text (13px); only the price stands at the title's size, which the
+   13px text rule had been overriding. */
+:root main .plan .price-big {
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+:root main .plan .price-big small {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+/* The plans band no longer shrinks to fit a short screen (2026-10-12's zoom steps): with the small
+   type it fits as it is, and the zoom made its sizes differ from every other section (Rami,
+   2026-10-18: "this section needs to be the same as the others"). */
+.plans-band > .sys-wrap {
+  zoom: 1;
+}
+/* The whole plans section on one screen at the same sizes (Rami, 2026-10-18: "without changing the
+   sizes, find a way for it to be all visible without scrolling"): the switch sits beside its note on
+   one line, and each card's list runs in two columns, its lead line across both. */
+.plans-band .period-switch {
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 10px;
+}
+.plans-band .plans {
+  margin-top: 18px;
+}
+.plans-band .plan .checks {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 18px;
+  row-gap: 6px;
+  align-items: start;
+}
+.plans-band .plan .checks .checks-lead {
+  grid-column: 1 / -1;
+}
+@media (max-width: 1100px) {
+  .plans-band .plan .checks {
+    grid-template-columns: 1fr;
+  }
+}
+.plans-band {
+  padding-block: 10px 14px;
+}
+.plans-band .plan {
+  padding: 18px 24px;
+}
+.plans-band .plan .price,
+.plans-band .plan .plan-cta {
+  margin-top: 10px;
+}
+.plans-band .plan .checks {
+  margin-top: 2px;
+  padding-top: 12px;
+}
+.plans-band .sys-foot {
+  margin-top: 10px;
+}
+/* Each card's list (Rami, 2026-10-18: "improve the structure further"): the plan's two numbers, storage
+   and desks, side by side as its spec row; every other line full width in one column, so no line is
+   squeezed into a narrow cell. */
+.plans-band .plan .checks > li {
+  grid-column: 1 / -1;
+}
+.plans-band .plan .checks > li:nth-child(2),
+.plans-band .plan .checks > li:nth-child(3) {
+  grid-column: auto;
+  padding-bottom: 6px;
+}
+.plans-band .plan .checks > li:nth-child(4) {
+  padding-top: 8px;
+  border-top: var(--hairline) solid var(--site-line);
+}
+.plans-band .plan .checks {
+  row-gap: 5px;
+}
+.plans-band .sys-head {
+  margin-bottom: 0;
+}
+.plans-band .plans {
+  margin-top: 22px;
+}
+/* the plans footnote's place, kept empty: the two lines it took */
+.sys-foot-blank {
+  height: 39px;
+}
+/* the plans title sits a little lower in its band, the band's top edge unchanged (Rami, 2026-10-18) */
+.plans-band .sys-head {
+  padding-top: 22px;
+}
+
+/* Chapters two by two (Rami, 2026-10-18, Polaris: "more structured, they're all over the place"):
+   one band, its title, then the features on the page's own two edges, each picture over its own
+   words, every picture one size. One column on a phone. */
+.sys-chapters.sys-chapters-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(40px, 3.6vw, 56px) clamp(24px, 2.4vw, 40px);
+  max-width: none;
+}
+
+.sys-chapters-grid .sys-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sys-chapters-grid .sys-chapter-visual {
+  order: -1;
+}
+
+.sys-chapters-grid .sys-chapter-copy {
+  gap: 6px;
+  max-width: 34em;
+}
+
+/* three across on six half-tracks, so a short last row can sit centred under the rest */
+.sys-chapters.sys-chapters-3 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.sys-chapters-3 > .sys-chapter {
+  grid-column: span 2;
+}
+
+.sys-chapters-3 > .sys-chapter:nth-child(3n + 1):nth-last-child(2) {
+  grid-column: 2 / span 2;
+}
+
+.sys-chapters-3 > .sys-chapter:nth-child(3n + 1):last-child {
+  grid-column: 3 / span 2;
+}
+
+/* a title straight over its grid sits close to it, as every band's head does to its content */
+:is(.band-white, .band-mist):has(.sys-chapters-grid) .sys-head {
+  margin-bottom: 32px;
+}
+
+/* columns and the grid in one band keep a section's gap between them (Drift's steps over its
+   pictures, Reach's pictures over Calls and People) */
+.sys-cols + .sys-chapters-grid,
+.sys-chapters-grid + .sys-cols {
+  margin-top: var(--rhythm);
+}
+
+@media (max-width: 900px) {
+  .sys-chapters.sys-chapters-grid,
+  .sys-chapters.sys-chapters-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .sys-chapters-3 > .sys-chapter:nth-child(n):nth-last-child(n) {
+    grid-column: auto;
+  }
+}
+
+/* Feature columns' symbols at the small type's scale, as the chapters' (Rami, 2026-10-18) */
+main .sys-cols li > svg {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 4px;
+}
+
+/* Every chapter's symbol at the small type's scale, in a row or in the grid (Rami, 2026-10-18) */
+.sys-chapter .sys-title-row {
+  gap: 10px;
+}
+
+.sys-chapter .sys-title-row svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.sys-chapter-action {
+  margin-top: 6px;
+}
+
+/* ══ The corporate pages (ui/corp.tsx; Rami, 2026-10-18: "visual structure and a professional
+   corporate layout", every page but home and MeridianOS) ═══════════════════════════════════════
+   One left edge down the page; content in grey cards on white; static paint only. `:root main`
+   where a rule must win over the site's type layer above. */
+
+.corp {
+  --corp-card: #f5f5f7;
+  --corp-ink: #1d1d1f;
+  --corp-soft: #5f6269;
+  --corp-rule: #e1e1e6;
+}
+
+/* ── The opening: a full-width block in the product's light, like the home hero ── */
+
+.ch-block {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 72px);
+  min-height: clamp(420px, 34vw, 600px);
+  padding: clamp(36px, 3.6vw, 64px) var(--site-inset);
+  background:
+    radial-gradient(60% 85% at 78% 45%, rgb(255 255 255 / 0.7) 0%, rgb(255 255 255 / 0) 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bloom) 16%, var(--tint)) 0%, var(--tint) 60%, color-mix(in srgb, var(--tint) 55%, #ffffff) 100%);
+}
+
+.ch-short .ch-block {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+  padding-block: clamp(40px, 4vw, 72px);
+}
+
+.ch-copy {
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  gap: 14px;
+  max-width: 46ch;
+}
+
+.ch-short .ch-copy {
+  max-width: 64ch;
+}
+
+:root main .ch .ch-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 4px;
+  color: var(--corp-ink);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+:root main .ch .ch-title {
+  margin: 0;
+  color: var(--corp-ink);
+  font-size: clamp(28px, 2.4vw, 36px);
+  font-weight: 750;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+:root main .ch .ch-lede {
+  margin: 0;
+  color: #4a4d54;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.ch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 8px;
+}
+
+:root main .ch .ch-note {
+  margin: 0;
+  color: #6b6e75;
+  font-size: 12px;
+}
+
+.ch-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  corner-shape: squircle;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.06),
+    0 28px 60px -28px rgb(20 22 30 / 0.45);
+}
+
+/* the facts under the block: one ruled row, on the page's edges */
+.ch-facts {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 var(--site-inset);
+  list-style: none;
+}
+
+.ch-facts li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 24px 24px 24px 0;
+  border-bottom: 1px solid var(--corp-rule);
+}
+
+.ch-facts li + li {
+  padding-left: 24px;
+  border-left: 1px solid var(--corp-rule);
+}
+
+:root main .ch .ch-fact-value {
+  color: var(--corp-ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+:root main .ch .ch-fact-label {
+  color: #6b6e75;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* ── Sections ── */
+
+.cs {
+  padding-block: var(--rhythm);
+}
+
+.cs-white {
+  background: #ffffff;
+}
+
+.cs-mist {
+  background: var(--corp-card);
+}
+
+.cs-white + .cs-white,
+.cs-white + .band-white,
+.cs-mist + .cs-mist {
+  padding-top: 0;
+}
+
+.cs-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px 40px;
+  margin-bottom: 28px;
+}
+
+.cs-head-copy {
+  display: grid;
+  gap: 8px;
+  max-width: 60ch;
+}
+
+:root main .corp .cs-label {
+  margin: 0;
+  color: #6b6e75;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+:root main .corp .cs-title {
+  margin: 0;
+  color: var(--corp-ink);
+}
+
+:root main .corp .cs-lede {
+  margin: 0;
+  color: #6b6e75;
+}
+
+.cs-aside {
+  flex: none;
+  padding-bottom: 2px;
+}
+
+/* ── Cards ── */
+
+.cc {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cc-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cc-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cc-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cc + .cc,
+.cc + .cf,
+.cf + .cc,
+.cf + .cf {
+  margin-top: 16px;
+}
+
+.cc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  padding: 28px;
+  border-radius: 22px;
+  corner-shape: squircle;
+  background: var(--corp-card);
+}
+
+.cs-mist .cc-card,
+.cs-mist .cf {
+  background: #ffffff;
+}
+
+.cc-copy {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+}
+
+.cc-icon {
+  margin-bottom: 6px;
+  color: var(--corp-ink);
+}
+
+.cc-n {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  background: var(--corp-ink);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cc-copy .sys-app {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 6px;
+}
+
+:root main .corp .cc-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--corp-ink);
+}
+
+:root main .corp .cc-body {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--corp-soft);
+}
+
+.cc-action {
+  margin-top: 6px;
+}
+
+.cc-visual {
+  margin-top: auto;
+}
+
+.cc-visual img,
+.cf-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  corner-shape: squircle;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.06);
+}
+
+/* one big card: the words left, the capture right */
+.cf {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 72px);
+  padding: clamp(28px, 3vw, 48px);
+  border-radius: 22px;
+  corner-shape: squircle;
+  background: var(--corp-card);
+}
+
+.cf-copy {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+/* where to get it */
+.cg-mark {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-bottom: 6px;
+  color: var(--corp-ink);
+}
+
+.cg-mark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cg .cg-mine {
+  box-shadow: inset 0 0 0 1.5px var(--corp-ink);
+}
+
+/* ── MeridianOS: one black card ── */
+
+.cm-card {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 72px);
+  padding: clamp(32px, 3.6vw, 64px);
+  border-radius: 28px;
+  corner-shape: squircle;
+  background: #0b0b0d;
+  color: #f5f5f7;
+  overflow: hidden;
+}
+
+.cm-copy {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.cm-mark {
+  margin-bottom: 8px;
+  color: #f5f5f7;
+}
+
+:root main .corp .cm .cs-label,
+:root main .corp .cm .cs-lede {
+  color: #a1a1a6;
+}
+
+:root main .corp .cm .cs-title {
+  color: #f5f5f7;
+}
+
+.cm-actions {
+  margin-top: 8px;
+}
+
+.cm .nm-btn[data-variant='primary'] {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.cm-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── The rest of the shared parts, set on the same edge ── */
+
+.corp .sys-head,
+.corp .sys-head-center {
+  justify-items: start;
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.corp .sys-period {
+  justify-content: flex-start;
+}
+
+.corp .sys-plans {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  gap: 16px;
+}
+
+.corp .sys-plans-solo {
+  grid-template-columns: minmax(0, 560px);
+}
+
+.corp .sys-plan {
+  border-radius: 22px;
+  corner-shape: squircle;
+}
+
+.corp .sys-foot {
+  text-align: left;
+}
+
+/* the questions: the title on the left, the list on the right */
+.corp .sys-faq .sys-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  align-items: start;
+  gap: 24px clamp(28px, 4vw, 72px);
+}
+
+.corp .sys-faq .sys-faq-title {
+  margin: 0;
+  text-align: left;
+}
+
+.corp .sys-faq .qa {
+  margin-top: 0;
+}
+
+/* ── Legal: the contents on the left, the text on the right ── */
+
+.cl {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+  align-items: start;
+  gap: clamp(28px, 4vw, 72px);
+}
+
+.cl-toc {
+  position: sticky;
+  top: calc(var(--site-bar) + 24px);
+  display: grid;
+  gap: 12px;
+}
+
+.cl-toc ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--corp-rule);
+}
+
+:root main .corp .cl-toc li {
+  font-size: 13px;
+}
+
+.cl-toc a {
+  display: block;
+  padding: 6px 0 6px 14px;
+  color: #4a4d54;
+  text-decoration: none;
+}
+
+.cl-toc a:hover {
+  color: var(--corp-ink);
+}
+
+.cl-text.legal {
+  max-width: 72ch;
+  padding: 0;
+}
+
+.cl-text.legal h2 {
+  scroll-margin-top: calc(var(--site-bar) + 24px);
+}
+
+:root main .corp .cl-text h2 {
+  margin: 40px 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+:root main .corp .cl-text > :first-child {
+  margin-top: 0;
+}
+
+/* ── Narrower windows ── */
+
+@media (max-width: 1100px) {
+  .cc-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .ch-block,
+  .cf,
+  .cm-card,
+  .cl,
+  .corp .sys-faq .sys-wrap,
+  .corp .sys-plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ch-block {
+    min-height: 0;
+  }
+
+  .ch-facts {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ch-facts li,
+  .ch-facts li + li {
+    padding: 18px 16px 18px 0;
+    border-left: 0;
+  }
+
+  .cc-2,
+  .cc-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cl-toc {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .cc-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.corp .sys-actions {
+  justify-content: flex-start;
+}
+
+/* the download tiles and the pricing switch on the same cards and edge */
+.corp .dl-grid {
+  gap: 16px;
+}
+
+.corp .dl-tile {
+  padding: 28px;
+  border-radius: 22px;
+  corner-shape: squircle;
+  background: var(--corp-card);
+  box-shadow: none;
+}
+
+.corp .shelf-switch {
+  justify-content: flex-start;
+}
+
+/* a plan on its own (Nomad Office) fills the row: what it is and its price on the left, what you
+   get on the right, so the section has no empty half */
+.corp .sys-plans-solo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.corp .sys-plans-solo .sys-plan {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: clamp(28px, 4vw, 72px);
+}
+
+.corp .sys-plans-solo .sys-plan > * {
+  grid-column: 1;
+}
+
+.corp .sys-plans-solo .sys-plan > .checks {
+  grid-column: 2;
+  grid-row: 1 / span 5;
+  align-self: center;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .corp .sys-plans-solo .sys-plan {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .corp .sys-plans-solo .sys-plan > .checks {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+.corp .sys-head .sys-lede {
+  margin-inline: 0;
+  text-align: left;
+}
+
+.corp .sys-plans-solo .sys-plan > .checks {
+  padding-top: 0;
+  border-top: 0;
+}
+
+
+/* ══ Home: MeridianOS as one card (Rami, 2026-10-18) ═════════════════════════════════════════
+   A black card on the page's edges, the MeridianOS page's arc (the .mxh-* layers, painted once:
+   no entrance here) along a planet's edge, the words above it and three facts on the planet. */
+.mxc-section {
+  padding-block: var(--rhythm) 0;
+}
+
+.mxc-wrap {
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: var(--site-inset);
+}
+
+.mxc {
+  --hz: 66%;
+  position: relative;
+  display: grid;
+  grid-template-rows: var(--hz) auto;
+  min-height: clamp(520px, 40vw, 640px);
+  overflow: hidden;
+  border-radius: 28px;
+  corner-shape: squircle;
+  background: #000000;
+  color: #f5f5f7;
+  text-align: center;
+}
+
+.mxc-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mxc-sky > * {
+  position: absolute;
+}
+
+/* the page's arc, still: it rose on the MeridianOS page; here it is simply there */
+.mxc .mxh-glow,
+.mxc .mxh-near,
+.mxc .mxh-core {
+  animation: none;
+  will-change: auto;
+}
+
+.mxc-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px var(--site-gutter) 56px;
+}
+
+.mxc-name {
+  margin: 0 0 6px;
+  color: #f5f5f7;
+}
+
+:root main .mxc .mxc-title {
+  margin: 0;
+  color: #f5f5f7;
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+:root main .mxc .mxc-sub {
+  margin: 0;
+  color: #a1a1a6;
+  font-size: 14px;
+}
+
+.mxc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 24px;
+  margin-top: 10px;
+}
+
+.mxc .nm-btn[data-variant='primary'],
+.mxc .nm-btn[data-variant='primary']:hover {
+  background: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.mxc .more {
+  color: #f5f5f7;
+}
+
+/* the facts stand on the planet, under the arc */
+.mxc-facts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-self: end;
+  margin: 0;
+  padding: 0 clamp(24px, 4vw, 64px) clamp(28px, 3vw, 44px);
+  list-style: none;
+}
+
+.mxc-facts li {
+  display: grid;
+  gap: 4px;
+  padding: 4px 16px;
+}
+
+.mxc-facts li + li {
+  border-left: 1px solid rgb(255 255 255 / 0.14);
+}
+
+:root main .mxc .mxc-facts b {
+  color: #f5f5f7;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+:root main .mxc .mxc-facts span {
+  color: #8e8e93;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .mxc {
+    --hz: 58%;
+    min-height: 0;
+    border-radius: 22px;
+  }
+
+  .mxc-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding-top: 28px;
+  }
+
+  .mxc-facts li + li {
+    border-left: 0;
+  }
+}
+
+/* ══ Motion on every page but MeridianOS's (Rami, 2026-10-18: "the website is very static … only
+   the MeridianOS page is animated; let's do that for all the others") ═══════════════════════════
+   The first law holds: opacity and transform only, nothing else moves. The opening rises once as
+   the page arrives; everything after it rises as it comes up the screen, on a scroll timeline the
+   compositor runs (no script per frame). Under reduced motion none of it exists: the page is
+   simply there. */
+
+@keyframes pg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes pg-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+}
+
+@keyframes pg-scroll-rise {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ── The opening: the words one after another, the product a beat behind, then the facts ── */
+  :is(.ch-copy, .film-note-inner) > * {
+    animation: pg-rise 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  :is(.ch-copy, .film-note-inner) > :nth-child(2) {
+    animation-delay: 70ms;
+  }
+
+  :is(.ch-copy, .film-note-inner) > :nth-child(3) {
+    animation-delay: 140ms;
+  }
+
+  :is(.ch-copy, .film-note-inner) > :nth-child(4) {
+    animation-delay: 210ms;
+  }
+
+  :is(.ch-copy, .film-note-inner) > :nth-child(n + 5) {
+    animation-delay: 280ms;
+  }
+
+  :is(.ch-visual, .film-device) {
+    animation: pg-arrive 1100ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+  }
+
+  .ch-facts li {
+    animation: pg-rise 760ms cubic-bezier(0.16, 1, 0.3, 1) 420ms both;
+  }
+
+  .ch-facts li:nth-child(2) {
+    animation-delay: 490ms;
+  }
+
+  .ch-facts li:nth-child(3) {
+    animation-delay: 560ms;
+  }
+
+  .ch-facts li:nth-child(4) {
+    animation-delay: 630ms;
+  }
+
+  /* ── After the opening: each piece rises as it comes up the screen ── */
+  @supports (animation-timeline: view()) {
+    .corp
+      :is(
+        .cs-head,
+        .cc > li,
+        .cf,
+        .sys-period,
+        .sys-plans > *,
+        .plans > *,
+        .sys-mini,
+        .sys-actions,
+        .cm-card,
+        .sys-faq-title,
+        .qa > details,
+        .dl-tile,
+        .sys-foot,
+        .shelf-notes > *
+      ),
+    .flow
+      :is(
+        .how-title,
+        .how-lede,
+        .how-steps > li,
+        .mxc,
+        .tiles-title,
+        .suite > *,
+        .where-copy,
+        .where-list > li,
+        .home-qa-title,
+        .home-qa .qa > details
+      ) {
+      animation: pg-scroll-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    /* side by side, a step behind one another */
+    :is(.cc, .how-steps, .suite, .where-list, .sys-plans, .plans) > :nth-child(2) {
+      animation-range: entry 8% entry 78%;
+    }
+
+    :is(.cc, .how-steps, .suite, .where-list, .sys-plans, .plans) > :nth-child(3) {
+      animation-range: entry 16% entry 86%;
+    }
+
+    :is(.cc, .how-steps, .suite, .where-list, .sys-plans, .plans) > :nth-child(4) {
+      animation-range: entry 24% entry 94%;
+    }
+
+    /* the MeridianOS card's arc brightens as the card comes up */
+    .mxc .mxh-glow,
+    .mxc .mxh-near,
+    .mxc .mxh-core {
+      animation: pg-light linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 45%;
+    }
+  }
+}
+
+@keyframes pg-light {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

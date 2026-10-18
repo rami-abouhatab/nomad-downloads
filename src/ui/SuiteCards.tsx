@@ -93,7 +93,7 @@ const APPS: AppCard[] = [
 /* The row is microsoft.com's: no pictures (Rami, 2026-10-09). The scenes
    made for each app are kept in public/assets/shots/suite for the product
    pages. */
-const ICON_V = '20261010a';
+const ICON_V = '20261018s';
 
 export function AppCards() {
   return (

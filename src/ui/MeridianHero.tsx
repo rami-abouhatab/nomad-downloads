@@ -19,7 +19,7 @@ const SHOW_TRY = false;
  *
  * The first law: every layer is a static gradient from the first paint; only opacity and
  * transform move. Reduced motion gets the risen sky and the words, at rest. The sunset is the
- * desk's own (rgb 249 115 22 → 235 95 16 → 220 80 12).
+ * desktop's own (rgb 249 115 22 → 235 95 16 → 220 80 12).
  */
 export function MeridianHero() {
   const starter = PRICES['ax:starter'];
@@ -40,7 +40,7 @@ export function MeridianHero() {
             Access wherever you are.
           </h1>
           <p className="mxh-sub mxh-in" style={{ ['--d' as string]: '1850ms' }}>
-            Your whole desk, on any computer you sign in to.
+            Your whole desktop, on any computer you sign in to.
           </p>
           {SHOW_TRY ? (
             <div className="mxh-try mxh-in" style={{ ['--d' as string]: '2050ms' }}>

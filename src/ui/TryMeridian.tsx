@@ -3,7 +3,7 @@
  * in real time, full screen but not full width, and we try the real experience, not a simulation;
  * not an account, but the experience"). The button stands in the opening where the price used to.
  *
- * The real shell, its web build at desk.nomad.ax, booted as the demo desk (`#demo`: nomad-shell
+ * The real shell, its web build at desk.nomad.ax, booted as the demo desktop (`#demo`: nomad-shell
  * src/demo/boot.ts, an in-memory drive, no account, nothing written anywhere). It runs in a frame
  * that grows out of the button that opened it and folds back into it on close.
  *
@@ -26,7 +26,7 @@ export function TryMeridian({ className }: { className?: string }) {
   const frameBox = useRef<HTMLDivElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   /* Meridian's own window motion (Rami, 2026-10-12: "open the try window like Meridian windows
-     open"): nomad-design's Grow, the engine the desk's windows and sheets use. It pours out of the
+     open"): nomad-design's Grow, the engine the desktop's windows and sheets use. It pours out of the
      button on the house overshoot, the content fades in from 40% of the clock, and on close the
      window stays solid while it is drawn back into the button. */
   const grower = useGrowFrom(frameBox, { content: inner, fadeAt: 0.92 });
@@ -53,7 +53,7 @@ export function TryMeridian({ className }: { className?: string }) {
     const open = () => {
       if (!frame) {
         frame = document.createElement('iframe');
-        frame.title = 'Meridian, the real desk';
+        frame.title = 'Meridian, the real desktop';
         frame.src = DESK;
         frame.allow = 'clipboard-read; clipboard-write; fullscreen';
         box.querySelector('.tm-screen')!.append(frame);
@@ -97,13 +97,13 @@ export function TryMeridian({ className }: { className?: string }) {
   }, [host, grower]);
 
   const windowLayer = (
-    <div className="tm-layer" ref={layer} hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label="Meridian, the real desk">
+    <div className="tm-layer" ref={layer} hidden data-lenis-prevent role="dialog" aria-modal="true" aria-label="Meridian, the real desktop">
       <div className="tm-scrim" />
       <div className="tm-window" ref={frameBox}>
         <div className="tm-inner" ref={inner}>
         <div className="tm-bar">
           <span className="tm-name">Meridian</span>
-          <span className="tm-note">A demo desk. Nothing you do here is saved.</span>
+          <span className="tm-note">A demo desktop. Nothing you do here is saved.</span>
           <LinkButton href="/meridian#plans" size="sm" variant="primary" className="tm-get">
             Get Meridian
           </LinkButton>

@@ -49,7 +49,7 @@ export const PAGES: PageMeta[] = [
     title: 'MeridianOS · Nomad',
     ogTitle: 'MeridianOS — Access wherever you are',
     description:
-      'MeridianOS is a whole desktop that lives in your Nomad account. Sign in on any computer and your desk opens as you left it. Meridian Starter, Pro and Ultra, from $9.99 a month, 14 days free.',
+      'MeridianOS is a whole desktop that lives in your Nomad account. Sign in on any computer and your desktop opens as you left it. Meridian Starter, Pro and Ultra, from $9.99 a month, 14 days free.',
   },
   {
     id: 'polaris',

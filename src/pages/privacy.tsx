@@ -1,142 +1,155 @@
 import { Layout } from '../ui/Layout';
+import { CorpHeader, LegalBody } from '../ui/corp';
 
 /* Legal text, unchanged from the 2026-10-08 draft. Bracketed placeholders are
    still to be filled by Rami (entity, contact). */
+/* the contents down the left (Rami, 2026-10-18: the corporate layout) */
+const TOC = [
+  { id: 'who', label: 'Who we are' },
+  { id: 'what-we-keep', label: 'What we keep' },
+  { id: 'why', label: 'Why we keep it' },
+  { id: 'connected', label: 'Google, Microsoft, Dropbox and GitHub data' },
+  { id: 'who-helps', label: 'Who helps us' },
+  { id: 'how-long', label: 'How long' },
+  { id: 'what-you-can-do', label: 'What you can do' },
+  { id: 'changes', label: 'Changes' },
+];
+
 const Todo = ({ children }: { children: string }) => <span className="todo">{children}</span>;
 
 export default function PrivacyPage() {
   return (
     <Layout page="privacy">
-      <article className="legal wrap">
-        <h1>Privacy</h1>
-        <p className="when">Last updated 8 October 2026</p>
+      <div data-light="neutral" className="corp">
+        <CorpHeader eyebrow="Legal" title="Privacy" lede="Last updated 8 October 2026" />
+        <LegalBody toc={TOC}>
+          <p>
+            Nomad makes MeridianOS, a desktop that lives in your account, and the apps Polaris Browser, Reach, Drift and Nomad Office. One Nomad
+            account signs you in to all of them. To bring your desktop back on another machine, MeridianOS keeps your files, your desktops and your settings
+            on our servers. This page says what we keep, why, who helps us keep it, and what you can do about it.
+          </p>
 
-        <p>
-          Nomad makes MeridianOS, a desktop that lives in your account, and the apps Polaris Browser, Reach, Drift and Nomad Office. One Nomad
-          account signs you in to all of them. To bring your desk back on another machine, MeridianOS keeps your files, your desks and your settings
-          on our servers. This page says what we keep, why, who helps us keep it, and what you can do about it.
-        </p>
+          <h2 id="who">Who we are</h2>
+          <p>
+            Nomad is run by Origins, <Todo>[REGISTERED ADDRESS]</Todo>. For anything on this page, write to{' '}
+            <Todo>[PRIVACY CONTACT EMAIL]</Todo>.
+          </p>
 
-        <h2 id="who">Who we are</h2>
-        <p>
-          Nomad is run by Origins, <Todo>[REGISTERED ADDRESS]</Todo>. For anything on this page, write to{' '}
-          <Todo>[PRIVACY CONTACT EMAIL]</Todo>.
-        </p>
+          <h2 id="what-we-keep">What we keep</h2>
+          <ul>
+            <li>
+              <strong>Your Nomad account:</strong> your name, email address, and how you sign in: a passkey, or a password we never see in
+              plain text. We do not offer sign-in with Google, Apple or Microsoft.
+            </li>
+            <li>
+              <strong>What you put in MeridianOS:</strong> your files, their earlier versions, your desktops, their layouts, snapshots, wallpapers,
+              installed apps and settings.
+            </li>
+            <li>
+              <strong>Reach:</strong> your messages, contacts and meetings, and recordings if you make them. If you connect Gmail or Outlook,
+              we keep the access Google or Microsoft gives us so Reach can read and send mail for you. If you add a mail account
+              with its password (an app password for Gmail, or your work mail's), it is kept encrypted and used only to fetch and send that mail.
+            </li>
+            <li>
+              <strong>Drift:</strong> the files you send, until shortly after their link expires.
+            </li>
+            <li>
+              <strong>Connected services:</strong> if you connect Google Drive, OneDrive or Dropbox, we keep the access that service gives us
+              and a copy of your files from it, so they appear in Nomad as a folder you can edit and stay in sync both ways. If you connect
+              GitHub, we keep the access GitHub gives us and copy the folders you choose into private repositories in your own GitHub account.
+            </li>
+            <li>
+              <strong>Plans and payments:</strong> what your account includes and until when (your entitlements), your payments and your
+              receipts. Payments are taken only at billing.nomad.ax. Card numbers go to our payment provider; we keep only the brand, the last
+              four digits and the expiry.
+            </li>
+            <li>
+              <strong>This machine:</strong> some things stay on the computer and never reach us: clipboard history, the window positions on
+              that screen, and the PIN you type (we keep only a protected form of it).
+            </li>
+          </ul>
 
-        <h2 id="what-we-keep">What we keep</h2>
-        <ul>
-          <li>
-            <strong>Your Nomad account:</strong> your name, email address, and how you sign in: a passkey, or a password we never see in
-            plain text. We do not offer sign-in with Google, Apple or Microsoft.
-          </li>
-          <li>
-            <strong>What you put in MeridianOS:</strong> your files, their earlier versions, your desks, their layouts, snapshots, wallpapers,
-            installed apps and settings.
-          </li>
-          <li>
-            <strong>Reach:</strong> your messages, contacts and meetings, and recordings if you make them. If you connect Gmail or Outlook,
-            we keep the access Google or Microsoft gives us so Reach can read and send mail for you. If you add a mail account
-            with its password (an app password for Gmail, or your work mail's), it is kept encrypted and used only to fetch and send that mail.
-          </li>
-          <li>
-            <strong>Drift:</strong> the files you send, until shortly after their link expires.
-          </li>
-          <li>
-            <strong>Connected services:</strong> if you connect Google Drive, OneDrive or Dropbox, we keep the access that service gives us
-            and a copy of your files from it, so they appear in Nomad as a folder you can edit and stay in sync both ways. If you connect
-            GitHub, we keep the access GitHub gives us and copy the folders you choose into private repositories in your own GitHub account.
-          </li>
-          <li>
-            <strong>Plans and payments:</strong> what your account includes and until when (your entitlements), your payments and your
-            receipts. Payments are taken only at billing.nomad.ax. Card numbers go to our payment provider; we keep only the brand, the last
-            four digits and the expiry.
-          </li>
-          <li>
-            <strong>This machine:</strong> some things stay on the computer and never reach us: clipboard history, the window positions on
-            that screen, and the PIN you type (we keep only a protected form of it).
-          </li>
-        </ul>
+          <h2 id="why">Why we keep it</h2>
+          <p>
+            To run Nomad's products for you: to bring your desktop back on any machine, to sync it, to deliver your mail, messages and calls, to
+            send what you ask Drift to send, to know which products your account includes and bill for them, and to email you about your
+            account (sign-in codes, receipts, PIN resets). We do not sell your data, we do not show you ads, and we do not use your files to
+            train anything.
+          </p>
 
-        <h2 id="why">Why we keep it</h2>
-        <p>
-          To run Nomad's products for you: to bring your desk back on any machine, to sync it, to deliver your mail, messages and calls, to
-          send what you ask Drift to send, to know which products your account includes and bill for them, and to email you about your
-          account (sign-in codes, receipts, PIN resets). We do not sell your data, we do not show you ads, and we do not use your files to
-          train anything.
-        </p>
+          <h2 id="connected">Google, Microsoft, Dropbox and GitHub data</h2>
+          <p>
+            When you connect Google Drive, Nomad reads, creates, changes and removes files in your Google Drive only to keep the Cloud › Google
+            Drive folder in Nomad and your Google Drive the same. The same holds for OneDrive and Dropbox. Nomad never uses this data for
+            advertising, never sells it, never lets people read it except when you ask us to help with your account or the law requires it,
+            and never uses it to train any model. You can disconnect any of them at any time in Settings › Connections; disconnecting stops
+            the sync and removes our access.
+          </p>
+          <p>
+            Nomad's use and transfer to any other app of information received from Google APIs will adhere to the{' '}
+            <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the
+            Limited Use requirements.
+          </p>
 
-        <h2 id="connected">Google, Microsoft, Dropbox and GitHub data</h2>
-        <p>
-          When you connect Google Drive, Nomad reads, creates, changes and removes files in your Google Drive only to keep the Cloud › Google
-          Drive folder in Nomad and your Google Drive the same. The same holds for OneDrive and Dropbox. Nomad never uses this data for
-          advertising, never sells it, never lets people read it except when you ask us to help with your account or the law requires it,
-          and never uses it to train any model. You can disconnect any of them at any time in Settings › Connections; disconnecting stops
-          the sync and removes our access.
-        </p>
-        <p>
-          Nomad's use and transfer to any other app of information received from Google APIs will adhere to the{' '}
-          <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the
-          Limited Use requirements.
-        </p>
+          <h2 id="who-helps">Who helps us</h2>
+          <ul>
+            <li>
+              <strong>Supabase</strong> stores your account and your files, in Frankfurt, Germany.
+            </li>
+            <li>
+              <strong>Cloudflare</strong> serves our websites and carries Drift's download links.
+            </li>
+            <li>
+              <strong>MontyPay</strong> takes card payments at billing.nomad.ax.
+            </li>
+            <li>
+              <strong>Resend</strong> sends our emails.
+            </li>
+            <li>
+              <strong>Google and Microsoft</strong>, only if you connect their mail, Google Drive or OneDrive.
+            </li>
+            <li>
+              <strong>Dropbox</strong>, only if you connect it.
+            </li>
+            <li>
+              <strong>GitHub</strong>, only if you connect it, to keep the folders you choose in private repositories in your own account.
+            </li>
+          </ul>
 
-        <h2 id="who-helps">Who helps us</h2>
-        <ul>
-          <li>
-            <strong>Supabase</strong> stores your account and your files, in Frankfurt, Germany.
-          </li>
-          <li>
-            <strong>Cloudflare</strong> serves our websites and carries Drift's download links.
-          </li>
-          <li>
-            <strong>MontyPay</strong> takes card payments at billing.nomad.ax.
-          </li>
-          <li>
-            <strong>Resend</strong> sends our emails.
-          </li>
-          <li>
-            <strong>Google and Microsoft</strong>, only if you connect their mail, Google Drive or OneDrive.
-          </li>
-          <li>
-            <strong>Dropbox</strong>, only if you connect it.
-          </li>
-          <li>
-            <strong>GitHub</strong>, only if you connect it, to keep the folders you choose in private repositories in your own account.
-          </li>
-        </ul>
+          <h2 id="how-long">How long</h2>
+          <p>
+            While your subscription lasts, and for one year after it ends. When a subscription ends, what it held (your MeridianOS desktop and
+            files, or your Reach Premium recordings) is kept for a year, exactly as you left it, and you can download all of it from Your data
+            at account.nomad.ax. We email you through that year, each time with the way to download. After the year it is deleted. If you come
+            back before then, you choose to pick up where you left off or start fresh, and you can delete it sooner yourself at any time. Your
+            account itself, and what free products like Reach and Drift hold, stay as long as you have the account. Earlier versions of files
+            are kept for as long as your MeridianOS plan's history allows: 30 days, a year, or for as long as you keep the plan. Drift files are
+            deleted soon after their link expires. When you delete your account, everything above is erased from our servers, except payments,
+            receipts and the record of what you bought, which tax law requires us to keep.
+          </p>
 
-        <h2 id="how-long">How long</h2>
-        <p>
-          While your subscription lasts, and for one year after it ends. When a subscription ends, what it held (your MeridianOS desk and
-          files, or your Reach Premium recordings) is kept for a year, exactly as you left it, and you can download all of it from Your data
-          at account.nomad.ax. We email you through that year, each time with the way to download. After the year it is deleted. If you come
-          back before then, you choose to pick up where you left off or start fresh, and you can delete it sooner yourself at any time. Your
-          account itself, and what free products like Reach and Drift hold, stay as long as you have the account. Earlier versions of files
-          are kept for as long as your MeridianOS plan's history allows: 30 days, a year, or for as long as you keep the plan. Drift files are
-          deleted soon after their link expires. When you delete your account, everything above is erased from our servers, except payments,
-          receipts and the record of what you bought, which tax law requires us to keep.
-        </p>
+          <h2 id="what-you-can-do">What you can do</h2>
+          <ul>
+            <li>
+              <strong>See and take your data:</strong> Settings › Accounts › Export my data copies every file, and your account data as a file,
+              to your computer. After a subscription ends, Your data at account.nomad.ax downloads everything it held as one ZIP, for a year.
+            </li>
+            <li>
+              <strong>Correct it:</strong> change your name in Settings › Accounts, and anything else you made, in Nomad itself.
+            </li>
+            <li>
+              <strong>Delete it:</strong> Settings › Accounts › Delete your Nomad account.
+            </li>
+            <li>
+              <strong>Ask us:</strong> write to the address above. If you are in the EU or UK you may also complain to your data protection
+              authority.
+            </li>
+          </ul>
 
-        <h2 id="what-you-can-do">What you can do</h2>
-        <ul>
-          <li>
-            <strong>See and take your data:</strong> Settings › Accounts › Export my data copies every file, and your account data as a file,
-            to your computer. After a subscription ends, Your data at account.nomad.ax downloads everything it held as one ZIP, for a year.
-          </li>
-          <li>
-            <strong>Correct it:</strong> change your name in Settings › Accounts, and anything else you made, in Nomad itself.
-          </li>
-          <li>
-            <strong>Delete it:</strong> Settings › Accounts › Delete your Nomad account.
-          </li>
-          <li>
-            <strong>Ask us:</strong> write to the address above. If you are in the EU or UK you may also complain to your data protection
-            authority.
-          </li>
-        </ul>
-
-        <h2 id="changes">Changes</h2>
-        <p>If this page changes in a way that matters, we will tell you before it takes effect.</p>
-      </article>
+          <h2 id="changes">Changes</h2>
+          <p>If this page changes in a way that matters, we will tell you before it takes effect.</p>
+        </LegalBody>
+      </div>
     </Layout>
   );
 }

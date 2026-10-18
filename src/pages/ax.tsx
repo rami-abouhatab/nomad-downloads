@@ -2,7 +2,7 @@ import { Layout } from '../ui/Layout';
 import { PlanCard } from '../ui/blocks';
 import { More } from '../ui/kit';
 import { PeriodSwitch } from '../ui/period';
-import { AX_PLANS, PRICE_FOOT } from '../data';
+import { AX_PLANS } from '../data';
 import { ProBadge } from '@nd/controls/ProBadge';
 import { Band, BandHead, Columns, FAQ, Platforms, type Item } from '../ui/system';
 import { DarkZone } from '../ui/cinema';
@@ -18,13 +18,13 @@ import { useSmoothScroll } from '../ui/smooth';
 const pro = <ProBadge plan="Pro" size="sm" />;
 const MORE: Item[] = [
   { title: 'Nomad Office', icon: 'document', body: 'Folio, Grids, Expo and Markup for documents, spreadsheets, presentations and PDFs. Nothing extra to buy.' },
-  { title: 'Polaris Browser', icon: 'globe', body: 'The browser is built in, and each desk keeps its own sign-ins, so work and home never mix.' },
+  { title: 'Polaris Browser', icon: 'globe', body: 'The browser is built in, and each desktop keeps its own sign-ins, so work and home never mix.' },
   { title: 'Reach', icon: 'mail', body: 'All your mail, chats and calls. Pro and Ultra add Reach Premium: longer, bigger meetings and recordings.' },
   { title: 'Drift', icon: 'send', body: 'Send any file with a link. Pro and Ultra add Drift Premium: bigger files, and sending straight to your phone.' },
   { title: 'Snapshots', icon: 'seekSnapshot', body: 'A saved photo of your desktop: layout, open apps and tabs. Jump back to it any time. Your files keep their own history.' },
   { title: 'File history', icon: 'clock', body: 'Go back to an earlier version of any file: 30 days on Starter, a year on Pro, forever on Ultra.' },
-  { title: 'More than one desk', icon: 'layers', tag: pro, body: 'Keep work and home on separate desks, each with its own apps, files and sign-ins. Three on Pro, eight on Ultra.' },
-  { title: 'Guest links', icon: 'seekGuest', tag: pro, body: 'Send someone a view of a desk. It opens in their browser, with nothing to install and no account. Links expire when you say.' },
+  { title: 'More than one desktop', icon: 'layers', tag: pro, body: 'Keep work and home on separate desktops, each with its own apps, files and sign-ins. Three on Pro, eight on Ultra.' },
+  { title: 'Guest links', icon: 'seekGuest', tag: pro, body: 'Send someone a view of a desktop. It opens in their browser, with nothing to install and no account. Links expire when you say.' },
   { title: 'Lock, Convert and Fonts', icon: 'lock', tag: pro, body: 'Put a PIN on any file, folder or app. Turn a file into another format in place. Add your own fonts.' },
 ];
 
@@ -43,12 +43,12 @@ const PRIVATE: Item[] = [
 
 const QA = [
   {
-    q: 'What is a desk?',
+    q: 'What is a desktop?',
     a: 'A complete workspace: its own apps, files, windows and browser sign-ins. Most people need one. Meridian Pro gives you three, so work and home never meet; Meridian Ultra gives you eight.',
   },
   {
     q: 'What happens when I use another computer?',
-    a: 'Install MeridianOS, sign in with your Nomad account, and your desk opens the way you left it. Your files and settings live in your account, not on the machine.',
+    a: 'Install MeridianOS, sign in with your Nomad account, and your desktop opens the way you left it. Your files and settings live in your account, not on the machine.',
   },
   {
     q: 'How does the free trial work?',
@@ -90,22 +90,22 @@ export default function AxPage() {
           <Collage
             label="Meridian, close up"
             items={[
-              { name: 'sq-seek', label: 'Search', title: 'Seek', body: 'One search for everything on your desk: apps, files, notes, and the web.', alt: 'Seek open over the desk, finding files and a note for “trip”.' },
+              { name: 'sq-seek', label: 'Search', title: 'Seek', body: 'One search for everything on your desktop: apps, files, notes, and the web.', alt: 'Seek open over the desktop, finding files and a note for “trip”.' },
               { name: 'sq-notices', label: 'Notifications', title: 'One calm card', body: 'Downloads, timers and messages arrive the same way, and wait while your pointer is on them.', alt: 'Three notifications under the menu bar.' },
               { name: 'row-gallery', label: 'Photos', title: 'Gallery', body: 'Your photographs grouped by day, with what happened on this day.', alt: 'Gallery showing photographs grouped by day.' },
               { name: 'sq-spaces', label: 'Spaces', title: 'Work and home, apart', body: 'Each space keeps its own apps, files, wallpaper and sign-ins.', alt: 'Settings showing three spaces: Personal, Work and Studio.' },
               { name: 'sq-stack', label: 'Windows', title: 'The Stack', body: 'Every open window at the same size. Pick one, or drop it into a layout.', alt: 'The Stack: Markup, Settings, Gallery and Files side by side.' },
               { name: 'row-markup', label: 'PDF', title: 'Markup', body: 'Read, mark up, fill in and sign any PDF.', alt: 'Markup with two PDFs.' },
-              { name: 'sq-files', label: 'Files', title: 'In your account', body: 'Desktop, Documents, Downloads, Pictures and Music, the same on every computer.', alt: 'Files open on the Pictures folder over the desk.' },
+              { name: 'sq-files', label: 'Files', title: 'In your account', body: 'Desktop, Documents, Downloads, Pictures and Music, the same on every computer.', alt: 'Files open on the Pictures folder over the desktop.' },
               { name: 'row-settings', label: 'Settings', title: 'Yours, everywhere', body: 'Your space, Focus and appearance follow you to the next computer too.', alt: 'Settings on its Home page.' },
-              { name: 'row-polaris', label: 'Browser', title: 'Polaris, built in', body: 'Each desk keeps its own sign-ins, so work and home never mix.', alt: 'Polaris Browser on a new tab.' },
+              { name: 'row-polaris', label: 'Browser', title: 'Polaris, built in', body: 'Each desktop keeps its own sign-ins, so work and home never mix.', alt: 'Polaris Browser on a new tab.' },
               { name: 'sq-dock', label: 'The dock', title: 'Every Nomad app', body: 'Polaris, Reach, Files, Nomad Office and the rest are there from the first day.', alt: 'The dock with the whole Nomad suite.' },
             ]}
           />
           <Versus
             id="vs-title"
             title="Meridian vs Others"
-            lede="What changes when your desk lives in your account, not on one machine."
+            lede="What changes when your desktop lives in your account, not on one machine."
             rows={[
               {
                 when: 'What if I want to open my desktop on another laptop?',
@@ -115,7 +115,7 @@ export default function AxPage() {
               {
                 when: 'What happens when I get a new computer?',
                 usual: 'A day of installing, copying and setting things up again.',
-                meridian: 'Install Meridian, sign in, and your desk is there.',
+                meridian: 'Install Meridian, sign in, and your desktop is there.',
               },
               {
                 when: 'What if my laptop is lost or broken?',
@@ -147,7 +147,7 @@ export default function AxPage() {
         {/* The question a cloud desktop raises: where is it, and who can see it (Rami, 2026-10-11).
             Every line is what the privacy policy already promises. */}
         <Band label="private-title">
-          <BandHead id="private-title" title="Private by design." lede="Your files, your sign-ins and what you do on your desk stay yours. No ads, no selling, no training on your files." />
+          <BandHead id="private-title" title="Private by design." lede="Your files, your sign-ins and what you do on your desktop stay yours. No ads, no selling, no training on your files." />
           <Columns items={PRIVATE} cols={3} align="center" />
           <p className="sys-foot">
             <More href="/privacy">Read how we handle your data</More>
@@ -155,7 +155,7 @@ export default function AxPage() {
         </Band>
 
         <Band id="plans" tone="mist" label="plans-title" className="plans-band">
-          <BandHead id="plans-title" title="Pick the size of your desk." lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desks, and the extras.">
+          <BandHead id="plans-title" title="Pick the size of your desktop.">
             <PeriodSwitch />
           </BandHead>
           <div className="plans">
@@ -163,13 +163,12 @@ export default function AxPage() {
               <PlanCard key={p.id} plan={p} />
             ))}
           </div>
-          <p className="sys-foot">
-            {PRICE_FOOT} <More href="/pricing#compare">Compare every feature</More>
-          </p>
+          {/* The footnote's words are gone, its room kept (Rami, 2026-10-18). */}
+          <div className="sys-foot sys-foot-blank" aria-hidden="true" />
         </Band>
 
         <Band label="where-title">
-          <BandHead id="where-title" title="Runs on the computer you have." lede="Install it once, sign in, and your desk is there." />
+          <BandHead id="where-title" title="Runs on the computer you have." lede="Install it once, sign in, and your desktop is there." />
           <Platforms anchor="meridian" />
         </Band>
 

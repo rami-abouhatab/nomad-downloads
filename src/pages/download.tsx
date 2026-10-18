@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Layout } from '../ui/Layout';
-import { Band, BandHead, PageHero } from '../ui/system';
+import { Band, BandHead } from '../ui/system';
+import { CorpHeader } from '../ui/corp';
 import { LinkButton, ProductMark, Sym, type ProductKey } from '../ui/kit';
 import { DRIFT_WEB } from '../data';
 
@@ -33,7 +34,7 @@ const dlSlug = (id: ProductKey) => (id === 'ax' ? 'meridian' : id);
    Windows only: Reach and Drift are the only apps on the web (Rami, 2026-10-14). */
 const OFFICE_NEED = (files: string) => (
   <>
-    Opens and saves {files}. Comes with <a href="/office#buy">Nomad Office</a>, already on every MeridianOS desk.
+    Opens and saves {files}. Comes with <a href="/office#buy">Nomad Office</a>, already on every MeridianOS desktop.
   </>
 );
 
@@ -157,10 +158,8 @@ export default function DownloadPage() {
 
   return (
     <Layout page="download">
-      <div data-light="neutral">
-      <PageHero
-        light="neutral"
-        layout="center"
+      <div data-light="neutral" className="corp">
+      <CorpHeader
         eyebrow="Download"
         title="Get Nomad's apps."
         lede="Everything here runs on Windows 10 and 11. Each app has a build for Intel and AMD PCs and one for ARM; we point out the one that fits this computer."

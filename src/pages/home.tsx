@@ -19,7 +19,7 @@ const FAQ = [
   },
   {
     q: 'What happens when I use another computer?',
-    a: 'Install MeridianOS, sign in with your Nomad account, and your desk opens as you left it. Your files and settings live in your account, not on the machine.',
+    a: 'Install MeridianOS, sign in with your Nomad account, and your desktop opens as you left it. Your files and settings live in your account, not on the machine.',
   },
   {
     q: 'How does the free trial work?',
@@ -64,7 +64,7 @@ export default function HomePage() {
               </li>
               <li>
                 <Sym name="display" size={36} />
-                <h3>Your desk opens as you left it.</h3>
+                <h3>Your desktop opens as you left it.</h3>
                 <p>Apps, files and windows, exactly where they were, down to the open tab.</p>
               </li>
               <li>
@@ -76,34 +76,46 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="panel-section panel-full" aria-labelledby="meridian-title">
-          <div className="panel-full-inner">
-            <div className="panel panel-meridian">
-              {/* apple.com's product tile (Rami, 2026-10-10): 692 px tall like
-                  theirs; the name on top, the laptop whole between, the line and
-                  the buttons under it. */}
-              <h2 id="meridian-title" className="meridian-head">
-                <MeridianLockup height={64} label="MeridianOS" className="meridian-head-lockup" />
-              </h2>
-              <img
-                className="panel-meridian-photo"
-                src="/assets/hero/meridian-laptop-golden-1774.webp"
-                srcSet="/assets/hero/meridian-laptop-golden-1774.webp 1774w, /assets/hero/meridian-laptop-golden-3548.webp 3548w"
-                sizes="100vw"
-                width={3548}
-                height={1774}
-                alt="MeridianOS on a laptop: the desktop with its menu bar and dock over a golden desert at sunrise."
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="meridian-foot">
-                <p className="meridian-line">Every Nomad app built in. Free for 14 days.</p>
-                <div className="panel-actions">
+        {/* MeridianOS as one card (Rami, 2026-10-18: the hero already has the device, so no laptop
+            here): the logo and wordmark, the MeridianOS page's own arc of light along a planet's
+            edge, painted once, the line and the ways in, and three facts on the planet under it. */}
+        <section className="mxc-section" aria-labelledby="meridian-title">
+          <div className="mxc-wrap">
+            <div className="mxc">
+              <div className="mxc-sky" aria-hidden="true">
+                <div className="mxh-glow" />
+                <div className="mxh-near" />
+                <div className="mxh-core" />
+              </div>
+              <div className="mxc-copy">
+                <p className="mxc-name">
+                  <MeridianLockup height={36} label="MeridianOS" />
+                </p>
+                <h2 id="meridian-title" className="mxc-title">
+                  Access wherever you are.
+                </h2>
+                <p className="mxc-sub">Your whole desktop, on any computer you sign in to.</p>
+                <div className="mxc-actions">
                   <LinkButton href={checkout('ax:starter', 'yearly')} variant="primary" hero>
                     Start free trial
                   </LinkButton>
+                  <More href="/meridian">Learn more about MeridianOS</More>
                 </div>
               </div>
+              <ul className="mxc-facts">
+                <li>
+                  <b>Every Nomad app built in</b>
+                  <span>Nomad Office, Polaris, Reach, Drift and Citadel</span>
+                </li>
+                <li>
+                  <b>Your desktop on any computer</b>
+                  <span>Sign in and it opens as you left it</span>
+                </li>
+                <li>
+                  <b>Free for 14 days</b>
+                  <span>Start with Meridian Starter</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>

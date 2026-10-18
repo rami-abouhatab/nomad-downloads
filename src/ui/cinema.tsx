@@ -1,7 +1,7 @@
 /**
  * The black zone (Rami, 2026-10-10: "the first few sections must all be black"). Its parts:
  * DarkZone and DarkHead (an eyebrow, a title and a line, set left). The zone ends in a clean cut to
- * the white rest (Rami, 2026-10-11: "not blur or gradient, just cut"). What fills it is TryDesk.tsx, the real desk to press.
+ * the white rest (Rami, 2026-10-11: "not blur or gradient, just cut"). What fills it is TryDesk.tsx, the real desktop to press.
  *
  * DarkHead arrives from the left on a CSS scroll timeline (opacity and transform only); without
  * view timelines, or under reduced motion, it is simply there.

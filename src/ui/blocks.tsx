@@ -97,7 +97,7 @@ export function Display({
 /**
  * A real app window, captured headless from the app's own code on sample
  * data (public/assets/shots/<name>-800|1280|1920.webp), framed the way a
- * window sits on the desk: the window's corner and a cast under it.
+ * window sits on the desktop: the window's corner and a cast under it.
  */
 export function WindowShot({
   name,
@@ -142,7 +142,7 @@ export const AX_DESK = {
   srcSet: '/assets/shots/ax-desk-800.webp 800w, /assets/shots/ax-desk-1280.webp 1280w, /assets/shots/ax-desk-1920.webp 1920w',
   width: 1920,
   height: 1080,
-  alt: 'A MeridianOS desk: a desert wallpaper, files and apps on the desktop, Polaris Browser open in a window, and the dock along the bottom.',
+  alt: 'A MeridianOS desktop: a desert wallpaper, files and apps on the desktop, Polaris Browser open in a window, and the dock along the bottom.',
 };
 
 /* ── Section scaffolding ──────────────────────────────────────────────── */
@@ -231,8 +231,8 @@ export function AxPlans({ id = 'plans', compareLink = true }: { id?: string; com
           id={`${id}-title`}
           center
           eyebrow="MeridianOS plans"
-          title="Pick the size of your desk."
-          lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desks, and the extras."
+          title="Pick the size of your desktop."
+          lede="Every plan is the full MeridianOS desktop. What changes is how much room you get, how many desktops, and the extras."
         >
           <PeriodSwitch />
         </SectionHead>
@@ -321,12 +321,12 @@ const ROWS: (
   | { label: string; cells: [Cell, Cell, Cell] }
 )[] = [
   { label: 'Free trial', cells: ['14 days', false, false] },
-  { group: 'The desk' },
+  { group: 'The desktop' },
   { label: 'Storage', cells: ['128 GB', '512 GB', '1 TB'] },
-  { label: 'Desks', cells: ['1', '3', '8'] },
+  { label: 'Desktops', cells: ['1', '3', '8'] },
   { label: 'Snapshots', cells: ['3', '25', 'Unlimited'] },
   { label: 'File history', cells: ['30 days', '1 year', 'Forever'] },
-  { label: 'Desk templates', cells: [false, true, true] },
+  { label: 'Desktop templates', cells: [false, true, true] },
   { label: 'Guest links', cells: [false, true, true] },
   { label: 'Lock, Convert and Fonts', cells: [false, true, true] },
   { label: 'Priority support', cells: [false, false, true] },

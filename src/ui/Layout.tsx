@@ -10,6 +10,7 @@
  * here listens to scroll.
  */
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useSmoothScroll } from './smooth';
 import { Button } from '@nd/controls/Button';
 import { CamelMark, LinkButton, Sym } from './kit';
 import { MANAGE_PLAN, SIGN_IN, SIGN_UP } from '../data';
@@ -214,7 +215,7 @@ function LocalNav({ name, links, cta, tone }: LocalNavProps) {
 /* The privacy promise at the foot of every page. Only what is true today. */
 const PRIVACY = [
   { title: 'Safe in your account.', body: 'Your files live in your account, on protected, encrypted servers.' },
-  { title: 'No ads.', body: 'None on the desk or in the apps. Polaris blocks trackers too.' },
+  { title: 'No ads.', body: 'None on the desktop or in the apps. Polaris blocks trackers too.' },
   { title: 'Never sold.', body: 'Your data is never sold, rented or shared with advertisers.' },
   { title: 'Never trains AI.', body: 'Your files, mail and chats are never used to train AI.' },
   { title: 'Locked by you.', body: 'Citadel encrypts any file or folder behind your own PIN.' },
@@ -433,6 +434,9 @@ function ToTop() {
 }
 
 export function Layout({ page, local, children }: { page: PageId; local?: LocalNavProps; children: ReactNode }) {
+  /* Every page scrolls as MeridianOS's does (Rami, 2026-10-18: "the website is very static"); the
+     MeridianOS page starts its own (ax.tsx), so it is left to that. */
+  useSmoothScroll(page !== 'ax');
   return (
     <PeriodProvider>
       <a className="skip" href="#main">

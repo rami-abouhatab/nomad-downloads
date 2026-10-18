@@ -4,7 +4,8 @@ import { Layout } from '../ui/Layout';
 import { Compare, PlanCard } from '../ui/blocks';
 import { PeriodSwitch } from '../ui/period';
 import { APP_PLANS, AX_PLANS, PRICE_FOOT } from '../data';
-import { Band, BandHead, FAQ, PageHero } from '../ui/system';
+import { Band, BandHead, FAQ } from '../ui/system';
+import { CorpHeader } from '../ui/corp';
 
 /* Pricing, shaped like microsoft.com's Microsoft 365 plan comparison and apple.com's Apple One
    (Rami, 2026-10-14: "Apple and Microsoft don't do these structures and free-for-all cards"): one
@@ -26,7 +27,7 @@ const QA = [
   { q: 'Can I change plans later?', a: 'Yes. Moving up starts today, with credit for what is left of your current plan. Moving down, or from yearly to monthly, starts when your current period ends, and nothing is charged until then.' },
   {
     q: 'I already pay for an app. What happens if I buy MeridianOS?',
-    a: 'Nothing changes. They are separate subscriptions: MeridianOS covers the apps inside your desk, and the app you bought keeps its own subscription, which works everywhere, your desk included. Your plans list each one, and your data is the same in both.',
+    a: 'Nothing changes. They are separate subscriptions: MeridianOS covers the apps inside your desktop, and the app you bought keeps its own subscription, which works everywhere, your desktop included. Your plans list each one, and your data is the same in both.',
   },
   { q: 'Is yearly cheaper?', a: 'Yes. Yearly plans are two months free.' },
 ];
@@ -53,28 +54,25 @@ export default function PricingPage() {
 
   return (
     <Layout page="pricing">
-      <div data-light="neutral">
-        <PageHero
-          light="neutral"
-          layout="center"
+      <div data-light="neutral" className="corp">
+        <CorpHeader
           eyebrow="Pricing"
           title="One account. Pick what you need."
           lede="MeridianOS is the whole desktop, with every Nomad app inside. Or take an app on its own, on your own computer."
-          actions={
-            <div className="shelf-switch">
-              <Segment<Shelf>
-                size="md"
-                aria-label="What you’re shopping for"
-                value={shelf}
-                onChange={pick}
-                options={[
-                  { id: 'meridian', label: 'MeridianOS' },
-                  { id: 'apps', label: 'Apps on their own' },
-                ]}
-              />
-            </div>
-          }
-        />
+        >
+          <div className="shelf-switch ch-actions">
+            <Segment<Shelf>
+              size="md"
+              aria-label="What you’re shopping for"
+              value={shelf}
+              onChange={pick}
+              options={[
+                { id: 'meridian', label: 'MeridianOS' },
+                { id: 'apps', label: 'Apps on their own' },
+              ]}
+            />
+          </div>
+        </CorpHeader>
 
         <div hidden={shelf !== 'meridian'}>
           <Band id="meridian" label="meridian-title">
@@ -100,7 +98,7 @@ export default function PricingPage() {
             <BandHead
               id="apps-title"
               title="Apps on their own."
-              lede="One app's Premium, wherever you use it: on your own computer, on the web, and on your MeridianOS desk. Each is its own subscription, with the same Nomad account and the same data."
+              lede="One app's Premium, wherever you use it: on your own computer, on the web, and on your MeridianOS desktop. Each is its own subscription, with the same Nomad account and the same data."
             >
               <PeriodSwitch />
             </BandHead>
@@ -116,7 +114,7 @@ export default function PricingPage() {
                 <b>Free from Nomad.</b> Polaris Browser, and the free Reach, Drift and Citadel, need only a Nomad account. <a href="/download">Download</a>
               </p>
               <p>
-                <b>Already on MeridianOS?</b> Meridian Pro and Ultra include Nomad Office and Reach, Drift and Citadel Premium on the desk. On Starter, an app's Premium bought here works on your desk too.{' '}
+                <b>Already on MeridianOS?</b> Meridian Pro and Ultra include Nomad Office and Reach, Drift and Citadel Premium on the desktop. On Starter, an app's Premium bought here works on your desktop too.{' '}
                 <a href="#meridian" onClick={(e) => (e.preventDefault(), pick('meridian'), window.scrollTo({ top: 0 }))}>
                   See MeridianOS plans
                 </a>
