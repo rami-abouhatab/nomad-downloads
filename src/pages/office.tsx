@@ -117,7 +117,7 @@ export default function OfficePage() {
         </Section>
 
         <Section id="get-title" label="Download" title="Get Nomad Office." lede="One installer puts Folio, Grids, Expo and Markup on your computer." aside={<More href="/download">All downloads</More>}>
-          <GetCards anchor="folio" />
+          <GetCards anchor="office" />
         </Section>
 
         <CorpMeridian
