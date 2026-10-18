@@ -1,4 +1,5 @@
 import { Layout } from '../ui/Layout';
+import { HeroFilm } from '../ui/HeroFilm';
 import { LinkButton, MeridianLockup, More, Sym } from '../ui/kit';
 import { AppCards } from '../ui/SuiteCards';
 import { checkout } from '../data';
@@ -42,30 +43,7 @@ export default function HomePage() {
   const mine = useMyPlatform();
   return (
     <Layout page="home">
-      {/* The hero is a stage, as on apple.com and microsoft.com: a contained
-          field with the flagship inside it, kept shorter than the screen so
-          the next section shows (the illusion-of-completeness fix). The same
-          desk on two computers is the promise, shown rather than said. */}
-      <section className="stage" aria-labelledby="stage-title">
-        <div className="stage-card">
-          <div className="stage-copy">
-            <h1 id="stage-title" className="stage-title">
-              Your desktop,
-              <br />
-              wherever you are.
-            </h1>
-            <p className="stage-lede">
-              Your whole computer lives in your Nomad account and opens on any computer, exactly as you left it.
-            </p>
-            <div className="stage-actions">
-              <LinkButton href="/meridian" variant="primary" hero>
-                Meet MeridianOS
-              </LinkButton>
-              <More href="/pricing">See pricing</More>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroFilm />
 
       {/* Order (Rami, 2026-10-10): MeridianOS's story together (how it works,
           then the trial), then the suite, then where it runs. */}
