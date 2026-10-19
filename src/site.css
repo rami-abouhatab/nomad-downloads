@@ -5955,9 +5955,12 @@ a.nm-btn.plan-cta {
 .film {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  /* One centred group, words and laptop together in the middle of the block (Rami, 2026-10-19:
+     "place them more centred, both text and device"), not pinned to its two edges. */
+  grid-template-columns: minmax(0, 440px) minmax(0, 720px);
+  justify-content: center;
   align-items: center;
-  gap: clamp(24px, 4vw, 64px);
+  gap: clamp(32px, 5vw, 88px);
   min-height: clamp(400px, 32vw, 560px);
   padding: clamp(28px, 3vw, 48px) var(--site-inset);
   overflow: hidden;
@@ -5972,8 +5975,8 @@ a.nm-btn.plan-cta {
 
 .film-device {
   position: relative;
-  justify-self: end;
-  width: min(100%, 760px);
+  justify-self: center;
+  width: min(100%, 720px);
 }
 .film-device-img {
   position: relative;
