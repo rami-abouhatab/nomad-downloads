@@ -7040,7 +7040,10 @@ main .sys-cols li > svg {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Three facts close together in the middle, not spread to the card's edges (Rami, 2026-10-19:
+     "bring these closer to each other"). */
+  grid-template-columns: repeat(3, minmax(0, 260px));
+  justify-content: center;
   align-self: end;
   margin: 0;
   padding: 0 clamp(24px, 4vw, 64px) clamp(28px, 3vw, 44px);
