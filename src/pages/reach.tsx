@@ -1,7 +1,7 @@
 import { Layout } from '../ui/Layout';
 import { LinkButton, More } from '../ui/kit';
-import { FAQ, PlanPair, RealShot } from '../ui/system';
-import { Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
+import { FAQ, PlanPair } from '../ui/system';
+import { Rows, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
 
 /* Reach, in the corporate system (Rami, 2026-10-18): the block with the real app beside the words,
    the facts, the app in cards (mail and chat large, then meetings, events and settings, then calls
@@ -30,6 +30,7 @@ export default function ReachPage() {
     >
       <div data-light="reach" className="corp">
         <CorpHero
+          shot={{ name: 'reach-conversation', alt: 'Reach with a chat open: two people agreeing to meet, the chats listed beside it.' }}
           light="reach"
           name="Reach"
           title="Everyone, in one place."
@@ -43,7 +44,6 @@ export default function ReachPage() {
             </>
           }
           note="Free for everyone with a Nomad account."
-          visual={<RealShot name="reach-conversation" ratio="16 / 10" eager alt="Reach with a chat open: two people agreeing to meet at three, the chats listed beside it." />}
           facts={[
             { value: 'Free', label: 'For everyone with a Nomad account' },
             { value: 'Every mail account', label: 'Gmail, Outlook, iCloud, Yahoo and IMAP' },
@@ -53,8 +53,7 @@ export default function ReachPage() {
         />
 
         <Section id="parts-title" anchor="features" label="Features" title="Everything you need to keep in touch.">
-          <Cards
-            cols={4}
+          <Rows
             items={[
               {
                 title: 'Mail',
@@ -78,8 +77,7 @@ export default function ReachPage() {
               },
             ]}
           />
-          <Cards
-            cols={3}
+          <Rows
             items={[
               { title: 'Calls', icon: 'camera', body: 'Voice and video calls between two people, as long as you like.' },
               { title: 'People', icon: 'account', body: 'Everyone you write to, call or meet, in one list you never had to build.' },

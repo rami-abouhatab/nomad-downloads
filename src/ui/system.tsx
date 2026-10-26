@@ -75,7 +75,7 @@ export function PageHero({
  */
 /* Bumped when the captures are re-shot (2026-10-18: each app alone, from its own dev build;
    design-assets/app-shots-2026-10-18). */
-const SHOTS_V = '20261018';
+export const SHOTS_V = '20261025';
 
 export function RealShot({ name, alt, ratio = '16 / 9', eager = false }: { name: string; alt: string; ratio?: string; eager?: boolean }) {
   return (

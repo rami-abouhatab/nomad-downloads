@@ -12,7 +12,7 @@
  */
 import type { ReactNode } from 'react';
 import { LinkButton, MeridianMark, More, ProductMark, Sym, type ProductKey } from './kit';
-import { PlatformMark, useMyPlatform, type HeroLight, type Item } from './system';
+import { PlatformMark, SHOTS_V, useMyPlatform, type HeroLight, type Item } from './system';
 
 /* ── The opening ────────────────────────────────────────────────────────── */
 
@@ -24,8 +24,9 @@ export function CorpHero({
   lede,
   actions,
   note,
-  visual,
   facts,
+  shot,
+  flip = false,
 }: {
   light: ProductKey;
   name: string;
@@ -33,12 +34,15 @@ export function CorpHero({
   lede: ReactNode;
   actions?: ReactNode;
   note?: ReactNode;
-  visual?: ReactNode;
   facts?: { value: ReactNode; label: ReactNode }[];
+  /** the app's capture, shown on the home hero's laptop */
+  shot: { name: string; alt: string };
+  /** the laptop on the left, the words on the right */
+  flip?: boolean;
 }) {
   return (
     <section className="ch" data-light={light} aria-labelledby="ph-title">
-      <div className="ch-block">
+      <div className={flip ? 'ch-block ch-laptop ch-flip' : 'ch-block ch-laptop'}>
         <div className="ch-copy">
           <p className="ch-eyebrow">
             <ProductMark product={light} size={28} />
@@ -51,7 +55,7 @@ export function CorpHero({
           {actions && <div className="ch-actions">{actions}</div>}
           {note && <p className="ch-note">{note}</p>}
         </div>
-        {visual && <div className="ch-visual">{visual}</div>}
+        <LaptopShot {...shot} />
       </div>
       {facts && (
         <ul className="ch-facts" aria-label={`${name} at a glance`}>
@@ -64,6 +68,36 @@ export function CorpHero({
         </ul>
       )}
     </section>
+  );
+}
+
+/**
+ * The home hero's laptop with an app's own capture on its screen (Rami, 2026-10-25: "same laptop
+ * but the screen of the app inside"). The capture sits exactly over the photo's screen, measured
+ * from laptop-front.webp: 185,27 to 1829,969 of 2013x1043.
+ */
+function LaptopShot({ name, alt }: { name: string; alt: string }) {
+  return (
+    <div className="ch-laptop-device">
+      <span className="film-device-shadow" aria-hidden="true" />
+      <img
+        className="film-device-img"
+        src="/assets/hero/laptop-front-1x.webp"
+        srcSet="/assets/hero/laptop-front-1x.webp 1006w, /assets/hero/laptop-front.webp 2013w"
+        sizes="(max-width: 880px) 92vw, 46vw"
+        alt=""
+        decoding="async"
+      />
+      <img
+        className="ch-laptop-screen"
+        src={`/assets/shots/products/${name}-1200.webp?v=${SHOTS_V}`}
+        srcSet={`/assets/shots/products/${name}-1200.webp?v=${SHOTS_V} 1200w, /assets/shots/products/${name}-2000.webp?v=${SHOTS_V} 2000w`}
+        sizes="(max-width: 880px) 76vw, 38vw"
+        alt={alt}
+        decoding="async"
+        fetchPriority="high"
+      />
+    </div>
   );
 }
 
@@ -165,6 +199,32 @@ export function Cards({ items, cols = 3 }: { items: Card[]; cols?: 2 | 3 | 4 }) 
             {it.action && <div className="cc-action">{it.action}</div>}
           </div>
           {it.visual && <div className="cc-visual">{it.visual}</div>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * Features as plain columns, Apple's way (Rami, 2026-10-25): a symbol, the title and its line,
+ * centred, with white space and no boxes. Words and symbols only, no captures.
+ */
+export type Row = Item & { action?: ReactNode };
+
+export function Rows({ items }: { items: Row[] }) {
+  return (
+    <ul className="fr">
+      {items.map((it) => (
+        <li key={it.title} id={it.id} className="fr-row">
+          <span className="fr-mark">{it.mark ?? (it.icon && <Sym name={it.icon} size={28} />)}</span>
+          <h3 className="fr-title">
+            {it.title}
+            {it.tag}
+          </h3>
+          <div className="fr-copy">
+            <p className="fr-body">{it.body}</p>
+            {it.action && <div className="fr-action">{it.action}</div>}
+          </div>
         </li>
       ))}
     </ul>

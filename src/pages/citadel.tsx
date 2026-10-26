@@ -1,7 +1,7 @@
 import { Layout } from '../ui/Layout';
 import { LinkButton, More } from '../ui/kit';
-import { FAQ, PlanPair, RealShot } from '../ui/system';
-import { Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
+import { FAQ, PlanPair } from '../ui/system';
+import { Rows, Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
 
 /* Citadel (Rami, 2026-10-09; page 2026-10-10; corporate system 2026-10-18): the block with the PIN
    beside the words, the facts, what it locks under the one plain promise, the three steps, free
@@ -36,6 +36,7 @@ export default function CitadelPage() {
     >
       <div data-light="citadel" className="corp">
         <CorpHero
+          shot={{ name: 'citadel-files', alt: 'Citadel: files and folders locked on this computer and in the cloud.' }}
           light="citadel"
           name="Citadel"
           title="Keep what's yours, yours."
@@ -48,7 +49,6 @@ export default function CitadelPage() {
               <More href="#premium">Citadel Premium</More>
             </>
           }
-          visual={<RealShot name="citadel-files" ratio="16 / 10" eager alt="Citadel: files and folders locked on this computer and in the cloud, and a place to drop more to lock." />}
           facts={[
             { value: 'Free', label: 'Lock as many folders and files as you like' },
             { value: 'Encrypted', label: 'Unreadable even if someone copies it' },
@@ -64,8 +64,7 @@ export default function CitadelPage() {
           title="Locked means encrypted."
           lede="Locked files are encrypted, so they stay unreadable even if someone copies them off the computer."
         >
-          <Cards
-            cols={3}
+          <Rows
             items={[
               {
                 title: 'Any folder or file',

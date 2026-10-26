@@ -81,7 +81,7 @@ export default function PricingPage() {
             </BandHead>
             <div className="plans">
               {AX_PLANS.map((p) => (
-                <PlanCard key={p.id} plan={p} />
+                <PlanCard key={p.id} plan={p} short />
               ))}
             </div>
             <p className="sys-foot">{PRICE_FOOT}</p>

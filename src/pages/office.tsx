@@ -2,8 +2,8 @@ import { Layout } from '../ui/Layout';
 import { LinkButton, More } from '../ui/kit';
 import { PriceText, usePeriod } from '../ui/period';
 import { checkout } from '../data';
-import { FAQ, PlanSolo, RealShot } from '../ui/system';
-import { Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
+import { FAQ, PlanSolo } from '../ui/system';
+import { Rows, Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
 
 /* Nomad Office, in the corporate system (Rami, 2026-10-18): the block with Folio beside the words,
    the facts, the four apps as cards, three of them at work, the one price, where to get it, its
@@ -50,6 +50,8 @@ export default function OfficePage() {
     >
       <div data-light="office" className="corp">
         <CorpHero
+          shot={{ name: 'office-folio', alt: 'Folio with a design brief open on a white page.' }}
+          flip
           light="office"
           name="Nomad Office"
           title="Four apps. One quiet office."
@@ -61,7 +63,6 @@ export default function OfficePage() {
             </>
           }
           note="Already in every MeridianOS plan."
-          visual={<RealShot name="office-folio" ratio="16 / 10" eager alt="Folio with a design brief open: a title, headings, a bulleted list and paragraphs on a white page." />}
           facts={[
             { value: 'Four apps', label: 'Folio, Grids, Expo and Markup' },
             { value: <PriceText product="office" />, label: 'One price for all four' },
@@ -83,8 +84,7 @@ export default function OfficePage() {
         </Section>
 
         <Section id="grids-title" anchor="at-work" label="At work" title="The apps at work.">
-          <Cards
-            cols={3}
+          <Rows
             items={[
               {
                 title: 'The numbers, and the formulas behind them.',

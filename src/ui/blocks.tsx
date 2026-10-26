@@ -195,7 +195,9 @@ export function Features({ items, cols = 3 }: { items: Feature[]; cols?: 2 | 3 }
 
 /* ── Plans ─────────────────────────────────────────────────────────────── */
 
-export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
+/* `short`: the card shows its headline lines and links to every feature below, so the three cards
+   fit one screen (Rami, 2026-10-25). */
+export function PlanCard({ plan, cta, short = false }: { plan: Plan; cta?: string; short?: boolean }) {
   const period = usePeriod();
   /* The visitor's own plan says so, and its button changes it instead of selling it again (2026-10-14). */
   const buy = buyFor(plan.id, plan.name, period, useHeld(), cta ?? plan.cta);
@@ -213,7 +215,12 @@ export function PlanCard({ plan, cta }: { plan: Plan; cta?: string }) {
       <LinkButton href={buy.href} variant={plan.lit && !buy.yours ? 'primary' : 'secondary'} hero className="plan-cta">
         {buy.label}
       </LinkButton>
-      <Checks lead={plan.lead} lines={plan.lines} />
+      <Checks lead={plan.lead} lines={short ? plan.lines.slice(0, 5) : plan.lines} />
+      {short && plan.lines.length > 5 ? (
+        <p className="plan-all">
+          <More href="#compare">Compare every feature</More>
+        </p>
+      ) : null}
       {plan.free ? (
         <p className="plan-free">
           Free: <b>{plan.free.name}</b>, {plan.free.what}. <a href={plan.free.href}>{plan.free.verb}</a>

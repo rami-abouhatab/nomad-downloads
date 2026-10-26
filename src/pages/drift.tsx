@@ -2,8 +2,8 @@ import { Layout } from '../ui/Layout';
 import { LinkButton, More, Sym } from '../ui/kit';
 import { PeriodSwitch, PriceText, usePeriod } from '../ui/period';
 import { DRIFT_WEB, checkout } from '../data';
-import { Actions, MiniCompare, RealShot } from '../ui/system';
-import { Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
+import { Actions, MiniCompare } from '../ui/system';
+import { Rows, Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
 
 /* Drift, in the corporate system (Rami, 2026-10-18): the block with the send panel beside the words,
    the facts, the three steps and what each end sees, sending to your own devices, free against
@@ -39,6 +39,8 @@ export default function DriftPage() {
     >
       <div data-light="drift" className="corp">
         <CorpHero
+          shot={{ name: 'drift-send', alt: 'The Drift send panel: a PDF ready to go to anyone with a link.' }}
+          flip
           light="drift"
           name="Drift"
           title="Send it with a link."
@@ -52,7 +54,6 @@ export default function DriftPage() {
             </>
           }
           note="Opens drift.nomad.ax in your browser."
-          visual={<RealShot name="drift-send" ratio="16 / 10" eager alt="The Drift send panel: a PDF ready to go to anyone with a link, lasting an hour, and Create link." />}
           facts={[
             { value: 'Free', label: 'With your free Nomad account' },
             { value: '2 GB per link', label: '10 GB with Drift Premium' },
@@ -73,8 +74,7 @@ export default function DriftPage() {
         </Section>
 
         <Section id="more-title" anchor="features" label="Features" title="More than a link.">
-          <Cards
-            cols={3}
+          <Rows
             items={[
               {
                 title: 'Everything sent to you, in one place.',

@@ -1,7 +1,6 @@
 import { Layout } from '../ui/Layout';
 import { LinkButton, More } from '../ui/kit';
-import { RealShot } from '../ui/system';
-import { Cards, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
+import { Rows, CorpHero, CorpMeridian, GetCards, Section } from '../ui/corp';
 
 /* Polaris, in the corporate system (Rami, 2026-10-18: "visual structure and a professional corporate
    layout"): the block with the real browser beside the words, the facts, the browser in four cards,
@@ -24,6 +23,8 @@ export default function PolarisPage() {
     >
       <div data-light="polaris" className="corp">
         <CorpHero
+          shot={{ name: 'polaris-newtab', alt: 'The Polaris new tab: a star, one search field and the sites you visit most.' }}
+          flip
           light="polaris"
           name="Polaris Browser"
           title="The browser, complete."
@@ -36,7 +37,6 @@ export default function PolarisPage() {
               <More href="#features">See what it does</More>
             </>
           }
-          visual={<RealShot name="polaris-page" ratio="16 / 10" eager alt="Polaris Browser with three tabs along the top and a Wikipedia article open, flush to the window." />}
           facts={[
             { value: 'Free', label: 'Nothing held back, and no account needed to browse' },
             { value: 'Chromium', label: 'The engine under Chrome and Edge' },
@@ -52,8 +52,7 @@ export default function PolarisPage() {
           title="Less browser. More of the page."
           lede="One slim bar, tabs along the top, and nothing on the screen that is not the page or something you asked for."
         >
-          <Cards
-            cols={4}
+          <Rows
             items={[
               {
                 title: 'A new tab with nothing in the way.',
@@ -80,8 +79,7 @@ export default function PolarisPage() {
         </Section>
 
         <Section id="built-title" label="Under the hood" title="Built on what already works.">
-          <Cards
-            cols={2}
+          <Rows
             items={[
               {
                 title: 'Sites work as they should',

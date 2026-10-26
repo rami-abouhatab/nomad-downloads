@@ -6007,21 +6007,21 @@ a.nm-btn.plan-cta {
 .film-note-title {
   margin: 0 0 6px;
   color: #141518;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 650;
   letter-spacing: -0.005em;
 }
 .film-note-body {
   margin: 0;
   color: #6b6e75;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.5;
 }
 .film-note-link {
   display: inline-block;
   margin-top: 8px;
   color: #141518;
-  font-size: 13px;
+  font-size: 16px;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -6029,10 +6029,10 @@ a.nm-btn.plan-cta {
 /* ══ Home: the hero's small type everywhere (Rami, 2026-10-18: "the sizes of the content in the
    rest of the sections need to match the minimal small style of the hero") ══════════════════
    Section titles are 28px (750, ink), above the content; everything said under them takes its body
-   (13px, the soft grey, 1.5); buttons and links speak at 13px. Scoped to the home page's flow, so
+   (16px, the soft grey, 1.5); buttons and links speak at 16px. Scoped to the home page's flow, so
    the product pages keep their own scale. */
 .flow :is(.how-title, .tiles-title, .where-title, .home-qa-title) {
-  /* still a title: clearly above the 13px it introduces (Rami, 2026-10-18) */
+  /* still a title: clearly above the 16px it introduces (Rami, 2026-10-18) */
   margin-bottom: 10px;
   color: #141518;
   font-size: 28px;
@@ -6042,7 +6042,7 @@ a.nm-btn.plan-cta {
 }
 .flow :is(.how-lede, .where-lede, .meridian-line, .suite-office) {
   color: #6b6e75;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
 }
@@ -6052,24 +6052,24 @@ a.nm-btn.plan-cta {
 /* the steps, the cards, the platforms and the questions */
 .flow :is(.how-steps h3, .app-tagline, .where-name h3) {
   color: #141518;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
 }
 .flow :is(.how-steps p, .app-body, .where-name p, .home-qa .qa p, .home-qa .qa [role='region'] p) {
   color: #6b6e75;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.5;
 }
 .flow .home-qa :is(summary, button, .qa-q) {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
 }
 .flow :is(.app-links a, .where-list a, .where-list .more, .suite-office a, .panel-actions a) {
-  font-size: 13px;
+  font-size: 16px;
 }
 .flow .nm-btn-label {
-  font-size: 13px;
+  font-size: 16px;
 }
 /* the Meridian section's lockup at the hero's scale too */
 .flow .meridian-head {
@@ -6109,8 +6109,8 @@ a.nm-btn.plan-cta {
 
 /* ══ Every page: the home page's small type (Rami, 2026-10-18: "do the same with all the other pages,
    unless it's the MeridianOS page, where the hero needs to be big") ═══════════════════════════════
-   Three steps and nothing else: a title (28px, 750), a heading (16px, 650) and the text (13px, the
-   soft grey); eyebrows 12px. `:root main` lifts these over each component's own rule. The
+   Three steps and nothing else: a title (28px, 750), a heading (18px, 650) and the text (16px, the
+   soft grey); eyebrows 13px. `:root main` lifts these over each component's own rule. The
    MeridianOS hero (.mxh) keeps its big type. */
 .ph + .band-white {
   padding-top: var(--rhythm);
@@ -6123,36 +6123,36 @@ a.nm-btn.plan-cta {
   letter-spacing: -0.02em;
 }
 :root main :is(h3, .plan-name, .dl-tile-name, .vs-when):not(.mxh *, .vh, .sr-only, .flow *) {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 650;
   line-height: 1.35;
   letter-spacing: -0.01em;
 }
 :root main :is(.ph-lede, .sys-lede, .sys-plan-pitch, .plan-pitch, .cg-body, .vs-meridian, .vs-usual, .dl-tile-what, .todo, p, li, td):not(.mxh *, .flow *) {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.5;
 }
 :root main :is(.ph-lede, .sys-lede, .sys-plan-pitch, .plan-pitch, .cg-body, .dl-tile-what):not(.mxh *) {
   color: #6b6e75;
 }
 :root main :is(th, .checks-lead, b, strong, small):not(.mxh *, .flow *) {
-  font-size: 13px;
+  font-size: 16px;
 }
 :root main :is(.ph-eyebrow, .sys-eyebrow):not(.mxh *) {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 :root main :is(.nm-btn-label, .more, a > span):not(.mxh *, .flow *) {
-  font-size: 13px;
+  font-size: 16px;
 }
 /* the questions and the tab labels speak at the text's size too */
 :root main :is(summary, button, .sys-tab) span:not(.mxh *, .flow *) {
-  font-size: 13px;
+  font-size: 16px;
 }
 
 /* Plan cards on the shared scale like every other section (Rami, 2026-10-18): the name is a heading
-   (16px) and everything else the text (13px); only the price stands at the title's size, which the
-   13px text rule had been overriding. */
+   (16px) and everything else the text (16px); only the price stands at the title's size, which the
+   16px text rule had been overriding. */
 :root main .plan .price-big {
   font-size: 28px;
   font-weight: 750;
@@ -6160,7 +6160,7 @@ a.nm-btn.plan-cta {
   letter-spacing: -0.02em;
 }
 :root main .plan .price-big small {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -6948,9 +6948,8 @@ main .sys-cols li > svg {
 }
 
 .mxc-wrap {
-  max-width: 1920px;
-  margin-inline: auto;
-  padding-inline: var(--site-inset);
+  /* edge to edge (Rami, 2026-10-25: "make it full width") */
+  max-width: none;
 }
 
 .mxc {
@@ -6960,8 +6959,6 @@ main .sys-cols li > svg {
   grid-template-rows: var(--hz) auto;
   min-height: clamp(520px, 40vw, 640px);
   overflow: hidden;
-  border-radius: 28px;
-  corner-shape: squircle;
   background: #000000;
   color: #f5f5f7;
   text-align: center;
@@ -7013,7 +7010,7 @@ main .sys-cols li > svg {
 :root main .mxc .mxc-sub {
   margin: 0;
   color: #a1a1a6;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .mxc-actions {
@@ -7075,7 +7072,6 @@ main .sys-cols li > svg {
   .mxc {
     --hz: 58%;
     min-height: 0;
-    border-radius: 22px;
   }
 
   .mxc-facts {
@@ -7231,4 +7227,401 @@ main .sys-cols li > svg {
   to {
     opacity: 1;
   }
+}
+
+/* ══ App pages (Rami, 2026-10-25): the home hero's shape, on white. The words and the home hero's
+   laptop sit as one centred group, the laptop showing the app's own capture on its screen; pages
+   alternate which side the laptop takes (`.ch-flip`). Type is the home page's: 28px title, 16px
+   text. Section heads centre over plain columns. Static paint only. `:root main .corp` lifts
+   these over the site's small-type layer. */
+
+.ch-block.ch-laptop {
+  grid-template-columns: minmax(0, 440px) minmax(0, 720px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+  min-height: clamp(400px, 32vw, 560px);
+  padding: clamp(28px, 3vw, 48px) var(--site-inset);
+  overflow: hidden;
+  /* the home hero's block (.film), same shape and size, in the app's own colours (Rami, 2026-10-25:
+     "same as homepage, same size, colors differ"): its tint deepening toward the top, a soft light
+     behind the laptop */
+  background:
+    radial-gradient(55% 75% at 72% 58%, rgb(255 255 255 / 0.7) 0%, rgb(255 255 255 / 0) 70%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bloom) 26%, var(--tint)) 0%,
+      color-mix(in srgb, var(--bloom) 14%, var(--tint)) 38%,
+      var(--tint) 72%,
+      color-mix(in srgb, var(--tint) 80%, #ffffff) 100%
+    );
+}
+
+.ch-laptop.ch-flip {
+  background:
+    radial-gradient(55% 75% at 28% 58%, rgb(255 255 255 / 0.7) 0%, rgb(255 255 255 / 0) 70%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bloom) 26%, var(--tint)) 0%,
+      color-mix(in srgb, var(--bloom) 14%, var(--tint)) 38%,
+      var(--tint) 72%,
+      color-mix(in srgb, var(--tint) 80%, #ffffff) 100%
+    );
+}
+
+.ch-laptop.ch-flip {
+  grid-template-columns: minmax(0, 720px) minmax(0, 440px);
+}
+
+.ch-flip .ch-copy {
+  order: 2;
+}
+
+.ch-laptop .ch-copy {
+  gap: 12px;
+  max-width: 34em;
+}
+
+:root main .corp .ch-laptop .ch-eyebrow {
+  font-size: 16px;
+}
+
+:root main .corp .ch-laptop .ch-title {
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+:root main .corp .ch-laptop .ch-lede {
+  color: #6b6e75;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+:root main .corp .ch-laptop .ch-note {
+  font-size: 14px;
+}
+
+.ch-laptop .ch-actions {
+  gap: 12px 24px;
+  margin-top: 8px;
+}
+
+.ch-laptop-device {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 720px);
+}
+
+/* the app's capture over the photo's screen (185,27 to 1829,969 of 2013x1043) */
+.ch-laptop-screen {
+  position: absolute;
+  left: 9.19%;
+  top: 2.59%;
+  width: 81.67%;
+  height: 90.32%;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 1.1% 1.1% 0 0 / 2% 2% 0 0;
+}
+
+.ch-laptop + .ch-facts {
+  max-width: 1240px;
+}
+
+:root main .corp .ch-laptop + .ch-facts .ch-fact-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+:root main .corp .ch-laptop + .ch-facts .ch-fact-label {
+  font-size: 16px;
+}
+
+@media (max-width: 880px) {
+  .ch-block.ch-laptop,
+  .ch-laptop.ch-flip {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+  .ch-flip .ch-copy {
+    order: 0;
+  }
+  .ch-laptop + .ch-facts {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ch-laptop + .ch-facts li + li {
+    border-left: 0;
+  }
+}
+
+/* section heads centre over their content */
+.corp .cs-head {
+  justify-content: center;
+  text-align: center;
+}
+
+.corp .cs-head-copy {
+  display: grid;
+  justify-items: center;
+  margin-inline: auto;
+}
+
+:root main .corp .cs-head .cs-title {
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+:root main .corp .cs-head .cs-lede {
+  max-width: 40em;
+  color: #6b6e75;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ── Feature columns ── */
+
+.fr {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(40px, 4vw, 72px) clamp(32px, 3vw, 56px);
+  max-width: 1240px;
+  margin: clamp(16px, 2vw, 32px) auto 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.fr-row {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+}
+
+.fr-mark {
+  display: grid;
+  place-items: center;
+  margin-bottom: 6px;
+  color: var(--corp-ink);
+}
+
+.fr-mark svg {
+  width: 36px;
+  height: 36px;
+}
+
+.fr-mark img {
+  width: 64px;
+  height: 64px;
+}
+
+:root main .corp .fr .fr-title {
+  margin: 0;
+  color: var(--corp-ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.fr-copy {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+:root main .corp .fr .fr-body {
+  max-width: 26em;
+  margin: 0;
+  color: #6b6e75;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.fr + .cc,
+.cc + .fr,
+.fr + .fr {
+  margin-top: clamp(56px, 5vw, 88px);
+}
+
+
+/* ══ Pricing and download (Rami, 2026-10-25: "improve them") ═════════════════════════════════════
+   Both open on the home hero's band: its height, padding and sky-to-sand gradient, the words
+   centred at the home page's sizes (28px title, 16px text). Section heads centre, as on the app
+   pages. Downloads read as one row per app: icon, what it is, the button at the right. */
+
+.ch-short .ch-block {
+  justify-items: center;
+  min-height: clamp(400px, 32vw, 560px);
+  padding: clamp(28px, 3vw, 48px) var(--site-inset);
+  text-align: center;
+  background:
+    radial-gradient(55% 75% at 50% 58%, rgb(255 248 238 / 0.75) 0%, rgb(255 248 238 / 0) 70%),
+    linear-gradient(180deg, #c4d2e0 0%, #d6dce1 38%, #e7e2d9 72%, #eee2d0 100%);
+}
+
+.ch-short .ch-copy {
+  justify-items: center;
+  gap: 12px;
+  max-width: 36em;
+}
+
+:root main .corp .ch-short .ch-eyebrow {
+  margin: 0;
+  font-size: 16px;
+}
+
+:root main .corp .ch-short .ch-title {
+  font-size: 28px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+:root main .corp .ch-short .ch-lede {
+  color: #4a4d54;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ch-short .ch-actions {
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* section heads centre, as on the app pages */
+.corp .sys-head,
+.corp .sys-head-center {
+  justify-items: center;
+  margin-inline: auto;
+  text-align: center;
+}
+
+:root main .corp .sys-head .sys-lede {
+  max-width: 40em;
+  margin-inline: auto;
+  color: #6b6e75;
+  font-size: 16px;
+}
+
+.corp .sys-head > :not(.sys-title, .sys-lede, .sys-eyebrow) {
+  justify-self: center;
+}
+
+/* ── Downloads, one row per app ── */
+
+.dl-grid {
+  display: block;
+  max-width: 1080px;
+  margin-inline: auto;
+  border-top: 1px solid var(--corp-rule);
+}
+
+.corp .dl-grid .dl-tile {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-areas:
+    'mark name  verbs'
+    'mark what  verbs'
+    'mark need  verbs'
+    'mark meta  other';
+  column-gap: clamp(16px, 2vw, 32px);
+  row-gap: 4px;
+  align-items: start;
+  padding: clamp(24px, 2.4vw, 32px) 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--corp-rule);
+  background: none;
+  box-shadow: none;
+}
+
+.dl-tile > :first-child {
+  grid-area: mark;
+}
+
+:root main .corp .dl-tile .dl-tile-name {
+  grid-area: name;
+  margin: 0;
+  color: var(--corp-ink);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+:root main .corp .dl-tile .dl-tile-what {
+  grid-area: what;
+  margin: 0;
+  color: var(--corp-ink);
+  font-size: 16px;
+}
+
+:root main .corp .dl-tile .dl-tile-need {
+  grid-area: need;
+  max-width: 38em;
+  margin: 0;
+  color: #6b6e75;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+:root main .corp .dl-tile .dl-tile-meta {
+  grid-area: meta;
+  margin: 4px 0 0;
+  color: #6b6e75;
+  font-size: 14px;
+}
+
+.dl-tile .dl-tile-verbs {
+  grid-area: verbs;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* two buttons stand one above the other, the same width (Rami, 2026-10-25) */
+.dl-tile .dl-tile-verbs > * {
+  justify-content: center;
+}
+
+:root main .corp .dl-tile .dl-tile-other {
+  grid-area: other;
+  justify-self: end;
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+@media (max-width: 760px) {
+  .dl-tile {
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-areas:
+      'mark name'
+      'mark what'
+      'mark need'
+      'mark meta'
+      'mark verbs'
+      'mark other';
+  }
+  .dl-tile > :first-child {
+    width: 48px;
+    height: 48px;
+  }
+  .dl-tile .dl-tile-verbs {
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+  :root main .corp .dl-tile .dl-tile-other {
+    justify-self: start;
+  }
+}
+
+/* the plan cards' link to every feature, under their headline lines */
+.plan-all {
+  margin-top: 16px;
 }
