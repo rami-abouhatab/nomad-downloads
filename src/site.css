@@ -7625,3 +7625,21 @@ main .sys-cols li > svg {
 .plan-all {
   margin-top: 16px;
 }
+
+/* the download page's help cards: as wide as the rows above, their words centred (Rami, 2026-10-26) */
+#which .cc {
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+#which .cc-card {
+  text-align: center;
+}
+
+#which .cc-copy {
+  justify-items: center;
+}
+
+#which .cc-body {
+  margin-inline: auto;
+}
